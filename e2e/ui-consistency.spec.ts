@@ -6,14 +6,18 @@
  * Screenshots go to test-results/screens/<theme>-<screen>.png for a visual pass.
  */
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { createRoom } from './helpers';
+import { SKIP_WELCOME, createRoom } from './helpers';
 import { devices } from '@playwright/test';
 
 const THEMES = ['classic', 'cute'] as const;
 type Theme = (typeof THEMES)[number];
 
 async function player(browser: Browser, theme: Theme, name?: string) {
-  const ctx = await browser.newContext({ ...devices['iPhone 14'], locale: 'vi-VN' });
+  const ctx = await browser.newContext({
+    ...devices['iPhone 14'],
+    locale: 'vi-VN',
+    storageState: SKIP_WELCOME,
+  });
   await ctx.addInitScript(
     ([theme, name]) => {
       localStorage.setItem('fg:settings', JSON.stringify({ theme }));

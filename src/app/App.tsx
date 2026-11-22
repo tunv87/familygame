@@ -7,6 +7,7 @@ import { NumbersSolo } from '../games/numbers/NumbersSolo';
 import { createLogger } from '../lib/logger';
 import { JoinScreen } from '../online/JoinScreen';
 import { RoomScreen } from '../online/RoomScreen';
+import { AboutScreen } from './AboutScreen';
 import { DebugScreen } from './DebugScreen';
 import { Hub } from './Hub';
 import { SettingsScreen } from './SettingsScreen';
@@ -47,6 +48,7 @@ export function App() {
         <Route path="/room/:code" element={<RoomScreen />} />
         <Route path="/settings" element={<SettingsScreen />} />
         <Route path="/debug" element={<DebugScreen />} />
+        <Route path="/about" element={<AboutScreen />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </HashRouter>

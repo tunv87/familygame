@@ -68,6 +68,9 @@ export function SettingsScreen() {
         </div>
       </div>
       <div className="grow" />
+      <button className="btn secondary" onClick={() => navigate('/about')} data-testid="about">
+        ℹ️ {t('about')} · {t('privacy')}
+      </button>
       <button className="btn secondary" onClick={() => navigate('/debug')}>
         🪵 {t('debug')}
       </button>

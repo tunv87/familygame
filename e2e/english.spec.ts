@@ -1,4 +1,5 @@
 import { devices, expect, test, type Page } from '@playwright/test';
+import { SKIP_WELCOME } from './helpers';
 
 const VIETNAMESE = /[ạ-ỹđĐăâêôơưàáảãèéẻẽìíỉĩòóỏõùúủũỳýỷỹ]/;
 
@@ -63,7 +64,11 @@ test('an English device gets a fully English app', async ({ page }) => {
 
 test('a Vietnamese device gets Vietnamese, and the choice can be changed', async ({ browser }) => {
   const page = await (
-    await browser.newContext({ ...devices['iPhone 14'], locale: 'vi-VN' })
+    await browser.newContext({
+      ...devices['iPhone 14'],
+      locale: 'vi-VN',
+      storageState: SKIP_WELCOME,
+    })
   ).newPage();
   await page.goto('/');
   await expect(page.getByTestId('game-caro')).toContainText('Cờ ca rô');

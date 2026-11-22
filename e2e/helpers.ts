@@ -1,8 +1,20 @@
 import { expect, type Browser, type Page } from '@playwright/test';
 import { devices } from '@playwright/test';
 
+export const BASE_URL = 'http://127.0.0.1:5174';
+
+/** Storage state that marks the first-launch welcome as done, so tests start at the hub. */
+export const SKIP_WELCOME = {
+  cookies: [],
+  origins: [{ origin: BASE_URL, localStorage: [{ name: 'fg:onboarded', value: '{"done":true}' }] }],
+};
+
 export async function newPlayer(browser: Browser) {
-  const ctx = await browser.newContext({ ...devices['iPhone 14'], locale: 'vi-VN' });
+  const ctx = await browser.newContext({
+    ...devices['iPhone 14'],
+    locale: 'vi-VN',
+    storageState: SKIP_WELCOME,
+  });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('[pageerror]', e.message));
   return page;
