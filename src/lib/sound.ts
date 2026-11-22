@@ -1,4 +1,5 @@
 import { getSettings } from '../app/settings';
+import { haptic } from './native';
 
 let ctx: AudioContext | null = null;
 
@@ -35,22 +36,30 @@ function tone(freq: number, start: number, dur: number, type: OscillatorType = '
   osc.stop(t0 + dur);
 }
 
-function vibrate(ms: number | number[]) {
-  if (getSettings().sound && 'vibrate' in navigator) navigator.vibrate(ms);
+/** Haptics follow the sound setting (one switch: "Âm thanh & rung"). */
+function buzz(kind: keyof typeof haptic) {
+  if (getSettings().sound) haptic[kind]();
 }
 
 export const sfx = {
-  tap: () => tone(660, 0, 0.08, 'triangle', 0.08),
+  tap: () => {
+    tone(660, 0, 0.08, 'triangle', 0.08);
+    buzz('tap');
+  },
   good: () => {
     tone(880, 0, 0.12);
     tone(1320, 0.06, 0.15);
+    buzz('tap');
   },
   bad: () => {
     tone(200, 0, 0.18, 'square', 0.06);
-    vibrate(60);
+    buzz('wrong');
   },
   opponent: () => tone(440, 0, 0.1, 'triangle', 0.08),
-  win: () => [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, 0.25)),
+  win: () => {
+    [523, 659, 784, 1047].forEach((f, i) => tone(f, i * 0.12, 0.25));
+    buzz('win');
+  },
   lose: () => [392, 330, 262].forEach((f, i) => tone(f, i * 0.15, 0.3, 'triangle')),
   /** Call from a user gesture to unlock audio on iOS. */
   unlock: () => void audio(),

@@ -5,7 +5,7 @@ import { useT } from '../../i18n';
 import { createLogger } from '../../lib/logger';
 import { randomSeed } from '../../lib/rng';
 import { sfx } from '../../lib/sound';
-import { ExitConfirm, ResultModal } from '../../ui/components';
+import { ExitConfirm, ResultModal, useBackHandler } from '../../ui/components';
 import { Countdown, MiniPlayer, NumbersBoard, useCountdown } from './NumbersBoard';
 import {
   applyClaim,
@@ -84,6 +84,7 @@ export function NumbersSolo() {
   };
 
   const exit = () => (s.done || s.next === 1 ? navigate('/numbers') : setConfirmExit(true));
+  useBackHandler(exit);
 
   const winner = numbersWinner(s);
   const elapsed = practice && startedAt && count === 0 ? Math.max(0, now - startedAt) : 0;

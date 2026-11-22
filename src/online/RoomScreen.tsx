@@ -5,7 +5,8 @@ import { NumbersOnline } from '../games/numbers/NumbersOnline';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
 import { sfx } from '../lib/sound';
-import { ExitConfirm, TopBar } from '../ui/components';
+import { ExitConfirm, TopBar, useBackHandler } from '../ui/components';
+import { shareInvite } from '../lib/native';
 import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
 import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
@@ -90,14 +91,7 @@ export function RoomScreen() {
     const url = shareUrl(code);
     const game = room?.game === 'numbers' ? t('gameNumbers') : t('gameCaro');
     const text = t('shareText', { game, code });
-    try {
-      if (navigator.share) {
-        await navigator.share({ title: t('appName'), text, url });
-        return;
-      }
-    } catch (e) {
-      if ((e as Error).name === 'AbortError') return;
-    }
+    if (await shareInvite({ title: t('appName'), text, url })) return;
     try {
       await navigator.clipboard.writeText(`${text}\n${url}`);
       setCopied(true);
@@ -112,6 +106,10 @@ export function RoomScreen() {
       : room?.game === 'caro'
         ? t('gameCaro')
         : t('online');
+
+  // Android back button: same as the exit button (asks mid-game). Set below once known.
+  const backRef = useRef<() => void>(() => void leave());
+  useBackHandler(() => (confirmExit ? setConfirmExit(false) : backRef.current()));
 
   if (error || room === null) {
     return (
@@ -164,6 +162,7 @@ export function RoomScreen() {
   const st = room.state as { done?: boolean; winner?: string };
   const finished = !!(st.done || st.winner);
   const requestExit = () => (finished || !oppEntry ? leave() : setConfirmExit(true));
+  backRef.current = requestExit;
   const props: OnlineGameProps = {
     room,
     uid,
