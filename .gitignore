@@ -16,3 +16,4 @@ vendor/bundle
 .bundle
 *.jks
 *.keystore
+qa/runs/tmp

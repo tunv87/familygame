@@ -20,7 +20,9 @@
     "prebuild": "node scripts/make-privacy.mjs",
     "build:native": "VITE_BASE=./ npm run build",
     "cap:sync": "npm run build:native && cap sync",
-    "store:screenshots": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --config store/playwright.store.config.ts\""
+    "store:screenshots": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --config store/playwright.store.config.ts\"",
+    "qa": "node scripts/qa.mjs",
+    "qa:report": "node scripts/qa-report.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
