@@ -1,0 +1,2 @@
+app_identifier("io.github.tunv87.familygame") # iOS bundle id
+package_name("io.github.tunv87.familygame")   # Android application id

@@ -1,0 +1,66 @@
+{
+  "vi": [
+    {
+      "id": "hub",
+      "title": "Trò chơi cho cả nhà",
+      "sub": "Từ bé 7 tuổi đến ông bà 70 tuổi"
+    },
+    {
+      "id": "numbers",
+      "title": "Thi tìm số siêu nhanh",
+      "sub": "Với máy, một mình hay cùng bạn"
+    },
+    {
+      "id": "caro-small",
+      "title": "Cờ ca rô 3×3 cho bé",
+      "sub": "Máy có 3 mức: Dễ, Vừa, Khó"
+    },
+    {
+      "id": "caro-big",
+      "title": "Ca rô lớn 15×15",
+      "sub": "5 quân thẳng hàng là thắng"
+    },
+    {
+      "id": "online",
+      "title": "Chơi với bạn ở xa",
+      "sub": "Chỉ cần gửi mã phòng 4 số"
+    },
+    {
+      "id": "cute",
+      "title": "Giao diện dễ thương 🎀",
+      "sub": "Không quảng cáo · Không cần tài khoản"
+    }
+  ],
+  "en": [
+    {
+      "id": "hub",
+      "title": "Games for the whole family",
+      "sub": "From age 7 to 70"
+    },
+    {
+      "id": "numbers",
+      "title": "Race to find the numbers",
+      "sub": "vs computer, solo or with a friend"
+    },
+    {
+      "id": "caro-small",
+      "title": "3×3 for little ones",
+      "sub": "Computer with 3 levels"
+    },
+    {
+      "id": "caro-big",
+      "title": "Big 15×15 Gomoku",
+      "sub": "Five in a row wins"
+    },
+    {
+      "id": "online",
+      "title": "Play with faraway friends",
+      "sub": "Just share a 4-digit room code"
+    },
+    {
+      "id": "cute",
+      "title": "A cute pink theme 🎀",
+      "sub": "No ads · No account needed"
+    }
+  ]
+}
