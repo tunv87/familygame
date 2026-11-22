@@ -5,7 +5,7 @@ import { NumbersOnline } from '../games/numbers/NumbersOnline';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
 import { sfx } from '../lib/sound';
-import { TopBar } from '../ui/components';
+import { ExitConfirm, TopBar } from '../ui/components';
 import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
 import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
@@ -20,7 +20,10 @@ export interface OnlineGameProps {
   me: RoomPlayer;
   opp?: RoomPlayer;
   oppGone: boolean;
+  /** leave immediately (from the result dialog) */
   onLeave: () => void;
+  /** leave via the exit button: asks for confirmation mid-game */
+  onExit: () => void;
 }
 
 export function RoomScreen() {
@@ -31,6 +34,7 @@ export function RoomScreen() {
   const [room, setRoom] = useState<Room | null | undefined>(undefined);
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
+  const [confirmExit, setConfirmExit] = useState(false);
   const lastOpp = useRef<{ uid: string; player: RoomPlayer } | null>(null);
   const leaving = useRef(false);
 
@@ -157,16 +161,45 @@ export function RoomScreen() {
 
   const opp = oppEntry?.[1] ?? lastOpp.current?.player;
   const oppUid = oppEntry?.[0] ?? lastOpp.current?.uid ?? '';
-  const props: OnlineGameProps = { room, uid, oppUid, me, opp, oppGone: !oppEntry, onLeave: leave };
+  const st = room.state as { done?: boolean; winner?: string };
+  const finished = !!(st.done || st.winner);
+  const requestExit = () => (finished || !oppEntry ? leave() : setConfirmExit(true));
+  const props: OnlineGameProps = {
+    room,
+    uid,
+    oppUid,
+    me,
+    opp,
+    oppGone: !oppEntry,
+    onLeave: leave,
+    onExit: requestExit,
+  };
   return (
     <main className={`screen ${room.game === 'numbers' ? 'tight' : ''}`}>
       {/* Numbers puts its back button in its compact HUD to leave more room for the board. */}
-      {room.game !== 'numbers' && <TopBar title={title} onBack={leave} />}
+      {room.game !== 'numbers' && (
+        <TopBar
+          title={title}
+          onBack={requestExit}
+          right={
+            <button className="btn secondary exit-btn" onClick={requestExit} data-testid="exit">
+              🚪 {t('exitGame')}
+            </button>
+          }
+        />
+      )}
       {!oppEntry && opp && <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>}
       {oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
       )}
       {room.game === 'numbers' ? <NumbersOnline {...props} /> : <CaroOnline {...props} />}
+      {confirmExit && (
+        <ExitConfirm
+          hint={t('exitOnlineHint')}
+          onConfirm={leave}
+          onCancel={() => setConfirmExit(false)}
+        />
+      )}
     </main>
   );
 }

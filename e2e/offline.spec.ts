@@ -42,3 +42,14 @@ test('caro 15×15 vs computer renders and responds', async ({ page }) => {
   await expect(page.locator('.caro-cell.o')).toHaveCount(1, { timeout: 5000 });
   await page.screenshot({ path: 'test-results/screens/caro-big.png' });
 });
+
+test('leaving a local caro game mid-way asks first', async ({ page }) => {
+  await page.goto('/#/caro/play?mode=local&size=3');
+  await page.getByTestId('cell-4').click();
+  await page.getByRole('button', { name: 'Quay lại' }).click();
+  await page.getByTestId('keep-playing').click();
+  await expect(page.getByTestId('caro-board')).toBeVisible();
+  await page.getByRole('button', { name: 'Quay lại' }).click();
+  await page.getByTestId('confirm-exit').click();
+  await expect(page.getByTestId('mode-solo')).toBeVisible();
+});
