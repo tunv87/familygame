@@ -4,7 +4,7 @@ import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import pkg from './package.json' with { type: 'json' };
 
-const buildTime = new Date().toISOString().slice(0, 16).replace('T', ' ');
+const buildTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 export default defineConfig({
   // GitHub Pages serves the site from /<repo>/
@@ -17,6 +17,8 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      // registered from src/lib/pwa.ts so we can re-check for updates on resume
+      injectRegister: false,
       includeAssets: ['icon.svg', 'apple-touch-icon.png'],
       manifest: {
         name: 'Trò chơi gia đình',
@@ -34,6 +36,9 @@ export default defineConfig({
         ],
       },
       workbox: {
+        clientsClaim: true,
+        skipWaiting: true,
+        cleanupOutdatedCaches: true,
         globPatterns: [
           '**/*.{js,css,html,svg,png}',
           '**/nunito-{latin,latin-ext,vietnamese}-*-normal-*.woff2',
