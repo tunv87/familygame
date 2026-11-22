@@ -2,11 +2,13 @@ import { useSyncExternalStore } from 'react';
 import { load, save } from '../lib/storage';
 
 export type Lang = 'vi' | 'en';
+export type ThemeId = 'classic' | 'cute';
 
 export interface Settings {
   sound: boolean;
   bigText: boolean;
   lang: Lang;
+  theme: ThemeId;
 }
 
 export interface Profile {
@@ -37,6 +39,7 @@ const settingsStore = createStore<Settings>('settings', {
   sound: true,
   bigText: false,
   lang: 'vi',
+  theme: 'classic',
 });
 const profileStore = createStore<Profile>('profile', {
   name: '',

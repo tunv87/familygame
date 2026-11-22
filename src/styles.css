@@ -14,6 +14,10 @@
   --p2: #f97316;
   --border: #e5d9bf;
   --radius: 20px;
+  --grid: #eadfc4;
+  --board-bg: #fffdf6;
+  --avatar-bg: #fff3cd;
+  --num-ink: #111827;
   --shadow: 0 4px 0 rgba(0, 0, 0, 0.12);
   --font: 20px;
   --tap: 64px;
@@ -264,7 +268,7 @@ button {
   border-radius: 50%;
   display: inline-grid;
   place-items: center;
-  background: #fff3cd;
+  background: var(--avatar-bg);
   flex: none;
 }
 
@@ -279,7 +283,7 @@ button {
   height: var(--tap);
   border-radius: 16px;
   border: 3px solid transparent;
-  background: #fff3cd;
+  background: var(--avatar-bg);
   cursor: pointer;
 }
 
@@ -394,7 +398,7 @@ button {
 }
 
 .banner {
-  background: #fff3cd;
+  background: var(--avatar-bg);
   border: 2px solid var(--primary);
   border-radius: 16px;
   padding: 10px 16px;
@@ -418,7 +422,7 @@ button {
   -webkit-overflow-scrolling: touch;
   border-radius: 16px;
   border: 3px solid var(--border);
-  background: #fffdf6;
+  background: var(--board-bg);
 }
 
 .caro-board {
@@ -430,7 +434,7 @@ button {
 }
 
 .caro-cell {
-  border: 1px solid #eadfc4;
+  border: 1px solid var(--grid);
   background: transparent;
   padding: 0;
   display: grid;
@@ -786,7 +790,7 @@ button {
 }
 
 .num {
-  color: #111827;
+  color: var(--num-ink);
 }
 
 .num.mine,
@@ -851,4 +855,80 @@ button {
 .mini-player {
   padding: 2px 6px 2px 3px;
   gap: 3px;
+}
+
+/* ---------- cute theme 🎀 ---------- */
+:root[data-theme='cute'] {
+  --bg: #fff0f7;
+  --surface: #ffffff;
+  --text: #5b2147;
+  --muted: #b06a96;
+  --primary: #ff8fc8;
+  --primary-ink: #ffffff;
+  --accent: #b388ff;
+  --x: #ff4fa3;
+  --o: #9b6dff;
+  --p1: #ff6fb5;
+  --p2: #8f6bff;
+  --border: #ffc6e2;
+  --grid: #ffd6ea;
+  --board-bg: #fffafd;
+  --avatar-bg: #ffe3f1;
+  --num-ink: #4a1d3f;
+  --radius: 28px;
+  --shadow: 0 4px 0 rgba(255, 105, 180, 0.28);
+}
+
+:root[data-theme='cute'] body {
+  font-family:
+    ui-rounded,
+    'SF Pro Rounded',
+    'Nunito',
+    'Varela Round',
+    -apple-system,
+    sans-serif;
+  background:
+    radial-gradient(circle, #ffd6ea 2.5px, transparent 3px) 0 0 / 28px 28px,
+    radial-gradient(circle, #e9dcff 2px, transparent 2.5px) 14px 14px / 28px 28px,
+    var(--bg);
+  background-attachment: fixed;
+}
+
+:root[data-theme='cute'] .hub-card {
+  background: linear-gradient(160deg, #ffffff 0%, #fff0f8 100%);
+}
+
+:root[data-theme='cute'] .btn:not(.secondary),
+:root[data-theme='cute'] .target .big {
+  background: linear-gradient(135deg, #ff9ad5 0%, #c39bff 100%);
+  color: #ffffff;
+}
+
+:root[data-theme='cute'] .topbar h1,
+:root[data-theme='cute'] .room-code {
+  color: #e0489b;
+}
+
+:root[data-theme='cute'] .caro-cell.last {
+  background: #ffe3f1 !important;
+}
+
+:root[data-theme='cute'] .caro-cell.win {
+  background: #e9dcff !important;
+}
+
+:root[data-theme='cute'] .segmented button[aria-pressed='true'] {
+  color: #ffffff;
+}
+
+.btn.secondary {
+  color: var(--text);
+}
+
+.player .avatar {
+  font-size: 1.1em;
+}
+
+.player {
+  padding-right: 10px;
 }

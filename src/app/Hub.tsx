@@ -3,10 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { GAMES } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
+import { setSettings, useSettings } from './settings';
+import { useTheme } from './theme';
 
 export function Hub() {
   const t = useT();
   const navigate = useNavigate();
+  const settings = useSettings();
+  const theme = useTheme();
   const taps = useRef<number[]>([]);
   // Hidden shortcut: tap the title 5 times quickly to open the debug log.
   const onTitleTap = () => {
@@ -18,7 +22,17 @@ export function Hub() {
     <main className="screen">
       <TopBar
         noBack
-        title={t('appName')}
+        left={
+          <button
+            className="icon-btn"
+            aria-label={t('theme')}
+            data-testid="theme-toggle"
+            onClick={() => setSettings({ theme: settings.theme === 'cute' ? 'classic' : 'cute' })}
+          >
+            {settings.theme === 'cute' ? '🎨' : '🎀'}
+          </button>
+        }
+        title={`${theme.titleEmoji} ${t('appName')} ${theme.titleEmoji}`.trim()}
         onTitleTap={onTitleTap}
         right={
           <button
@@ -36,7 +50,7 @@ export function Hub() {
             key={g.id}
             className="hub-card"
             testId={`game-${g.id}`}
-            emoji={g.emoji}
+            emoji={theme.gameEmoji[g.id] ?? g.emoji}
             title={t(g.title)}
             hint={t(g.desc)}
             onClick={() => navigate(g.path)}

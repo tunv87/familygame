@@ -53,3 +53,20 @@ test('leaving a local caro game mid-way asks first', async ({ page }) => {
   await page.getByTestId('confirm-exit').click();
   await expect(page.getByTestId('mode-solo')).toBeVisible();
 });
+
+test('cute theme: toggle from the hub, persists, and changes caro marks', async ({ page }) => {
+  await page.goto('/');
+  await page.getByTestId('theme-toggle').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'cute');
+  await page.screenshot({ path: 'test-results/screens/cute-hub.png' });
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'cute');
+  await page.goto('/#/caro/play?mode=local&size=3');
+  for (const i of [0, 4, 1]) await page.getByTestId(`cell-${i}`).click();
+  await expect(page.getByTestId('cell-0')).toHaveText('💖');
+  await expect(page.getByTestId('cell-4')).toHaveText('⭐');
+  await page.screenshot({ path: 'test-results/screens/cute-caro.png' });
+  await page.goto('/#/settings');
+  await page.getByTestId('theme-classic').click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'classic');
+});

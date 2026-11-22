@@ -1,21 +1,23 @@
 import { Avatar } from '../ui/components';
+import { useTheme } from '../app/theme';
 import type { RoomPlayer } from './types';
 
 export function PlayerChip({
   player,
-  label,
+  mark,
   score,
   active,
   color,
   testId,
 }: {
   player?: RoomPlayer;
-  label?: string;
+  mark?: 'x' | 'o';
   score?: number;
   active?: boolean;
   color?: string;
   testId?: string;
 }) {
+  const theme = useTheme();
   return (
     <div
       className={`player ${active ? 'active' : ''} ${player && !player.online ? 'offline' : ''}`}
@@ -24,7 +26,7 @@ export function PlayerChip({
     >
       <span className="avatar-wrap">
         <Avatar emoji={player?.avatar ?? '❔'} />
-        {label ? <span className={`badge ${label === '✕' ? 'x' : 'o'}`}>{label}</span> : null}
+        {mark ? <span className={`badge ${mark}`}>{mark === 'x' ? theme.x : theme.o}</span> : null}
       </span>
       <span className="name">{player?.name ?? '…'}</span>
       {score !== undefined && (

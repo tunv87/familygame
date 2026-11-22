@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { AVATARS, getProfile, setProfile, useProfile, type Profile } from '../app/settings';
 import { useT, type MessageKey } from '../i18n';
 import { sfx } from '../lib/sound';
+import { useTheme } from '../app/theme';
 
 export function TopBar({
   title,
@@ -10,9 +11,11 @@ export function TopBar({
   right,
   onTitleTap,
   noBack,
+  left,
 }: {
   title: string;
   noBack?: boolean;
+  left?: ReactNode;
   onBack?: () => void;
   right?: ReactNode;
   onTitleTap?: () => void;
@@ -34,7 +37,7 @@ export function TopBar({
           ⬅️
         </button>
       ) : (
-        <span style={{ width: 'var(--tap)' }} />
+        (left ?? <span style={{ width: 'var(--tap)' }} />)
       )}
       <h1 onClick={onTitleTap}>{title}</h1>
       {right ?? <span style={{ width: 'var(--tap)' }} />}
@@ -123,15 +126,16 @@ export function HelpButton({ steps }: { steps: [string, MessageKey][] }) {
 }
 
 export function Confetti() {
+  const { confetti } = useTheme();
   const pieces = useMemo(
     () =>
       Array.from({ length: 28 }, (_, i) => ({
         left: Math.random() * 100,
         delay: Math.random() * 0.8,
         dur: 2 + Math.random() * 1.5,
-        emoji: ['🎉', '⭐', '🎈', '✨', '🏆'][i % 5],
+        emoji: confetti[i % confetti.length],
       })),
-    [],
+    [confetti],
   );
   return (
     <div className="confetti" aria-hidden>

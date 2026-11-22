@@ -32,6 +32,9 @@ export const en: Partial<Record<MessageKey, string>> = {
   sound: 'Sound & vibration',
   bigText: 'Large text',
   language: 'Language',
+  theme: 'Theme',
+  themeClassic: 'Classic',
+  themeCute: 'Cute 🎀',
   on: 'On',
   off: 'Off',
 };
