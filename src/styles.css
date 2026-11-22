@@ -940,3 +940,8 @@ input {
 .numbers-hud .target .big {
   font-size: 1.35em;
 }
+
+.big-stat {
+  font-size: 1.6em;
+  font-weight: 900;
+}

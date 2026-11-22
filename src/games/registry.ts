@@ -19,7 +19,7 @@ export const GAMES: GameInfo[] = [
     title: 'gameNumbers',
     desc: 'gameNumbersDesc',
     path: '/numbers',
-    modes: ['online'],
+    modes: ['solo', 'online'],
   },
   {
     id: 'caro',

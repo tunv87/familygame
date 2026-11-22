@@ -3,6 +3,7 @@ import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-d
 import { CaroLocal } from '../games/caro/CaroLocal';
 import { CaroSetup } from '../games/caro/CaroSetup';
 import { NumbersSetup } from '../games/numbers/NumbersSetup';
+import { NumbersSolo } from '../games/numbers/NumbersSolo';
 import { createLogger } from '../lib/logger';
 import { JoinScreen } from '../online/JoinScreen';
 import { RoomScreen } from '../online/RoomScreen';
@@ -38,6 +39,7 @@ export function App() {
         <Route path="/caro" element={<CaroSetup />} />
         <Route path="/caro/play" element={<CaroLocal />} />
         <Route path="/numbers" element={<NumbersSetup />} />
+        <Route path="/numbers/play" element={<NumbersSolo />} />
         <Route path="/join" element={<JoinScreen />} />
         <Route path="/join/:code" element={<JoinScreen />} />
         <Route path="/room/:code" element={<RoomScreen />} />

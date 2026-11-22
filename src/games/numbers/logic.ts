@@ -123,3 +123,17 @@ export function normalizeOwner(owner: unknown): Record<string, string> {
   }
   return owner as Record<string, string>;
 }
+
+export type BotLevel = 'easy' | 'medium' | 'hard';
+
+/** How long the computer takes to find the next number, in ms (randomised per number). */
+export const BOT_DELAY: Record<BotLevel, [number, number]> = {
+  easy: [3000, 5000],
+  medium: [2000, 3000],
+  hard: [1000, 2000],
+};
+
+export function botDelayMs(level: BotLevel, rand: () => number = Math.random): number {
+  const [lo, hi] = BOT_DELAY[level];
+  return Math.round(lo + rand() * (hi - lo));
+}

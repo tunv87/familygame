@@ -122,7 +122,20 @@ for (const theme of THEMES) {
       await checkScreen(page, theme, 'caro-local-15');
 
       await page.goto('/#/numbers');
+      await checkScreen(page, theme, 'numbers-mode');
+      await page.getByTestId('mode-practice').click();
       await checkScreen(page, theme, 'numbers-level');
+      await page.getByTestId('level-easy').click();
+      await expect(page.getByTestId('countdown')).toBeHidden({ timeout: 10_000 });
+      await page.getByTestId('num-1').click();
+      await expectUniformNumbers(page);
+      await checkScreen(page, theme, 'numbers-practice');
+      await page.goto('/#/numbers/play?mode=bot&level=hard');
+      await expect(page.getByTestId('countdown')).toBeHidden({ timeout: 10_000 });
+      await expectUniformNumbers(page);
+      await checkScreen(page, theme, 'numbers-bot');
+      await page.goto('/#/numbers');
+      await page.getByTestId('mode-online').click();
       await page.getByTestId('level-hard').click();
       await checkScreen(page, theme, 'numbers-lobby');
       await page.getByTestId('create-room').click();
@@ -139,6 +152,7 @@ for (const theme of THEMES) {
       const a = await player(browser, theme);
       const b = await player(browser, theme, 'Ông Nội');
       await a.goto('/#/numbers');
+      await a.getByTestId('mode-online').click();
       await a.getByTestId('level-hard').click();
       const code = await createRoom(a, 'Bé Na Nguyễn Thị');
       await checkScreen(a, theme, 'room-waiting');
@@ -185,6 +199,7 @@ test('numbers: easy and medium boards also use one size', async ({ browser }) =>
     const a = await player(browser, 'classic');
     const b = await player(browser, 'classic', 'B');
     await a.goto('/#/numbers');
+    await a.getByTestId('mode-online').click();
     await a.getByTestId(`level-${level}`).click();
     const code = await createRoom(a, 'A');
     await b.goto(`/#/join/${code}`);
