@@ -36,7 +36,7 @@ export default defineConfig({
       workbox: {
         globPatterns: [
           '**/*.{js,css,html,svg,png}',
-          '**/*nunito-{latin,latin-ext,vietnamese}-*-normal.woff2',
+          '**/nunito-{latin,latin-ext,vietnamese}-*-normal-*.woff2',
         ],
       },
     }),
