@@ -159,8 +159,9 @@ export function RoomScreen() {
   const oppUid = oppEntry?.[0] ?? lastOpp.current?.uid ?? '';
   const props: OnlineGameProps = { room, uid, oppUid, me, opp, oppGone: !oppEntry, onLeave: leave };
   return (
-    <main className="screen">
-      <TopBar title={title} onBack={leave} />
+    <main className={`screen ${room.game === 'numbers' ? 'tight' : ''}`}>
+      {/* Numbers puts its back button in its compact HUD to leave more room for the board. */}
+      {room.game !== 'numbers' && <TopBar title={title} onBack={leave} />}
       {!oppEntry && opp && <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>}
       {oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
