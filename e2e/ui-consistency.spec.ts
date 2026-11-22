@@ -13,7 +13,7 @@ const THEMES = ['classic', 'cute'] as const;
 type Theme = (typeof THEMES)[number];
 
 async function player(browser: Browser, theme: Theme, name?: string) {
-  const ctx = await browser.newContext({ ...devices['iPhone 14'] });
+  const ctx = await browser.newContext({ ...devices['iPhone 14'], locale: 'vi-VN' });
   await ctx.addInitScript(
     ([theme, name]) => {
       localStorage.setItem('fg:settings', JSON.stringify({ theme }));

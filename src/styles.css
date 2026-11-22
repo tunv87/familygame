@@ -945,3 +945,21 @@ input {
   font-size: 1.6em;
   font-weight: 900;
 }
+
+/* HUD chips share the leftover width equally and never push the row wider than the screen */
+.numbers-hud {
+  min-width: 0;
+}
+
+.numbers-hud .mini-player {
+  flex: 1 1 0;
+}
+
+.numbers-hud .target,
+.numbers-hud .icon-btn {
+  flex: none;
+}
+
+.mini-score {
+  font-variant-numeric: tabular-nums;
+}

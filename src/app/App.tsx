@@ -12,6 +12,7 @@ import { Hub } from './Hub';
 import { SettingsScreen } from './SettingsScreen';
 import { useSettings } from './settings';
 import { THEMES } from './theme';
+import { translate } from '../i18n';
 
 const log = createLogger('nav');
 
@@ -27,6 +28,7 @@ export function App() {
     document.documentElement.dataset.bigtext = bigText ? '1' : '0';
     document.documentElement.lang = lang;
     document.documentElement.dataset.theme = theme;
+    document.title = translate(lang, 'appName');
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', THEMES[theme].themeColor);

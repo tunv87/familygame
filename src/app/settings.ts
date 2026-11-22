@@ -16,6 +16,13 @@ export interface Profile {
   avatar: string;
 }
 
+/** First launch: Vietnamese devices get Vietnamese, everyone else English. */
+function detectLang(): Lang {
+  const langs =
+    typeof navigator === 'undefined' ? [] : (navigator.languages ?? [navigator.language]);
+  return langs.some((l) => l?.toLowerCase().startsWith('vi')) ? 'vi' : 'en';
+}
+
 export const AVATARS = ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐯', '🐸', '🐵', '🦄', '🐧', '🐢'];
 
 function createStore<T>(key: string, fallback: T) {
@@ -38,7 +45,7 @@ function createStore<T>(key: string, fallback: T) {
 const settingsStore = createStore<Settings>('settings', {
   sound: true,
   bigText: false,
-  lang: 'vi',
+  lang: detectLang(),
   theme: 'classic',
 });
 const profileStore = createStore<Profile>('profile', {

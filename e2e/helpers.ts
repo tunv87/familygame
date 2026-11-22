@@ -2,7 +2,7 @@ import { expect, type Browser, type Page } from '@playwright/test';
 import { devices } from '@playwright/test';
 
 export async function newPlayer(browser: Browser) {
-  const ctx = await browser.newContext({ ...devices['iPhone 14'] });
+  const ctx = await browser.newContext({ ...devices['iPhone 14'], locale: 'vi-VN' });
   const page = await ctx.newPage();
   page.on('pageerror', (e) => console.error('[pageerror]', e.message));
   return page;

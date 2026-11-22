@@ -17,7 +17,7 @@ export default defineConfig({
     {
       // iPhone viewport/touch emulation on Chromium (WebKit isn't installed in CI by default).
       name: 'iphone',
-      use: { ...devices['iPhone 14'], browserName: 'chromium' },
+      use: { ...devices['iPhone 14'], browserName: 'chromium', locale: 'vi-VN' },
     },
   ],
   webServer: {
