@@ -21,8 +21,6 @@ const COUNTDOWN = 3;
 const HINT_AFTER_MS = 15_000;
 /** Tap target diameter in grid cells: tiles are ≥ 1 - 2·JITTER apart, so this never overlaps. */
 const HIT_SIZE = 1 - 2 * JITTER;
-/** Claimed numbers get a same-size disc regardless of their random text size. */
-const CLAIMED_SIZE = 0.72;
 
 function MiniPlayer({
   player,
@@ -123,8 +121,14 @@ export function NumbersOnline(props: OnlineGameProps) {
   return (
     <>
       <div className="numbers-hud">
-        <button className="btn secondary exit-btn" onClick={props.onExit} data-testid="exit">
-          🚪 {t('exitGame')}
+        <button
+          className="icon-btn small"
+          onClick={props.onExit}
+          data-testid="exit"
+          aria-label={t('exitGame')}
+          title={t('exitGame')}
+        >
+          🚪
         </button>
         <MiniPlayer player={me} score={s.scores?.[uid] ?? 0} color="var(--p1)" testId="me" />
         <div className="target" data-testid="target">
@@ -164,8 +168,8 @@ export function NumbersOnline(props: OnlineGameProps) {
                 <span
                   className="num-face"
                   style={{
-                    width: (who ? CLAIMED_SIZE : tile.size) * cellPx,
-                    fontSize: tile.size * cellPx * 0.55,
+                    width: tile.size * cellPx,
+                    fontSize: tile.size * cellPx * 0.6,
                   }}
                 >
                   {tile.n}
