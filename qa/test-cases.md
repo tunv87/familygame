@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v2** (sau review lần 1, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v2.1** (sau review lần 1 và sau run 01, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -70,12 +70,12 @@ Phiên bản: **v2** (sau review lần 1, xem `review-log.md`). Mỗi case có m
 
 ## SEC – Bảo mật
 
-| Mã     | Ưu tiên | Kiểm tra                                                             | Kết quả mong đợi                                                                         |
-| ------ | ------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| SEC-01 | P1      | Firebase rules (9 case đã có)                                        | Pass                                                                                     |
-| SEC-02 | P1      | Tên người chơi chứa HTML/script                                      | Hiển thị như chữ, không chạy script                                                      |
-| SEC-03 | P1      | Không có khoá bí mật trong bản build                                 | Chỉ có config web công khai của Firebase                                                 |
-| SEC-04 | P1      | `npm audit` dependency chạy trong app                                | Không có lỗ hổng High/Critical                                                           |
-| SEC-05 | P2      | Android không cho HTTP thường (cleartext), iOS không mở ATS tuỳ tiện | Đúng                                                                                     |
-| SEC-06 | P1      | Người trong phòng không sửa được thông tin người kia                 | Rules chặn                                                                               |
-| SEC-07 | P2      | Mã phòng 4 số có thể bị dò                                           | Ghi nhận rủi ro: chỉ lộ biệt danh + nước đi, phòng hết hạn 24 giờ; chấp nhận cho bản đầu |
+| Mã     | Ưu tiên | Kiểm tra                                                                  | Kết quả mong đợi                                                                                                                                       |
+| ------ | ------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SEC-01 | P1      | Firebase rules (9 case đã có)                                             | Pass                                                                                                                                                   |
+| SEC-02 | P1      | Tên người chơi chứa HTML/script                                           | Hiển thị như chữ, không chạy script                                                                                                                    |
+| SEC-03 | P1      | Không có khoá bí mật trong bản build                                      | Chỉ có config web công khai của Firebase                                                                                                               |
+| SEC-04 | P1      | `npm audit` dependency chạy trong app                                     | Không có lỗ hổng High/Critical                                                                                                                         |
+| SEC-05 | P2      | Android không cho HTTP thường (cleartext), iOS không mở ATS tuỳ tiện      | Đúng                                                                                                                                                   |
+| SEC-06 | P1      | Người trong phòng không sửa được thông tin người kia                      | Rules chặn                                                                                                                                             |
+| SEC-07 | P2      | Dữ liệu phòng chỉ gồm thông tin cần cho game (mã phòng 4 số có thể bị dò) | Rules từ chối mọi trường lạ (email, số điện thoại…); rủi ro dò mã được ghi nhận và chấp nhận vì phòng chỉ chứa biệt danh + nước đi, hết hạn sau 24 giờ |

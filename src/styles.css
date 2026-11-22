@@ -12,6 +12,9 @@
   --o: #1d4ed8;
   --p1: #2563eb;
   --p2: #f97316;
+  /* text versions of the player colours (WCAG AA on white) */
+  --ink-p1: #1d4ed8;
+  --ink-p2: #c2410c;
   --border: #e5d9bf;
   --font-family: 'Nunito', 'Segoe UI', Roboto, Arial, sans-serif;
   --radius: 20px;
@@ -863,14 +866,16 @@ input {
   --bg: #fff0f7;
   --surface: #ffffff;
   --text: #5b2147;
-  --muted: #b06a96;
+  --muted: #8a4072;
   --primary: #ff8fc8;
-  --primary-ink: #ffffff;
+  --primary-ink: #5b2147;
   --accent: #b388ff;
   --x: #ff4fa3;
   --o: #9b6dff;
   --p1: #ff6fb5;
   --p2: #8f6bff;
+  --ink-p1: #be185d;
+  --ink-p2: #6d28d9;
   --border: #ffc6e2;
   --grid: #ffd6ea;
   --board-bg: #fffafd;
@@ -895,7 +900,7 @@ input {
 :root[data-theme='cute'] .btn:not(.secondary),
 :root[data-theme='cute'] .target .big {
   background: linear-gradient(135deg, #ff9ad5 0%, #c39bff 100%);
-  color: #ffffff;
+  color: var(--primary-ink);
 }
 
 :root[data-theme='cute'] .topbar h1,
@@ -912,7 +917,7 @@ input {
 }
 
 :root[data-theme='cute'] .segmented button[aria-pressed='true'] {
-  color: #ffffff;
+  color: var(--primary-ink);
 }
 
 .btn.secondary {
@@ -1104,5 +1109,69 @@ input {
   .icon-btn.small {
     width: 60px;
     height: 60px;
+  }
+}
+
+/* ---------- game screens fill exactly one screen, so boards size to what is left ---------- */
+.screen.game {
+  height: 100dvh;
+  flex: none;
+}
+
+/* very narrow phones (360px wide): keep 6 avatars per row at ≥ 44px */
+@media (max-width: 380px) {
+  .modal-backdrop {
+    padding: 10px;
+  }
+
+  .modal {
+    padding: 16px;
+  }
+
+  .avatar-grid.compact {
+    gap: 4px;
+  }
+}
+
+/* phones held sideways (web only; the native apps are portrait) */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --tap: 48px;
+  }
+
+  .screen {
+    gap: 8px;
+    padding-top: calc(env(safe-area-inset-top) + 6px);
+    padding-bottom: calc(env(safe-area-inset-bottom) + 6px);
+  }
+
+  .topbar h1 {
+    font-size: 1em;
+  }
+
+  .status-line {
+    min-height: 1.2em;
+    font-size: 0.95em;
+  }
+
+  .card {
+    min-height: var(--tap);
+    padding: 8px 16px;
+  }
+
+  .hub-card .emoji {
+    font-size: 2.2em;
+  }
+
+  /* first-launch dialog in two columns so "Start" is visible without scrolling */
+  .modal:has([data-testid='welcome']) {
+    max-width: 760px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(5, auto);
+    grid-auto-flow: column;
+    column-gap: 20px;
+    row-gap: 8px;
+    padding: 14px 20px;
   }
 }

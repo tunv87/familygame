@@ -82,6 +82,7 @@ export const vi = {
   copied: 'Đã chép link!',
   shareText: 'Vào chơi {game} với mình nhé! Mã phòng: {code}',
   waitingOpponent: 'Đang chờ bạn vào…',
+  offlineSelf: 'Mất mạng, đang kết nối lại…',
   waitingReconnect: '{name} bị mất mạng, đang chờ quay lại…',
   opponentLeft: '{name} đã rời phòng',
   leave: 'Rời phòng',

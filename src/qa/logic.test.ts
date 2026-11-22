@@ -85,3 +85,27 @@ describe('[LG-10] saved data with missing or wrong fields falls back to defaults
     expect(load('test', { a: 1 })).toEqual({ a: 3 });
   });
 });
+
+describe('[LG-10] corrupt settings, profile and records are cleaned', () => {
+  it('settings with unknown values fall back to valid ones', async () => {
+    const { cleanSettings, cleanProfile } = await import('../app/settings');
+    const s = cleanSettings({ theme: 'neon', lang: 'fr', sound: 'yes', bigText: 7 } as never);
+    expect(['vi', 'en']).toContain(s.lang);
+    expect(s).toMatchObject({ theme: 'classic', sound: true, bigText: false });
+    expect(cleanProfile({ name: 12345, avatar: null } as never).name).toBe('');
+    expect(cleanProfile({ name: 'x'.repeat(40), avatar: '🐶' }).name).toHaveLength(20);
+  });
+  it('a corrupt record is ignored and replaced by the next real time', () => {
+    localStorage.setItem('fg:numbers-records', '{"easy":"fast","hard":-5}');
+    expect(getRecord('easy')).toBeUndefined();
+    expect(getRecord('hard')).toBeUndefined();
+    expect(submitTime('easy', 30_000)).toBe(true);
+    expect(getRecord('easy')).toBe(30_000);
+  });
+  it('an unknown level becomes easy', async () => {
+    const { asLevel, makeLayout } = await import('../games/numbers/logic');
+    expect(asLevel('impossible')).toBe('easy');
+    expect(asLevel(undefined)).toBe('easy');
+    expect(makeLayout('bogus' as never, 1).tiles).toHaveLength(30);
+  });
+});

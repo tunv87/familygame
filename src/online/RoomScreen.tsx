@@ -36,6 +36,14 @@ export function RoomScreen() {
   const [error, setError] = useState('');
   const [copied, setCopied] = useState(false);
   const [confirmExit, setConfirmExit] = useState(false);
+  // 'unknown' until the first connection, so the notice does not flash while connecting
+  const [connection, setConnection] = useState<'unknown' | 'online' | 'offline'>('unknown');
+  useEffect(() => {
+    // The browser knows about a lost network before Firebase's socket times out.
+    const off = () => setConnection('offline');
+    window.addEventListener('offline', off);
+    return () => window.removeEventListener('offline', off);
+  }, []);
   const lastOpp = useRef<{ uid: string; player: RoomPlayer } | null>(null);
   const leaving = useRef(false);
 
@@ -44,7 +52,14 @@ export function RoomScreen() {
     ensureAuth()
       .then((u) => {
         setUid(u);
-        unsub = watchRoom(code, u, setRoom, () => setError(t('connectError')));
+        unsub = watchRoom(
+          code,
+          u,
+          setRoom,
+          () => setError(t('connectError')),
+          (c) =>
+            setConnection((prev) => (c ? 'online' : prev === 'unknown' ? 'unknown' : 'offline')),
+        );
       })
       .catch(() => setError(t('connectError')));
     return () => unsub?.();
@@ -174,7 +189,7 @@ export function RoomScreen() {
     onExit: requestExit,
   };
   return (
-    <main className={`screen ${room.game === 'numbers' ? 'tight' : ''}`}>
+    <main className={`screen game ${room.game === 'numbers' ? 'tight' : ''}`}>
       {/* Numbers puts its back button in its compact HUD to leave more room for the board. */}
       {room.game !== 'numbers' && (
         <TopBar
@@ -186,6 +201,11 @@ export function RoomScreen() {
             </button>
           }
         />
+      )}
+      {connection === 'offline' && (
+        <div className="banner" data-testid="offline">
+          📶 {t('offlineSelf')}
+        </div>
       )}
       {!oppEntry && opp && <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>}
       {oppEntry && !oppEntry[1].online && (

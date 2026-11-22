@@ -24,3 +24,17 @@ Người review: Claude. Đối chiếu từng case với Apple Human Interface 
 | Ngoài phạm vi      | Nút Back Android, rung, chia sẻ native không test được trên web.                                                                                                                                                              | Ghi vào test plan: kiểm tra tay khi có bản TestFlight / Play closed test.                                |
 
 Kết quả: v2 có **52 case** (v1: 42; thêm 10, sửa 7).
+
+## Review lần 2 – sau run 01 (v2 → v2.1)
+
+Mỗi case FAIL ở run 01 được xem lại: lỗi do **app** (ghi vào `bugs.md` và sửa) hay do **test** (sửa test, ghi ở đây).
+
+| Case             | Kết luận                                                                                                                                         | Thay đổi                                                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-01            | Lỗi test: sự kiện `pointerdown` tự tạo bằng `dispatchEvent` không đi qua React, nên luôn báo 9999 ms.                                            | Bấm thật bằng Playwright, đo trong trang từ sự kiện `pointerdown` (capture) đến khi lớp CSS của số đổi.                                              |
+| SEC-02           | Lỗi test: `isVisible()` không chờ, hộp nhập tên chưa kịp hiện nên người thứ hai không vào phòng.                                                 | `joinAs` chờ hộp nhập tên tối đa 3 giây.                                                                                                             |
+| CR-06            | Lỗi test: script chuẩn bị dữ liệu chạy cả trên trang `about:blank` (khi lùi quá trang đầu) và gặp lỗi đọc `sessionStorage`.                      | Bọc script trong `try`.                                                                                                                              |
+| CR-07            | Một nửa lỗi test: các dòng `ERR_INTERNET_DISCONNECTED` là đúng khi mất mạng. Nửa còn lại là thiếu sót của app: người mất mạng không được báo gì. | Bỏ qua lỗi mạng khi đang offline; **bổ sung kiểm tra** người mất mạng thấy thông báo "Mất mạng, đang kết nối lại…" và thông báo tắt khi có mạng lại. |
+| SEC-07           | Case chưa có test tự động (chỉ ghi nhận rủi ro).                                                                                                 | Chuyển thành case kiểm tra được: rules từ chối trường lạ trong phòng/người chơi; thêm test luồng chơi đầy đủ dưới rules mới.                         |
+| Báo cáo          | Ảnh evidence trùng tên giữa các test nên ghi đè nhau (ảnh case SEC-02 hiện màn hình của test khác).                                              | Tên ảnh gồm mã case + thư mục riêng của test.                                                                                                        |
+| Các case còn lại | Lỗi của app, xem `bugs.md` B01–B09.                                                                                                              | Không đổi test.                                                                                                                                      |

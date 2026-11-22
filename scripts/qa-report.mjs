@@ -1,7 +1,7 @@
 // Builds qa/runs/run-NN.md and run-NN.json from the raw results in qa/runs/tmp,
 // mapping every test back to the case IDs in qa/test-cases.md. Exit code 1 if any case failed.
 import { copyFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { basename, join } from 'node:path';
+import { basename, dirname, join } from 'node:path';
 
 const n = process.argv[2] ?? '00';
 const tmp = 'qa/runs/tmp';
@@ -10,8 +10,10 @@ const now = new Date().toISOString().replace('T', ' ').slice(0, 16) + ' UTC';
 // ---- test cases from the catalogue
 const cases = [];
 for (const line of readFileSync('qa/test-cases.md', 'utf8').split('\n')) {
-  const m = line.match(/^\| ([A-Z]+-\d+b?) \| (P\d) \| (.+?) \| (.+?) \|$/);
-  if (m) cases.push({ id: m[1], prio: m[2], what: m[3], expected: m[4] });
+  // tolerate Prettier's column padding
+  const cells = line.split('|').map((c) => c.trim());
+  if (cells.length >= 6 && /^[A-Z]+-\d+b?$/.test(cells[1]) && /^P\d$/.test(cells[2]))
+    cases.push({ id: cells[1], prio: cells[2], what: cells[3], expected: cells[4] });
 }
 
 // ---- raw results → flat list { title, status, errors[], evidence[] }
@@ -57,7 +59,8 @@ const walk = (suite, path) => {
           mkdirSync(evDir, { recursive: true });
           const dest = join(
             evDir,
-            `${spec.title.match(/\[([A-Z]+-\d+b?)\]/)?.[1] ?? 'test'}-${basename(att.path)}`,
+            // unique per test: case id + the test's own artifact folder + file name
+            `${spec.title.match(/\[([A-Z]+-\d+b?)\]/)?.[1] ?? 'test'}-${basename(dirname(att.path)).slice(-24)}-${basename(att.path)}`,
           );
           copyFileSync(att.path, dest);
           evidence.push(dest);

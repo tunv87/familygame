@@ -65,9 +65,10 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
   });
   await ctx.addInitScript(
     ([welcome, theme, lang, name, sound]) => {
-      if (sessionStorage.getItem('qa-init')) return; // only seed once per tab (reloads keep user changes)
-      sessionStorage.setItem('qa-init', '1');
       try {
+        // only seed once per tab, so reloads keep what the test changed
+        if (sessionStorage.getItem('qa-init')) return;
+        sessionStorage.setItem('qa-init', '1');
         if (!welcome) localStorage.setItem('fg:onboarded', '{"done":true}');
         localStorage.setItem('fg:settings', JSON.stringify({ theme, lang, sound, bigText: false }));
         if (name) localStorage.setItem('fg:profile', JSON.stringify({ name, avatar: '🐰' }));
@@ -122,7 +123,12 @@ export async function createRoomAs(page: Page, name: string) {
 export async function joinAs(page: Page, code: string, name: string) {
   await page.goto(`/#/join/${code}`);
   const input = page.getByTestId('name-input');
-  if (await input.isVisible({ timeout: 3000 }).catch(() => false)) {
+  // isVisible() does not wait; give the profile dialog time to appear
+  const asked = await input
+    .waitFor({ timeout: 3000 })
+    .then(() => true)
+    .catch(() => false);
+  if (asked) {
     await input.fill(name);
     await page.getByTestId('save-profile').click();
   }

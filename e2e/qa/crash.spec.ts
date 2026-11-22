@@ -150,14 +150,16 @@ test('[CR-07] losing the connection mid-game and getting it back', async ({ brow
   await a.page.getByTestId('cell-0').click();
   await expect(b.page.getByTestId('status')).toContainText('Đến lượt bạn');
   await b.ctx.setOffline(true);
-  await b.page.waitForTimeout(3000);
+  await expect(b.page.getByTestId('offline'), '[CR-07] no offline notice for the player who lost the connection').toBeVisible({ timeout: 10_000 });
   await b.ctx.setOffline(false);
+  await expect(b.page.getByTestId('offline'), '[CR-07] offline notice stays after reconnect').toBeHidden({ timeout: 15_000 });
   await b.page.getByTestId('cell-4').click();
   await expect(
     a.page.getByTestId('status'),
     '[CR-07] game did not continue after reconnect',
   ).toContainText('Đến lượt bạn', { timeout: 15_000 });
-  expect([...a.errors, ...b.errors], '[CR-07] errors').toEqual([]);
+  const unexpected = [...a.errors, ...b.errors].filter((e) => !/ERR_INTERNET_DISCONNECTED/.test(e));
+  expect(unexpected, '[CR-07] errors').toEqual([]);
 });
 
 test('[CR-08] reloading mid online game keeps the game', async ({ browser }) => {

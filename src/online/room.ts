@@ -101,6 +101,7 @@ export function watchRoom(
   uid: string,
   onRoom: (room: Room | null) => void,
   onError: (e: Error) => void,
+  onConnection: (connected: boolean) => void = () => {},
 ): Unsubscribe {
   const db = getDb();
   const meRef = ref(db, `rooms/${code}/players/${uid}`);
@@ -115,9 +116,11 @@ export function watchRoom(
   const unsubConn = onValue(ref(db, '.info/connected'), (snap) => {
     if (snap.val() !== true) {
       log.warn('disconnected');
+      onConnection(false);
       return;
     }
     log.info('connected');
+    onConnection(true);
     void onDisconnect(ref(db, `rooms/${code}/players/${uid}/online`))
       .set(false)
       .then(async () => {

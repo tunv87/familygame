@@ -26,6 +26,9 @@ export function Countdown({ count }: { count: number }) {
   ) : null;
 }
 
+/** Text colour for a player colour: var(--p2) → var(--ink-p2), which passes WCAG AA on white. */
+export const inkOf = (color: string) => color.replace('var(--p', 'var(--ink-p');
+
 export function MiniPlayer({
   avatar,
   name,
@@ -45,7 +48,7 @@ export function MiniPlayer({
     <div className={`mini-player ${offline ? 'offline' : ''}`} style={{ borderColor: color }}>
       <span className="mini-avatar">{avatar ?? '❔'}</span>
       <span className="mini-name">{name ?? '…'}</span>
-      <span className="mini-score" style={{ color }} data-testid={`${testId}-score`}>
+      <span className="mini-score" style={{ color: inkOf(color) }} data-testid={`${testId}-score`}>
         {score}
       </span>
     </div>

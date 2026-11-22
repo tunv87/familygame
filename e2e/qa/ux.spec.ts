@@ -6,24 +6,26 @@ test('[UX-01] correct tap gives visual feedback within 100 ms', async ({ browser
   const { page } = await openApp(browser);
   await page.goto('/#/numbers/play?mode=practice&level=easy');
   await waitCountdown(page);
-  const times: number[] = [];
-  for (let n = 1; n <= 5; n++) {
-    const ms = await page.getByTestId(`num-${n}`).evaluate(async (el) => {
-      const t0 = performance.now();
-      const changed = new Promise<number>((resolve) => {
-        const mo = new MutationObserver(() => {
-          if (el.className.includes('mine')) {
-            mo.disconnect();
-            resolve(performance.now() - t0);
-          }
-        });
-        mo.observe(el, { attributes: true, attributeFilter: ['class'] });
-      });
-      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
-      return Promise.race([changed, new Promise<number>((r) => setTimeout(() => r(9999), 2000))]);
-    });
-    times.push(Math.round(ms));
-  }
+  await page.evaluate(() => {
+    const w = window as unknown as { __tap: number; __times: number[] };
+    w.__times = [];
+    document.addEventListener('pointerdown', () => (w.__tap = performance.now()), true);
+    new MutationObserver((list) => {
+      for (const m of list) {
+        const el = m.target as HTMLElement;
+        if (m.attributeName === 'class' && el.className.includes('mine') && !el.dataset.timed) {
+          el.dataset.timed = '1';
+          w.__times.push(performance.now() - w.__tap);
+        }
+      }
+    }).observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+  });
+  for (let n = 1; n <= 5; n++) await page.getByTestId(`num-${n}`).click();
+  await page.waitForTimeout(300);
+  const times = (await page.evaluate(() => (window as unknown as { __times: number[] }).__times)).map(
+    (t) => Math.round(t),
+  );
+  expect(times.length, '[UX-01] taps not registered').toBe(5);
   expect(Math.max(...times), `[UX-01] feedback times ms: ${times.join(', ')}`).toBeLessThanOrEqual(
     100,
   );

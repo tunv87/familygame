@@ -8,6 +8,10 @@ export const LEVELS: Record<NumbersLevel, { total: number; cols: number; rows: n
   hard: { total: 100, cols: 8, rows: 13 },
 };
 
+export function asLevel(v: unknown): NumbersLevel {
+  return typeof v === 'string' && v in LEVELS ? (v as NumbersLevel) : 'easy';
+}
+
 export const COLORS = ['#e63946', '#1d4ed8', '#2a9d8f', '#9d4edd', '#e76f51', '#386641'];
 
 export interface NumberTile {
@@ -35,7 +39,7 @@ export const BASE_SIZE = 0.78;
  * both players see the same board. Jitter + size bounds guarantee tiles never overlap.
  */
 export function makeLayout(level: NumbersLevel, seed: number): Layout {
-  const { total, cols, rows } = LEVELS[level];
+  const { total, cols, rows } = LEVELS[asLevel(level)];
   const rand = createRng(seed);
   const cells = shuffle(
     Array.from({ length: cols * rows }, (_, i) => i),
@@ -78,9 +82,9 @@ export function initialState(
   now: number,
 ): NumbersState {
   return {
-    level,
+    level: asLevel(level),
     seed,
-    total: LEVELS[level].total,
+    total: LEVELS[asLevel(level)].total,
     next: 1,
     owner: {},
     scores: Object.fromEntries(uids.map((u) => [u, 0])),

@@ -80,6 +80,7 @@ export const en: Record<MessageKey, string> = {
   copied: 'Link copied!',
   shareText: 'Come play {game} with me! Room code: {code}',
   waitingOpponent: 'Waiting for your friend…',
+  offlineSelf: 'No connection, reconnecting…',
   waitingReconnect: '{name} lost connection, waiting…',
   opponentLeft: '{name} left the room',
   leave: 'Leave room',
