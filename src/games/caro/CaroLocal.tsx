@@ -4,7 +4,7 @@ import { useProfile } from '../../app/settings';
 import { useT } from '../../i18n';
 import { createLogger } from '../../lib/logger';
 import { sfx } from '../../lib/sound';
-import { Avatar, HelpButton, ResultModal, TopBar } from '../../ui/components';
+import { Avatar, ExitConfirm, HelpButton, ResultModal, TopBar } from '../../ui/components';
 import { chooseMove, type AiLevel } from './ai';
 import { boardFromMoves, configFor, outcomeOfMoves, type Player } from './logic';
 import { CaroBoard } from './CaroBoard';
@@ -73,6 +73,9 @@ export function CaroLocal() {
     setMoves((m) => m.slice(0, Math.max(0, m.length - n)));
   };
 
+  const [confirmExit, setConfirmExit] = useState(false);
+  const exit = () => (moves.length > 0 && !outcome ? setConfirmExit(true) : navigate('/caro'));
+
   const newRound = () => {
     setMoves([]);
     setRound((r) => r + 1);
@@ -103,11 +106,7 @@ export function CaroLocal() {
   const mark = (isA: boolean) => ((isA ? aIsX : !aIsX) ? '✕' : '◯');
   return (
     <main className="screen">
-      <TopBar
-        title={t('gameCaro')}
-        onBack={() => navigate('/caro')}
-        right={<HelpButton steps={CARO_HELP} />}
-      />
+      <TopBar title={t('gameCaro')} onBack={exit} right={<HelpButton steps={CARO_HELP} />} />
       <div className="players">
         {[0, 1].map((k) => (
           <div key={k} className={`player ${!outcome && currentIsA === (k === 0) ? 'active' : ''}`}>
@@ -145,6 +144,9 @@ export function CaroLocal() {
           🔄 {t('newGame')}
         </button>
       </div>
+      {confirmExit && (
+        <ExitConfirm onConfirm={() => navigate('/caro')} onCancel={() => setConfirmExit(false)} />
+      )}
       {outcome && (
         <ResultModal
           title={resultTitle}

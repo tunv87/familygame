@@ -93,3 +93,20 @@ test('joining a missing room shows an error; a third player is refused', async (
   await joinByLink(third, code, 'Cô');
   await expect(third.getByText(`Phòng ${code} đã đủ 2 người`)).toBeVisible({ timeout: 15_000 });
 });
+
+test('exit asks for confirmation mid-game and the friend sees you left', async ({ browser }) => {
+  const a = await newPlayer(browser);
+  const b = await newPlayer(browser);
+  await a.goto('/#/numbers');
+  await a.getByTestId('level-easy').click();
+  const code = await createRoom(a, 'Bà');
+  await joinByLink(b, code, 'Cháu');
+  await expect(a.getByTestId('numbers-board')).toBeVisible({ timeout: 15_000 });
+  await a.getByTestId('exit').click();
+  await a.getByTestId('keep-playing').click();
+  await expect(a.getByTestId('numbers-board')).toBeVisible();
+  await a.getByTestId('exit').click();
+  await a.getByTestId('confirm-exit').click();
+  await expect(a.getByTestId('game-numbers')).toBeVisible();
+  await expect(b.getByText('Bà đã rời phòng')).toBeVisible({ timeout: 15_000 });
+});

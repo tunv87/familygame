@@ -151,6 +151,33 @@ export function Confetti() {
   );
 }
 
+/** "Leave this game?" confirmation so a stray tap doesn't end a game in progress. */
+export function ExitConfirm({
+  hint,
+  onConfirm,
+  onCancel,
+}: {
+  hint?: string;
+  onConfirm: () => void;
+  onCancel: () => void;
+}) {
+  const t = useT();
+  return (
+    <Modal onClose={onCancel}>
+      <h2>🚪 {t('exitConfirm')}</h2>
+      {hint && <div className="muted">{hint}</div>}
+      <div className="stack">
+        <button className="btn" onClick={onCancel} data-testid="keep-playing">
+          ▶️ {t('keepPlaying')}
+        </button>
+        <button className="btn secondary" onClick={onConfirm} data-testid="confirm-exit">
+          🚪 {t('exitGame')}
+        </button>
+      </div>
+    </Modal>
+  );
+}
+
 /** Result dialog shown at the end of a round. */
 export function ResultModal({
   title,

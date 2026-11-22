@@ -825,3 +825,30 @@ button {
 .num.hint .num-face {
   outline: 4px dashed var(--primary);
 }
+
+.exit-btn {
+  min-height: 44px;
+  padding: 6px 12px;
+  font-size: 0.85em;
+  flex: none;
+}
+
+/* tighter HUD so short names like "Min" are not cut off on phones */
+.numbers-hud .target .big {
+  padding: 0 10px;
+  min-width: 1.9em;
+}
+
+.numbers-hud .exit-btn {
+  padding: 6px 10px;
+  gap: 4px;
+}
+
+.mini-avatar {
+  font-size: 1.1em;
+}
+
+.mini-player {
+  padding: 2px 6px 2px 3px;
+  gap: 3px;
+}
