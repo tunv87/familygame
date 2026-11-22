@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Gia đình</string>
+    <string name="title_activity_main">Gia đình</string>
+    <string name="package_name">io.github.tunv87.familygame</string>
+    <string name="custom_url_scheme">io.github.tunv87.familygame</string>
+</resources>

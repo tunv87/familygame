@@ -1,4 +1,5 @@
 import { createLogger } from './logger';
+import { persist } from './native';
 
 const log = createLogger('storage');
 const PREFIX = 'fg:';
@@ -15,7 +16,9 @@ export function load<T>(key: string, fallback: T): T {
 
 export function save<T>(key: string, value: T) {
   try {
-    localStorage.setItem(PREFIX + key, JSON.stringify(value));
+    const json = JSON.stringify(value);
+    localStorage.setItem(PREFIX + key, json);
+    persist(PREFIX + key, json);
   } catch (e) {
     log.warn('save failed', { key, e: String(e) });
   }

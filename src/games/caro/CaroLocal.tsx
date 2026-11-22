@@ -5,7 +5,14 @@ import { useTheme } from '../../app/theme';
 import { useT } from '../../i18n';
 import { createLogger } from '../../lib/logger';
 import { sfx } from '../../lib/sound';
-import { Avatar, ExitConfirm, HelpButton, ResultModal, TopBar } from '../../ui/components';
+import {
+  Avatar,
+  ExitConfirm,
+  HelpButton,
+  ResultModal,
+  TopBar,
+  useBackHandler,
+} from '../../ui/components';
 import { chooseMove, type AiLevel } from './ai';
 import { boardFromMoves, configFor, outcomeOfMoves, type Player } from './logic';
 import { CaroBoard } from './CaroBoard';
@@ -77,6 +84,7 @@ export function CaroLocal() {
 
   const [confirmExit, setConfirmExit] = useState(false);
   const exit = () => (moves.length > 0 && !outcome ? setConfirmExit(true) : navigate('/caro'));
+  useBackHandler(exit);
 
   const newRound = () => {
     setMoves([]);

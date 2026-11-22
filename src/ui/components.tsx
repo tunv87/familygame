@@ -1,9 +1,20 @@
-import { useEffect, useMemo, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AVATARS, getProfile, setProfile, useProfile, type Profile } from '../app/settings';
 import { useT, type MessageKey } from '../i18n';
 import { sfx } from '../lib/sound';
 import { useTheme } from '../app/theme';
+import { pushBackHandler } from '../lib/native';
+
+/** While mounted (and `active`), the Android back button calls `handler` instead of going back. */
+export function useBackHandler(handler: () => void, active = true) {
+  const ref = useRef(handler);
+  ref.current = handler;
+  useEffect(() => {
+    if (!active) return;
+    return pushBackHandler(() => ref.current());
+  }, [active]);
+}
 
 export function TopBar({
   title,
@@ -166,6 +177,7 @@ export function ExitConfirm({
   onCancel: () => void;
 }) {
   const t = useT();
+  useBackHandler(onCancel);
   return (
     <Modal onClose={onCancel}>
       <h2>🚪 {t('exitConfirm')}</h2>

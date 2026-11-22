@@ -14,6 +14,7 @@ import { SettingsScreen } from './SettingsScreen';
 import { useSettings } from './settings';
 import { THEMES } from './theme';
 import { translate } from '../i18n';
+import { hideSplash, setStatusBarTheme } from '../lib/native';
 
 const log = createLogger('nav');
 
@@ -30,10 +31,12 @@ export function App() {
     document.documentElement.lang = lang;
     document.documentElement.dataset.theme = theme;
     document.title = translate(lang, 'appName');
+    setStatusBarTheme(theme);
     document
       .querySelector('meta[name="theme-color"]')
       ?.setAttribute('content', THEMES[theme].themeColor);
   }, [bigText, lang, theme]);
+  useEffect(hideSplash, []);
   return (
     <HashRouter>
       <RouteLogger />

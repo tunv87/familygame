@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
-import { Card, HelpButton, TopBar } from '../../ui/components';
+import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
 import { NUMBERS_HELP } from './help';
 import type { NumbersLevel } from './logic';
 import { formatSeconds, getRecord } from './records';
@@ -25,6 +25,8 @@ export function NumbersSetup() {
     else if (mode) setMode(null);
     else navigate('/');
   };
+
+  useBackHandler(back);
 
   const pickLevel = (lv: NumbersLevel) => {
     if (mode === 'online') setLevel(lv);

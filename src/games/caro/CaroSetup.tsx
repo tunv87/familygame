@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
-import { Card, HelpButton, TopBar } from '../../ui/components';
+import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
 import type { Mode } from '../registry';
 import type { AiLevel } from './ai';
 import { CARO_HELP } from './help';
@@ -18,6 +18,8 @@ export function CaroSetup() {
     else if (mode !== null) setMode(null);
     else navigate('/');
   };
+
+  useBackHandler(back);
 
   const pickSize = (s: number) => {
     if (mode === 'local') navigate(`/caro/play?mode=local&size=${s}`);

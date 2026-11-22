@@ -1,5 +1,6 @@
 import { registerSW } from 'virtual:pwa-register';
 import { createLogger } from './logger';
+import { isNative } from './native';
 
 const log = createLogger('pwa');
 const CHECK_EVERY_MS = 15 * 60 * 1000;
@@ -12,7 +13,8 @@ const CHECK_EVERY_MS = 15 * 60 * 1000;
  * a new version is installed.
  */
 export function setupPwa() {
-  if (!('serviceWorker' in navigator) || import.meta.env.DEV) return;
+  // Native apps ship their files inside the app bundle: no service worker there.
+  if (!('serviceWorker' in navigator) || import.meta.env.DEV || isNative) return;
   const updateSW = registerSW({
     immediate: true,
     onRegisteredSW(url, reg) {
