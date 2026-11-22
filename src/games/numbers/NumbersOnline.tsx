@@ -6,11 +6,46 @@ import { OnlineResult } from '../../online/OnlineResult';
 import { PlayerChip } from '../../online/PlayerChip';
 import { transactState } from '../../online/room';
 import type { OnlineGameProps } from '../../online/RoomScreen';
-import { applyClaim, makeLayout, normalizeOwner, numbersWinner, type NumbersState } from './logic';
+import type { RoomPlayer } from '../../online/types';
+import {
+  JITTER,
+  applyClaim,
+  makeLayout,
+  normalizeOwner,
+  numbersWinner,
+  type NumbersState,
+} from './logic';
 
 const log = createLogger('numbers');
 const COUNTDOWN = 3;
 const HINT_AFTER_MS = 15_000;
+/** Tap target diameter in grid cells: tiles are ≥ 1 - 2·JITTER apart, so this never overlaps. */
+const HIT_SIZE = 1 - 2 * JITTER;
+
+function MiniPlayer({
+  player,
+  score,
+  color,
+  testId,
+}: {
+  player?: RoomPlayer;
+  score: number;
+  color: string;
+  testId: string;
+}) {
+  return (
+    <div
+      className={`mini-player ${player && !player.online ? 'offline' : ''}`}
+      style={{ borderColor: color }}
+    >
+      <span className="mini-avatar">{player?.avatar ?? '❔'}</span>
+      <span className="mini-name">{player?.name ?? '…'}</span>
+      <span className="mini-score" style={{ color }} data-testid={`${testId}-score`}>
+        {score}
+      </span>
+    </div>
+  );
+}
 
 export function NumbersOnline(props: OnlineGameProps) {
   const { room, uid, oppUid, me, opp } = props;
@@ -85,17 +120,17 @@ export function NumbersOnline(props: OnlineGameProps) {
 
   return (
     <>
-      <div className="players">
-        <PlayerChip player={me} score={s.scores?.[uid] ?? 0} color="var(--p1)" testId="me" />
-        <PlayerChip player={opp} score={s.scores?.[oppUid] ?? 0} color="var(--p2)" testId="opp" />
+      <div className="numbers-hud">
+        <button className="icon-btn small" aria-label={t('leave')} onClick={props.onLeave}>
+          ⬅️
+        </button>
+        <MiniPlayer player={me} score={s.scores?.[uid] ?? 0} color="var(--p1)" testId="me" />
+        <div className="target" data-testid="target">
+          {s.done ? '🏁' : <span className="big">{s.next}</span>}
+        </div>
+        <MiniPlayer player={opp} score={s.scores?.[oppUid] ?? 0} color="var(--p2)" testId="opp" />
       </div>
-      <div className="target" data-testid="target">
-        {s.done ? '🏁' : t('numbersFind')}
-        {!s.done && <span className="big">{s.next}</span>}
-      </div>
-      <div className="status-line muted" style={{ fontSize: '0.85em' }}>
-        {toast}
-      </div>
+      <div className="numbers-toast">{toast}</div>
       <div className="numbers-wrap" ref={wrapRef}>
         <div
           className="numbers-board"
@@ -114,9 +149,8 @@ export function NumbersOnline(props: OnlineGameProps) {
                   {
                     left: `${tile.x * 100}%`,
                     top: `${tile.y * 100}%`,
-                    width: tile.size * cellPx,
-                    fontSize: tile.size * cellPx * 0.5,
-                    color: tile.color,
+                    // Hit area is as large as the grid allows without overlapping neighbours.
+                    width: HIT_SIZE * cellPx,
                     '--rot': `${tile.rotate}deg`,
                   } as React.CSSProperties
                 }
@@ -125,7 +159,12 @@ export function NumbersOnline(props: OnlineGameProps) {
                   void tap(tile.n);
                 }}
               >
-                {tile.n}
+                <span
+                  className="num-face"
+                  style={{ width: tile.size * cellPx, fontSize: tile.size * cellPx * 0.55 }}
+                >
+                  {tile.n}
+                </span>
               </button>
             );
           })}
