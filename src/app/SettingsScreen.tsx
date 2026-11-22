@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useT } from '../i18n';
 import { Avatar, ProfileModal, TopBar } from '../ui/components';
-import { setSettings, useProfile, useSettings, type Lang } from './settings';
+import { setSettings, useProfile, useSettings, type Lang, type ThemeId } from './settings';
 import { useState } from 'react';
 
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
@@ -34,6 +34,21 @@ export function SettingsScreen() {
         </span>
         ✏️
       </button>
+      <div className="setting-row">
+        <span>🎨 {t('theme')}</span>
+        <div className="segmented">
+          {(['classic', 'cute'] as ThemeId[]).map((theme) => (
+            <button
+              key={theme}
+              aria-pressed={s.theme === theme}
+              data-testid={`theme-${theme}`}
+              onClick={() => setSettings({ theme })}
+            >
+              {theme === 'classic' ? t('themeClassic') : t('themeCute')}
+            </button>
+          ))}
+        </div>
+      </div>
       <div className="setting-row">
         <span>🔊 {t('sound')}</span>
         <Toggle value={s.sound} onChange={(sound) => setSettings({ sound })} />

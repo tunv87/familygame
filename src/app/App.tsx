@@ -10,6 +10,7 @@ import { DebugScreen } from './DebugScreen';
 import { Hub } from './Hub';
 import { SettingsScreen } from './SettingsScreen';
 import { useSettings } from './settings';
+import { THEMES } from './theme';
 
 const log = createLogger('nav');
 
@@ -20,11 +21,15 @@ function RouteLogger() {
 }
 
 export function App() {
-  const { bigText, lang } = useSettings();
+  const { bigText, lang, theme } = useSettings();
   useEffect(() => {
     document.documentElement.dataset.bigtext = bigText ? '1' : '0';
     document.documentElement.lang = lang;
-  }, [bigText, lang]);
+    document.documentElement.dataset.theme = theme;
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', THEMES[theme].themeColor);
+  }, [bigText, lang, theme]);
   return (
     <HashRouter>
       <RouteLogger />

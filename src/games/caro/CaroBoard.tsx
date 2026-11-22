@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import type { Stone } from './logic';
+import { useTheme } from '../../app/theme';
 
 const MIN_CELL_BIG = 34; // px; comfortable finger target on the 15×15 board
 
@@ -23,6 +24,7 @@ export function CaroBoard({
   const [avail, setAvail] = useState({ w: 320, h: 320 });
   const [zoomed, setZoomed] = useState(false);
   const small = size <= 4;
+  const theme = useTheme();
 
   useLayoutEffect(() => {
     const el = wrapRef.current;
@@ -72,7 +74,7 @@ export function CaroBoard({
               disabled={disabled || s !== 0}
               onClick={() => onCell(i)}
             >
-              {s !== 0 && <span className="mark">{s === 1 ? '✕' : '◯'}</span>}
+              {s !== 0 && <span className="mark">{s === 1 ? theme.x : theme.o}</span>}
             </button>
           ))}
         </div>

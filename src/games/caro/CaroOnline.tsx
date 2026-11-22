@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useT } from '../../i18n';
+import { useTheme } from '../../app/theme';
 import { createLogger } from '../../lib/logger';
 import { sfx } from '../../lib/sound';
 import { OnlineResult } from '../../online/OnlineResult';
@@ -15,6 +16,7 @@ const log = createLogger('caro-online');
 export function CaroOnline(props: OnlineGameProps) {
   const { room, uid, oppUid, me, opp } = props;
   const t = useT();
+  const theme = useTheme();
   const s = room.state as CaroOnlineState;
   const moves = useMemo(() => s.moves ?? [], [s.moves]);
   const board = useMemo(() => boardFromMoves(s.size, moves), [s.size, moves]);
@@ -46,21 +48,21 @@ export function CaroOnline(props: OnlineGameProps) {
   };
 
   const markOf = (isX: boolean) => (
-    <span style={{ color: isX ? 'var(--x)' : 'var(--o)' }}>{isX ? '✕' : '◯'}</span>
+    <span style={{ color: isX ? 'var(--x)' : 'var(--o)' }}>{isX ? theme.x : theme.o}</span>
   );
   return (
     <>
       <div className="players">
         <PlayerChip
           player={me}
-          label={iAmX ? '✕' : '◯'}
+          mark={iAmX ? 'x' : 'o'}
           score={winsOf(room, uid)}
           active={myTurn}
           testId="me"
         />
         <PlayerChip
           player={opp}
-          label={iAmX ? '◯' : '✕'}
+          mark={iAmX ? 'o' : 'x'}
           score={winsOf(room, oppUid)}
           active={!s.winner && !myTurn}
           testId="opp"

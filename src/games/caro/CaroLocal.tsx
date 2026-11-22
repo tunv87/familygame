@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
+import { useTheme } from '../../app/theme';
 import { useT } from '../../i18n';
 import { createLogger } from '../../lib/logger';
 import { sfx } from '../../lib/sound';
@@ -17,6 +18,7 @@ export function CaroLocal() {
   const t = useT();
   const navigate = useNavigate();
   const profile = useProfile();
+  const theme = useTheme();
   const [params] = useSearchParams();
   const mode = params.get('mode') === 'local' ? 'local' : 'solo';
   const size = Number(params.get('size')) === 15 ? 15 : 3;
@@ -103,20 +105,18 @@ export function CaroLocal() {
     }
   }
 
-  const mark = (isA: boolean) => ((isA ? aIsX : !aIsX) ? '✕' : '◯');
+  const mark = (isA: boolean) => ((isA ? aIsX : !aIsX) ? theme.x : theme.o);
   return (
     <main className="screen">
       <TopBar title={t('gameCaro')} onBack={exit} right={<HelpButton steps={CARO_HELP} />} />
       <div className="players">
         {[0, 1].map((k) => (
           <div key={k} className={`player ${!outcome && currentIsA === (k === 0) ? 'active' : ''}`}>
-            <Avatar emoji={avatars[k]} />
-            <span className="name">
-              <span style={{ color: (k === 0) === aIsX ? 'var(--x)' : 'var(--o)' }}>
-                {mark(k === 0)}
-              </span>{' '}
-              {names[k]}
+            <span className="avatar-wrap">
+              <Avatar emoji={avatars[k]} />
+              <span className={`badge ${(k === 0) === aIsX ? 'x' : 'o'}`}>{mark(k === 0)}</span>
             </span>
+            <span className="name">{names[k]}</span>
             <span className="score">{score[k]}</span>
           </div>
         ))}
