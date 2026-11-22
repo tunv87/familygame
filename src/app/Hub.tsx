@@ -1,10 +1,11 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GAMES } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
 import { setSettings, useSettings } from './settings';
 import { useTheme } from './theme';
+import { Welcome, needsWelcome } from './Welcome';
 
 export function Hub() {
   const t = useT();
@@ -12,6 +13,7 @@ export function Hub() {
   const settings = useSettings();
   const theme = useTheme();
   const taps = useRef<number[]>([]);
+  const [welcome, setWelcome] = useState(needsWelcome);
   // Hidden shortcut: tap the title 5 times quickly to open the debug log.
   const onTitleTap = () => {
     const now = Date.now();
@@ -57,6 +59,7 @@ export function Hub() {
           />
         ))}
       </div>
+      {welcome && <Welcome onDone={() => setWelcome(false)} />}
       <div className="grow" />
       <Card
         emoji="🔑"

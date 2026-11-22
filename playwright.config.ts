@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test';
+import { SKIP_WELCOME } from './e2e/helpers';
 
 const PORT = 5174;
 
@@ -17,7 +18,12 @@ export default defineConfig({
     {
       // iPhone viewport/touch emulation on Chromium (WebKit isn't installed in CI by default).
       name: 'iphone',
-      use: { ...devices['iPhone 14'], browserName: 'chromium' },
+      use: {
+        ...devices['iPhone 14'],
+        browserName: 'chromium',
+        locale: 'vi-VN',
+        storageState: SKIP_WELCOME,
+      },
     },
   ],
   webServer: {

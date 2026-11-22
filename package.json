@@ -16,7 +16,8 @@
     "emulators": "firebase emulators:start --only auth,database --project demo-familygame",
     "test:rules": "firebase emulators:exec --only auth,database --project demo-familygame \"vitest run --config vitest.rules.config.ts\"",
     "e2e": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --trace off\"",
-    "test:pwa": "node scripts/check-sw-update.mjs"
+    "test:pwa": "node scripts/check-sw-update.mjs",
+    "prebuild": "node scripts/make-privacy.mjs"
   },
   "dependencies": {
     "@fontsource/nunito": "^5.3.0",

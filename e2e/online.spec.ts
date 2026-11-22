@@ -42,6 +42,7 @@ test('online numbers easy: race to find 1→30', async ({ browser }) => {
   const b = await newPlayer(browser);
   await a.goto('/');
   await a.getByTestId('game-numbers').click();
+  await a.getByTestId('mode-online').click();
   await a.getByTestId('level-easy').click();
   const code = await createRoom(a, 'Mẹ');
 
@@ -98,6 +99,7 @@ test('exit asks for confirmation mid-game and the friend sees you left', async (
   const a = await newPlayer(browser);
   const b = await newPlayer(browser);
   await a.goto('/#/numbers');
+  await a.getByTestId('mode-online').click();
   await a.getByTestId('level-easy').click();
   const code = await createRoom(a, 'Bà');
   await joinByLink(b, code, 'Cháu');

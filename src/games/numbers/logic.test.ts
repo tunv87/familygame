@@ -80,3 +80,18 @@ describe('numbers claims', () => {
     expect(numbersWinner(s)).toBe('draw');
   });
 });
+
+describe('numbers bot', () => {
+  it('waits within the configured range for every level', async () => {
+    const { BOT_DELAY, botDelayMs } = await import('./logic');
+    for (const level of ['easy', 'medium', 'hard'] as const) {
+      const [lo, hi] = BOT_DELAY[level];
+      for (const r of [0, 0.5, 0.999]) {
+        const d = botDelayMs(level, () => r);
+        expect(d).toBeGreaterThanOrEqual(lo);
+        expect(d).toBeLessThanOrEqual(hi);
+      }
+    }
+    expect(BOT_DELAY.easy[0]).toBeGreaterThan(BOT_DELAY.hard[1]);
+  });
+});
