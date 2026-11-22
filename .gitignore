@@ -8,3 +8,11 @@ playwright-report
 .env.local
 .firebase
 *.tsbuildinfo
+
+# store tooling
+ios-asc-key.p8
+/build
+vendor/bundle
+.bundle
+*.jks
+*.keystore

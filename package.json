@@ -19,7 +19,8 @@
     "test:pwa": "node scripts/check-sw-update.mjs",
     "prebuild": "node scripts/make-privacy.mjs",
     "build:native": "VITE_BASE=./ npm run build",
-    "cap:sync": "npm run build:native && cap sync"
+    "cap:sync": "npm run build:native && cap sync",
+    "store:screenshots": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --config store/playwright.store.config.ts\""
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",

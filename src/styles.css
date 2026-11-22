@@ -1066,3 +1066,43 @@ input {
   gap: 12px;
   padding: 20px;
 }
+
+/* ---------- tablets (iPad, Android tablets): bigger type and targets, wider content ---------- */
+@media (min-width: 700px) and (min-height: 700px) {
+  :root {
+    --font: 26px;
+    --tap: 80px;
+  }
+
+  :root[data-bigtext='1'] {
+    --font: 30px;
+    --tap: 92px;
+  }
+
+  .screen {
+    max-width: 960px;
+    gap: 22px;
+  }
+
+  .hub-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+
+  .hub-card {
+    padding: 48px 24px;
+  }
+
+  .hub-card .emoji {
+    font-size: 5.5em;
+  }
+
+  .modal {
+    max-width: 560px;
+  }
+
+  .icon-btn.small {
+    width: 60px;
+    height: 60px;
+  }
+}
