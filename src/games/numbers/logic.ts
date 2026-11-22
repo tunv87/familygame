@@ -28,8 +28,7 @@ export interface Layout {
 }
 
 export const JITTER = 0.1;
-export const BASE_SIZE = 0.7;
-export const MAX_SCALE = 1.1;
+export const BASE_SIZE = 0.78;
 
 /**
  * Scatter numbers 1..total on a jittered grid. Deterministic for a given seed so that
@@ -47,12 +46,11 @@ export function makeLayout(level: NumbersLevel, seed: number): Layout {
     const row = Math.floor(cell / cols);
     const jx = (rand() * 2 - 1) * JITTER;
     const jy = (rand() * 2 - 1) * JITTER;
-    const scale = 0.8 + rand() * (MAX_SCALE - 0.8);
     return {
       n: k + 1,
       x: (col + 0.5 + jx) / cols,
       y: (row + 0.5 + jy) / rows,
-      size: BASE_SIZE * scale,
+      size: BASE_SIZE,
       rotate: Math.round((rand() * 2 - 1) * 30),
       color: COLORS[Math.floor(rand() * COLORS.length)],
     };

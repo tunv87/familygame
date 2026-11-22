@@ -25,6 +25,13 @@ describe('numbers layout', () => {
     expect(makeLayout('hard', 99)).not.toEqual(makeLayout('hard', 100));
   });
 
+  it('gives every number the same size (only position/rotation vary)', () => {
+    for (const level of levels) {
+      const sizes = new Set(makeLayout(level, 7).tiles.map((t) => t.size));
+      expect(sizes.size).toBe(1);
+    }
+  });
+
   it('never overlaps tiles and stays inside the board', () => {
     for (const level of levels) {
       for (let seed = 0; seed < 30; seed++) {

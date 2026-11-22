@@ -33,7 +33,12 @@ export default defineConfig({
           { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      workbox: { globPatterns: ['**/*.{js,css,html,svg,png}'] },
+      workbox: {
+        globPatterns: [
+          '**/*.{js,css,html,svg,png}',
+          '**/*nunito-{latin,latin-ext,vietnamese}-*-normal.woff2',
+        ],
+      },
     }),
   ],
   server: { host: true, port: 5173 },
