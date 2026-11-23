@@ -7,3 +7,6 @@ playwright-report
 android
 ios
 assets
+qa/runs
+qa/evidence
+public/privacy.html
