@@ -158,6 +158,16 @@ async function scene(
       for (const m of moves) await page.getByTestId(`cell-${m}`).click();
       break;
     }
+    case 'noitu':
+      // a few words into the chain: the next word is being typed
+      await page.goto('/#/noitu/play?mode=local');
+      await page.getByTestId('nt-input').waitFor({ timeout: 15_000 });
+      for (let i = 0; i < 3; i++) {
+        await page.getByTestId('nt-hint').click();
+        await page.getByTestId('nt-go').click();
+      }
+      await page.getByTestId('nt-hint').click();
+      break;
     case 'oanquan':
       // one move each, then the player picks a field: the direction buttons light up
       await page.goto('/#/oanquan/play?mode=local');

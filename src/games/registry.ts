@@ -4,7 +4,7 @@ export type Mode = 'solo' | 'local' | 'online';
 export type GameGroup = 'folk' | 'mind';
 
 export interface GameInfo {
-  id: 'numbers' | 'caro' | 'coganh' | 'oanquan';
+  id: 'numbers' | 'caro' | 'coganh' | 'oanquan' | 'noitu';
   emoji: string;
   title: MessageKey;
   desc: MessageKey;
@@ -45,6 +45,15 @@ export const GAMES: GameInfo[] = [
     title: 'gameCaro',
     desc: 'gameCaroDesc',
     path: '/caro',
+    modes: ['solo', 'local', 'online'],
+    group: 'mind',
+  },
+  {
+    id: 'noitu',
+    emoji: '🔗',
+    title: 'gameNoiTu',
+    desc: 'gameNoiTuDesc',
+    path: '/noitu',
     modes: ['solo', 'local', 'online'],
     group: 'mind',
   },

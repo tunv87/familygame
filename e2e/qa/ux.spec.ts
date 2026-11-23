@@ -67,6 +67,8 @@ test('[UX-03] every screen has a way back or out', async ({ browser }) => {
     '/#/coganh/play?mode=solo&level=easy',
     '/#/oanquan',
     '/#/oanquan/play?mode=solo&level=easy',
+    '/#/noitu',
+    '/#/noitu/play?mode=solo&level=easy',
   ];
   for (const r of routes) {
     await page.goto(r);

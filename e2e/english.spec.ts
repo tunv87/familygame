@@ -10,7 +10,7 @@ async function noVietnamese(page: Page, screen: string) {
     // with its rule names Gánh / Mở, and Ô Ăn Quan.
     document.body.innerText
       .replace('Tiếng Việt', '')
-      .replace(/Cờ Gánh|Gánh|Mở|Ô Ăn Quan/g, '')
+      .replace(/Cờ Gánh|Gánh|Mở|Ô Ăn Quan|Nối từ/g, '')
       .replace(/\s+/g, ' '),
   );
   expect(

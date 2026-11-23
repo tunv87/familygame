@@ -1,1 +1,1 @@
-o an quan,mancala,co ganh,tic tac toe,gomoku,vietnamese,number search,family,kids,offline
+learn vietnamese,word chain,o an quan,mancala,co ganh,gomoku,tic tac toe,family,kids,offline

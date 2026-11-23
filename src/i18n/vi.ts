@@ -191,6 +191,35 @@ export const vi = {
   numbersStory2:
     'Ở Việt Nam, học sinh hay viết các số lung tung lên giấy rồi thi xem ai khoanh được số tiếp theo nhanh hơn. Trò này giúp mắt quét nhanh, nhận biết số, rất hợp để ông bà chơi cùng cháu.',
   numbersStory3: 'Mẹo: đừng dò từng ô. Hãy nhìn bao quát cả bảng và nhớ vị trí những số sắp tới.',
+  gameNoiTu: 'Nối từ',
+  gameNoiTuDesc: 'Nối chữ tiếng Việt, học thêm nghĩa',
+  aboutWords: 'Từ điển Nối từ: Wiktionary (CC BY-SA 4.0), qua kaikki.org.',
+  ntLoading: 'Đang mở từ điển…',
+  ntLoadFailed: 'Chưa tải được từ điển. Hãy kết nối mạng rồi thử lại.',
+  ntYourTurn: 'Đến lượt bạn!',
+  ntPlaceholder: 'gõ tiếng tiếp theo',
+  ntGo: 'Nối!',
+  ntHint: 'Gợi ý ({n})',
+  ntGiveUp: 'Chịu',
+  ntUnknown: '"{w}" chưa có trong từ điển',
+  ntUsed: '"{w}" đã dùng rồi',
+  ntChain: 'Phải bắt đầu bằng "{w}"',
+  ntChoose: 'Bạn muốn nói từ nào?',
+  ntTimeout: '{name} hết giờ',
+  ntGaveUp: '{name} chịu thua',
+  ntChainLen: 'chuỗi dài {n} từ',
+  ntCouldSay: 'Có thể nối: {w}',
+  ntHelp1:
+    'Mỗi người nói một từ 2 tiếng, bắt đầu bằng tiếng cuối của từ trước: học sinh → sinh viên → viên phấn…',
+  ntHelp2: 'Chỉ cần gõ tiếng thứ hai. Gõ không dấu cũng được, nếu có nhiều từ thì chọn từ đúng.',
+  ntHelp3: 'Hết giờ, chịu thua, hoặc không nối được là thua. Từ đã dùng thì không được dùng lại.',
+  ntHelp4: 'Mỗi ván có 3 lần gợi ý. Dưới mỗi từ có nghĩa tiếng Anh để học thêm.',
+  ntStory1:
+    'Nối từ (hay nối chữ) là trò chơi chữ quen thuộc của người Việt, từ giờ ra chơi đến những buổi sinh hoạt tập thể và giờ đây trên mạng xã hội.',
+  ntStory2:
+    'Trò chơi dựa vào một nét đặc biệt của tiếng Việt: mỗi tiếng là một âm tiết, và rất nhiều từ được ghép từ hai tiếng. Người Nhật có trò "shiritori", người nói tiếng Anh có "word chain" – nối theo chữ cái hoặc âm cuối.',
+  ntStory3:
+    'Từ điển trong game dựa trên Wiktionary (giấy phép CC BY-SA) và có nghĩa tiếng Anh, để các bạn nhỏ ở trong và ngoài nước vừa chơi vừa học thêm từ mới.',
 } as const;
 
 export type MessageKey = keyof typeof vi;

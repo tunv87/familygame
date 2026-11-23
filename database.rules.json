@@ -11,7 +11,7 @@
           ".validate": "newData.val() === $code"
         },
         "game": {
-          ".validate": "newData.val() === 'numbers' || newData.val() === 'caro' || newData.val() === 'coganh' || newData.val() === 'oanquan'"
+          ".validate": "newData.val() === 'numbers' || newData.val() === 'caro' || newData.val() === 'coganh' || newData.val() === 'oanquan' || newData.val() === 'noitu'"
         },
         "options": {
           ".validate": "newData.hasChildren()"

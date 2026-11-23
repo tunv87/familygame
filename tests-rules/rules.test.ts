@@ -222,6 +222,10 @@ describe('[SEC-08] game types', () => {
       set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'oanquan', options: { v: 1 } }),
     );
     await admin('DELETE', '');
+    await ok(
+      set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'noitu', options: { v: 1 } }),
+    );
+    await admin('DELETE', '');
     await denied(set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'chess' }));
   });
 });

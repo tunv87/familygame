@@ -108,8 +108,9 @@ test('[UX-23] hub groups games; every game has rules and a story', async ({ brow
   await expect(folk.getByTestId('game-coganh')).toBeVisible();
   await expect(mind.getByTestId('game-caro'), '[UX-23] Ca rô not in brain games').toBeVisible();
   await expect(mind.getByTestId('game-numbers')).toBeVisible();
+  await expect(mind.getByTestId('game-noitu')).toBeVisible();
   await evidence(page, 'oanquan', 'D2', 'UX-23-hub');
-  for (const g of ['oanquan', 'coganh', 'caro', 'numbers']) {
+  for (const g of ['oanquan', 'coganh', 'caro', 'numbers', 'noitu']) {
     await page.goto(`/#/${g}`);
     await page.getByTestId('help').click();
     await expect(page.getByTestId('help-rules'), `[UX-23] ${g} rules`).toBeVisible();

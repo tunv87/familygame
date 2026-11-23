@@ -1607,3 +1607,168 @@ input {
     font-size: 1em;
   }
 }
+
+/* ---------- nối từ ---------- */
+.nt-timer {
+  position: relative;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.nt-timer-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: color-mix(in srgb, var(--primary) 55%, transparent);
+  transition: width 0.25s linear;
+}
+
+.nt-timer.low .nt-timer-fill {
+  background: color-mix(in srgb, var(--bad) 45%, transparent);
+}
+
+.nt-timer span {
+  position: relative;
+}
+
+.nt-chain {
+  flex: 1;
+  min-height: 120px;
+  margin: 0;
+  padding: 4px;
+  list-style: none;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.nt-bubble {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  max-width: 85%;
+}
+
+.nt-bubble .avatar {
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  flex: none;
+}
+
+.nt-bubble.me {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.nt-bubble.start {
+  align-self: center;
+}
+
+.nt-text {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 14px;
+  border-radius: 18px;
+  background: var(--surface);
+  border: 2px solid var(--border);
+}
+
+.nt-bubble.me .nt-text {
+  background: color-mix(in srgb, var(--primary) 30%, var(--surface));
+  border-color: var(--primary);
+}
+
+.nt-bubble.start .nt-text {
+  background: transparent;
+  border-style: dashed;
+  text-align: center;
+}
+
+.nt-text b {
+  font-size: 1.15em;
+}
+
+.nt-text small {
+  color: var(--muted);
+  font-size: 0.7em;
+  line-height: 1.2;
+}
+
+.nt-answer {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nt-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.nt-prefix {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 14px;
+  background: var(--avatar-bg);
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.nt-input {
+  flex: 1;
+  min-width: 0;
+  min-height: var(--tap);
+  padding: 0 12px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+}
+
+.nt-input:focus {
+  outline: 3px solid var(--primary);
+  border-color: var(--primary);
+}
+
+.nt-go {
+  flex: none;
+  min-width: 80px;
+}
+
+.nt-error {
+  min-height: 1.3em;
+  color: var(--bad);
+  font-size: 0.85em;
+  font-weight: 700;
+  text-align: center;
+}
+
+.nt-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.nt-screen > :not(.nt-chain),
+.nt-screen .nt-answer > * {
+  flex: none;
+}
+
+.nt-screen .players .btn {
+  min-height: calc(var(--tap) * 0.8);
+  white-space: nowrap;
+}

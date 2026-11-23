@@ -4,6 +4,8 @@ import { CaroLocal } from '../games/caro/CaroLocal';
 import { CaroSetup } from '../games/caro/CaroSetup';
 import { CoGanhLocal } from '../games/coganh/CoGanhLocal';
 import { CoGanhSetup } from '../games/coganh/CoGanhSetup';
+import { NoiTuLocal } from '../games/noitu/NoiTuLocal';
+import { NoiTuSetup } from '../games/noitu/NoiTuSetup';
 import { OAQLocal } from '../games/oanquan/OAQLocal';
 import { OAQSetup } from '../games/oanquan/OAQSetup';
 import { NumbersSetup } from '../games/numbers/NumbersSetup';
@@ -90,6 +92,8 @@ export function App() {
         <Route path="/coganh/play" element={<CoGanhLocal />} />
         <Route path="/oanquan" element={<OAQSetup />} />
         <Route path="/oanquan/play" element={<OAQLocal />} />
+        <Route path="/noitu" element={<NoiTuSetup />} />
+        <Route path="/noitu/play" element={<NoiTuLocal />} />
         <Route path="/numbers" element={<NumbersSetup />} />
         <Route path="/numbers/play" element={<NumbersSolo />} />
         <Route path="/join" element={<JoinScreen />} />

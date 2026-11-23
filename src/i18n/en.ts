@@ -189,4 +189,35 @@ export const en: Record<MessageKey, string> = {
     'Vietnamese pupils play a paper version: scribble numbers all over a page, then race to circle the next one. It trains quick eyes and number sense – perfect for grandparents and grandchildren.',
   numbersStory3:
     "Tip: don't check square by square. Take in the whole board and remember where the next few numbers are.",
+  gameNoiTu: 'Word Chain',
+  gameNoiTuDesc: 'Vietnamese word chain – learn as you play',
+  aboutWords: 'Word Chain dictionary: Wiktionary (CC BY-SA 4.0), via kaikki.org.',
+  ntLoading: 'Opening the dictionary…',
+  ntLoadFailed: 'Could not load the dictionary. Connect to the internet and try again.',
+  ntYourTurn: 'Your turn!',
+  ntPlaceholder: 'type the next syllable',
+  ntGo: 'Go!',
+  ntHint: 'Hint ({n})',
+  ntGiveUp: 'Give up',
+  ntUnknown: '"{w}" is not in the dictionary',
+  ntUsed: '"{w}" was already used',
+  ntChain: 'Start with "{w}"',
+  ntChoose: 'Which word do you mean?',
+  ntTimeout: '{name} ran out of time',
+  ntGaveUp: '{name} gave up',
+  ntChainLen: 'a chain of {n} words',
+  ntCouldSay: 'You could have said: {w}',
+  ntHelp1:
+    'Take turns saying a two-syllable Vietnamese word that starts with the last syllable of the previous one: học sinh → sinh viên → viên phấn…',
+  ntHelp2:
+    'Just type the second syllable. Tone marks are optional; if several words fit, pick the right one.',
+  ntHelp3: 'Run out of time, give up or get stuck and you lose. Words cannot be used twice.',
+  ntHelp4:
+    'You get 3 hints per game. Every word shows its English meaning, so you learn as you play.',
+  ntStory1:
+    'Nối từ ("joining words") is a favourite Vietnamese word game, played at school break time, at youth camps and now on social media.',
+  ntStory2:
+    'It relies on something special about Vietnamese: every syllable is a word on its own, and a great many words are made of two syllables. Japan has a similar game called "shiritori", and English speakers play "word chain".',
+  ntStory3:
+    'The dictionary in this game comes from Wiktionary (CC BY-SA licence) and shows the English meaning of every word, so children in Vietnam and abroad can learn new words as they play.',
 };
