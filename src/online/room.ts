@@ -12,6 +12,7 @@ import {
 import { createLogger } from '../lib/logger';
 import { randomSeed } from '../lib/rng';
 import { initialCaroState } from '../games/caro/online';
+import { initialCoGanhState } from '../games/coganh/online';
 import { initialState as initialNumbersState, type NumbersLevel } from '../games/numbers/logic';
 import { ensureAuth, getDb } from './firebase';
 import { MAX_PLAYERS, ROOM_TTL_MS, type GameId, type Room, type RoomOptions } from './types';
@@ -160,6 +161,7 @@ function newState(room: Room, round: number) {
   }
   // Alternate who plays X (first) each round.
   const [a, b] = round % 2 === 1 ? uids : [uids[1], uids[0]]; // host is X in round 1
+  if (room.game === 'coganh') return initialCoGanhState(a, b); // a = Black, moves first
   return initialCaroState(room.options.size ?? 3, a, b);
 }
 

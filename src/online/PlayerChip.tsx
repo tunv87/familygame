@@ -6,6 +6,7 @@ import type { RoomPlayer } from './types';
 export function PlayerChip({
   player,
   mark,
+  stone,
   score,
   active,
   color,
@@ -13,6 +14,8 @@ export function PlayerChip({
 }: {
   player?: RoomPlayer;
   mark?: 'x' | 'o';
+  /** Cờ gánh piece colour */
+  stone?: 'black' | 'white';
   score?: number;
   active?: boolean;
   color?: string;
@@ -28,6 +31,7 @@ export function PlayerChip({
       <span className="avatar-wrap">
         <Avatar emoji={player?.avatar ?? '❔'} />
         {mark ? <span className={`badge ${mark}`}>{mark === 'x' ? theme.x : theme.o}</span> : null}
+        {stone ? <span className={`badge cg-badge ${stone}`} /> : null}
       </span>
       <span className="name">{player?.name ?? '…'}</span>
       {score !== undefined && (

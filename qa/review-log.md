@@ -59,3 +59,15 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | AU-05        | Thay cho phần âm thanh của UX-10 (UX-10 vẫn kiểm tra rung).                                                                                      |
 | AU-06        | Nhạc nền mặc định tắt theo yêu cầu. Trình duyệt chỉ cho phát sau lần chạm đầu, nên test chạm trước khi kiểm tra.                                 |
 | AU-07        | Âm thanh theo giao diện.                                                                                                                         |
+
+## Review lần 5 – thêm Cờ gánh, v2.3 → v2.4
+
+| Case                        | Lý do                                                                                                                                                                                                        |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| LG-11 … LG-15               | Bám từng mục trong đặc tả luật của chủ dự án và các điểm review R1–R10.                                                                                                                                      |
+| LG-16                       | Máy: luôn đúng luật (kể cả Mở), có gánh thì gánh, tốc độ < 300 ms.                                                                                                                                           |
+| LG-17, UX-19, SEC-08        | Online: kiểm tra nước đi trong transaction như Ca rô, rules thêm `coganh`.                                                                                                                                   |
+| UI-09                       | Cờ gánh có bàn riêng (SVG): cần kiểm tra vừa màn hình và điểm bấm ≥ 44 px trên điện thoại ở cả 2 giao diện.                                                                                                  |
+| UX-16 … UX-18, AU-08, CR-13 | Trải nghiệm chọn quân, luật Mở trên giao diện, âm thanh gánh/bị Mở, link sai.                                                                                                                                |
+| UX-16                       | Bản đầu giả định quân góc (0,0) bị kẹt lúc bắt đầu ván; thực tế quân đó đi chéo được (đúng luật). Đổi thành kiểm tra "chạm quân khác của mình thì đổi chọn". Trường hợp quân bị khoá đã được UX-17 kiểm tra. |
+| CR-01, UX-03, UX-11         | Thêm các màn Cờ gánh vào danh sách màn hình kiểm tra.                                                                                                                                                        |
