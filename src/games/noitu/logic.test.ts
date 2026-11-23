@@ -6,6 +6,7 @@ import {
   initialState,
   lose,
   makeDict,
+  normalize,
   options,
   plain,
   play,
@@ -45,18 +46,36 @@ describe('[LG-21] Nối từ rules', () => {
     expect(check(dict, ['học sinh'], '  Viên ')).toEqual({ ok: true, word: 'sinh viên' });
   });
 
-  it('accepts words typed without tones when only one word fits', () => {
-    expect(check(dict, ['học sinh'], 'vien')).toEqual({ ok: true, word: 'sinh viên' });
-    expect(check(dict, ['học sinh'], 'sinh nhat')).toEqual({ ok: true, word: 'sinh nhật' });
+  it('needs the tone marks: a tone-less word is refused without giving it away', () => {
+    expect(check(dict, ['học sinh'], 'vien')).toEqual({ ok: false, reason: 'tones' });
+    expect(check(dict, ['học sinh'], 'sinh nhat')).toEqual({ ok: false, reason: 'tones' });
+    expect(check(dict, ['mèo con'], 'ma')).toEqual({ ok: true, word: 'con ma' });
+    expect(check(dict, ['mèo con'], 'má')).toEqual({ ok: true, word: 'con má' });
+    expect(check(dict, ['mèo con'], 'mà')).toEqual({ ok: false, reason: 'tones' });
+    expect(check(dict, ['mèo con'], 'MÈO ')).toEqual({ ok: true, word: 'con mèo' });
+    expect(check(dict, ['học sinh'], 'sinh vien')).toEqual({ ok: false, reason: 'tones' });
+    expect(check(dict, ['học sinh'], 'sính viên')).toEqual({ ok: false, reason: 'chain' });
   });
 
-  it('asks the player to choose when tones are needed to tell words apart', () => {
-    expect(check(dict, ['mèo con'], 'ma')).toEqual({ ok: true, word: 'con ma' }); // exact
-    expect(check(dict, ['mèo con'], 'MA ')).toEqual({ ok: true, word: 'con ma' });
-    const v = check(dict, ['ma quỷ', 'quỷ con'], 'meo'); // tones left out
-    expect(v).toEqual({ ok: true, word: 'con mèo' });
-    const amb = check(dict, ['mèo con'], 'mà');
-    expect(amb).toEqual({ ok: false, reason: 'choose', candidates: ['con ma', 'con má'] });
+  it('both tone placements are the same word: "hoà" = "hòa", "thuỷ" = "thủy"', () => {
+    const d = makeDict([
+      ['hoà bình', 'peace', 1],
+      ['hòa bình', 'peace', 2],
+      ['bình thủy', 'thermos', 1],
+      ['an hòa', 'harmony', 2],
+    ]);
+    expect(d.size).toBe(3); // the duplicate spelling is merged
+    expect(d.tier('hòa bình')).toBe(1);
+    expect(check(d, ['an hoà'], 'bình')).toEqual({ ok: true, word: 'hoà bình' });
+    expect(check(d, ['hòa bình'], 'thuỷ')).toEqual({ ok: true, word: 'bình thuỷ' });
+    expect(check(d, ['hoà bình'], 'thủy')).toEqual({ ok: true, word: 'bình thuỷ' });
+    // decomposed input (some keyboards) is the same text
+    expect(check(d, ['hoà bình'], 'thủy'.normalize('NFD'))).toEqual({
+      ok: true,
+      word: 'bình thuỷ',
+    });
+    // "hoàng", "thuyền": the tone is not syllable-final, nothing to move
+    expect(normalize('Hoàng Thuyền')).toBe('hoàng thuyền');
   });
 
   it('refuses words that break the chain, repeat, or are not in the dictionary', () => {

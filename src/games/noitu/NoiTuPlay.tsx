@@ -95,14 +95,12 @@ export function AnswerBox({
   const t = useT();
   const [text, setText] = useState('');
   const [error, setError] = useState('');
-  const [choices, setChoices] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const prev = last(chain[chain.length - 1]);
 
   useEffect(() => {
     setText('');
     setError('');
-    setChoices([]);
     if (enabled) inputRef.current?.focus({ preventScroll: true });
   }, [chain.length, enabled]);
 
@@ -116,13 +114,12 @@ export function AnswerBox({
       return;
     }
     sfx.bad();
-    setChoices(v.reason === 'choose' ? v.candidates : []);
     const typed = `${prev} ${text.trim().split(/\s+/).slice(-1)[0]}`;
     setError(
       v.reason === 'empty'
         ? ''
-        : v.reason === 'choose'
-          ? t('ntChoose')
+        : v.reason === 'tones'
+          ? t('ntTones')
           : v.reason === 'used'
             ? t('ntUsed', { w: typed })
             : v.reason === 'chain'
@@ -141,7 +138,6 @@ export function AnswerBox({
     onHint();
     setText(pick.split(' ')[1]);
     setError('');
-    setChoices([]);
     inputRef.current?.focus({ preventScroll: true });
   };
 
@@ -177,24 +173,6 @@ export function AnswerBox({
       <div className="nt-error" data-testid="nt-error" role="status">
         {error}
       </div>
-      {choices.length > 0 && (
-        <div className="nt-choices">
-          {choices.map((w) => (
-            <button
-              key={w}
-              type="button"
-              className="btn secondary"
-              data-testid="nt-choice"
-              onClick={() => {
-                sfx.tap();
-                onAnswer(w);
-              }}
-            >
-              {w}
-            </button>
-          ))}
-        </div>
-      )}
       <div className="players">
         <button
           type="button"

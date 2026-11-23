@@ -204,14 +204,15 @@ export const vi = {
   ntUnknown: '"{w}" chưa có trong từ điển',
   ntUsed: '"{w}" đã dùng rồi',
   ntChain: 'Phải bắt đầu bằng "{w}"',
-  ntChoose: 'Bạn muốn nói từ nào?',
+  ntTones: 'Gõ có dấu nhé! Từ này cần đúng dấu.',
   ntTimeout: '{name} hết giờ',
   ntGaveUp: '{name} chịu thua',
   ntChainLen: 'chuỗi dài {n} từ',
   ntCouldSay: 'Có thể nối: {w}',
   ntHelp1:
     'Mỗi người nói một từ 2 tiếng, bắt đầu bằng tiếng cuối của từ trước: học sinh → sinh viên → viên phấn…',
-  ntHelp2: 'Chỉ cần gõ tiếng thứ hai. Gõ không dấu cũng được, nếu có nhiều từ thì chọn từ đúng.',
+  ntHelp2:
+    'Chỉ cần gõ tiếng thứ hai, nhớ gõ đúng dấu: "viên" chứ không phải "vien". Viết "hoà" hay "hòa" đều được.',
   ntHelp3: 'Hết giờ, chịu thua, hoặc không nối được là thua. Từ đã dùng thì không được dùng lại.',
   ntHelp4: 'Mỗi ván có 3 lần gợi ý. Dưới mỗi từ có nghĩa tiếng Anh để học thêm.',
   ntStory1:

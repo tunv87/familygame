@@ -1756,13 +1756,6 @@ input {
   text-align: center;
 }
 
-.nt-choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  justify-content: center;
-}
-
 .nt-screen > :not(.nt-chain),
 .nt-screen .nt-answer > * {
   flex: none;

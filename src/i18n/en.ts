@@ -202,7 +202,7 @@ export const en: Record<MessageKey, string> = {
   ntUnknown: '"{w}" is not in the dictionary',
   ntUsed: '"{w}" was already used',
   ntChain: 'Start with "{w}"',
-  ntChoose: 'Which word do you mean?',
+  ntTones: 'Add the tone marks! This word needs them.',
   ntTimeout: '{name} ran out of time',
   ntGaveUp: '{name} gave up',
   ntChainLen: 'a chain of {n} words',

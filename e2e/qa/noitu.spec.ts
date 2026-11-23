@@ -4,17 +4,15 @@ import { PHONES, createRoomAs, evidence, joinAs, openApp } from './fixtures';
 
 const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
 
-/** Answers with the hint word, typed without tone marks (picking a word if asked). */
+/** Answers with the hint word, typed out again with its tone marks. */
 async function answerWithHint(page: Page) {
   await page.getByTestId('nt-hint').click();
   const word = await page.getByTestId('nt-input').inputValue();
-  await page.getByTestId('nt-input').fill(plain(word));
+  await page.getByTestId('nt-input').fill(word);
   await page.getByTestId('nt-go').click();
-  const choice = page.getByTestId('nt-choice');
-  if (await choice.count()) await choice.first().click();
 }
 
-test('[UX-24] same device: hint, tone-free typing, refusals, giving up', async ({ browser }) => {
+test('[UX-24] same device: hint, tone marks required, refusals, giving up', async ({ browser }) => {
   const { page, errors } = await openApp(browser);
   await page.goto('/#/noitu/play?mode=local');
   await page.getByTestId('nt-input').waitFor({ timeout: 15_000 });
@@ -27,7 +25,19 @@ test('[UX-24] same device: hint, tone-free typing, refusals, giving up', async (
   await expect(page.getByTestId('nt-error'), '[UX-24] unknown word not refused').toContainText(
     'chưa có trong từ điển',
   );
-  await answerWithHint(page);
+  // the hint word without its tone marks is refused, without giving the word away
+  await page.getByTestId('nt-hint').click();
+  const hinted = await page.getByTestId('nt-input').inputValue();
+  if (plain(hinted) !== hinted) {
+    await page.getByTestId('nt-input').fill(plain(hinted));
+    await page.getByTestId('nt-go').click();
+    await expect(page.getByTestId('nt-error'), '[UX-24] tone-less word accepted').toContainText(
+      'Gõ có dấu',
+    );
+    await expect(page.getByTestId('nt-word-1')).toHaveCount(0);
+  }
+  await page.getByTestId('nt-input').fill(hinted);
+  await page.getByTestId('nt-go').click();
   await expect(page.getByTestId('nt-word-1'), '[UX-24] word not added').toBeVisible();
   await expect(page.getByTestId('nt-hint')).toContainText('3'); // player 2 has all hints
   await expect(page.getByTestId('status')).toContainText('Người 2');

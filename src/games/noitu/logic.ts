@@ -22,8 +22,23 @@ export interface Dict {
   from(syllable: string): readonly string[];
 }
 
+const TONE = '[\u0300\u0301\u0303\u0309\u0323]';
+const OLD_OA = new RegExp(`o(${TONE})([ae])(?=\\s|$)`, 'g');
+const OLD_UY = new RegExp(`u(${TONE})y(?=\\s|$)`, 'g');
+
+/**
+ * Lower case, single spaces, and one spelling for the two accepted tone placements:
+ * "hòa" / "hoà", "thủy" / "thuỷ" are the same word (both are correct Vietnamese).
+ */
 export const normalize = (s: string) =>
-  s.normalize('NFC').toLowerCase().trim().replace(/\s+/g, ' ');
+  s
+    .normalize('NFD')
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, ' ')
+    .replace(OLD_OA, 'o$2$1')
+    .replace(OLD_UY, 'uy$1')
+    .normalize('NFC');
 
 /** Removes tones and marks: "Viên" → "vien", "đường" → "duong". */
 export const plain = (s: string) =>
@@ -37,7 +52,13 @@ export function makeDict(rows: readonly Row[]): Dict {
   const byFirst = new Map<string, string[]>();
   for (const [w, gloss, tier] of rows) {
     const word = normalize(w);
-    if (word.split(' ').length !== 2 || info.has(word)) continue;
+    if (word.split(' ').length !== 2) continue;
+    const seen = info.get(word);
+    if (seen) {
+      // the same word in the other tone placement: keep the more common tier
+      if (tier < seen.tier) seen.tier = tier;
+      continue;
+    }
     info.set(word, { gloss, tier });
     const f = first(word);
     const list = byFirst.get(f);
@@ -65,8 +86,7 @@ export interface NoiTuState {
 
 export type Verdict =
   | { ok: true; word: string }
-  | { ok: false; reason: 'empty' | 'chain' | 'used' | 'unknown' }
-  | { ok: false; reason: 'choose'; candidates: string[] };
+  | { ok: false; reason: 'empty' | 'chain' | 'used' | 'unknown' | 'tones' };
 
 /** Words that can follow the chain now (not used yet). */
 export function options(dict: Dict, chain: readonly string[]): string[] {
@@ -76,7 +96,7 @@ export function options(dict: Dict, chain: readonly string[]): string[] {
 
 /**
  * Checks what a player typed: just the second syllable ("viên") or the whole word
- * ("sinh viên"). Tones may be missing when that is unambiguous.
+ * ("sinh viên"). It must be written correctly, with its tone marks.
  */
 export function check(dict: Dict, chain: readonly string[], input: string): Verdict {
   const s = normalize(input);
@@ -84,18 +104,14 @@ export function check(dict: Dict, chain: readonly string[], input: string): Verd
   const prev = last(chain[chain.length - 1]);
   const parts = s.split(' ');
   if (parts.length > 2) return { ok: false, reason: 'unknown' };
-  if (parts.length === 2 && plain(parts[0]) !== plain(prev)) return { ok: false, reason: 'chain' };
+  if (parts.length === 2 && parts[0] !== prev) return { ok: false, reason: 'chain' };
   const second = parts[parts.length - 1];
   const word = `${prev} ${second}`;
   if (chain.includes(word)) return { ok: false, reason: 'used' };
   if (dict.has(word)) return { ok: true, word };
-  // no exact match: try ignoring tones
-  const used = new Set(chain);
-  const all = dict.from(prev).filter((w) => plain(last(w)) === plain(second));
-  const fresh = all.filter((w) => !used.has(w));
-  if (fresh.length === 1) return { ok: true, word: fresh[0] };
-  if (fresh.length > 1) return { ok: false, reason: 'choose', candidates: fresh };
-  if (all.length) return { ok: false, reason: 'used' };
+  // a real word with the tone marks missing or wrong: tell them, but don't give it away
+  if (dict.from(prev).some((w) => plain(last(w)) === plain(second)))
+    return { ok: false, reason: 'tones' };
   return { ok: false, reason: 'unknown' };
 }
 

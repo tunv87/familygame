@@ -21,7 +21,8 @@ describe('[LG-24] Nối từ online', () => {
     expect(turnUidOf(s)).toBe('a');
     expect(applyNoiTuWord(s, 'b', 'viên', dict, 2000)).toBeNull(); // not b's turn
     expect(applyNoiTuWord(s, 'a', 'xyz', dict, 2000)).toBeNull(); // not a word
-    s = applyNoiTuWord(s, 'a', 'vien', dict, 2000)!;
+    expect(applyNoiTuWord(s, 'a', 'vien', dict, 2000)).toBeNull(); // tone marks needed
+    s = applyNoiTuWord(s, 'a', 'viên', dict, 2000)!;
     expect(s.chain).toEqual(['học sinh', 'sinh viên']);
     expect(turnUidOf(s)).toBe('b');
     expect(s.deadline).toBe(2000 + 30_000);
