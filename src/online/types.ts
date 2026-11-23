@@ -1,7 +1,7 @@
 import type { CaroOnlineState } from '../games/caro/online';
 import type { NumbersState } from '../games/numbers/logic';
 
-export type GameId = 'numbers' | 'caro';
+export type GameId = 'numbers' | 'caro' | 'coganh';
 
 export interface RoomPlayer {
   name: string;

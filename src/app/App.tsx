@@ -2,6 +2,8 @@ import { useEffect, useRef } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CaroLocal } from '../games/caro/CaroLocal';
 import { CaroSetup } from '../games/caro/CaroSetup';
+import { CoGanhLocal } from '../games/coganh/CoGanhLocal';
+import { CoGanhSetup } from '../games/coganh/CoGanhSetup';
 import { NumbersSetup } from '../games/numbers/NumbersSetup';
 import { NumbersSolo } from '../games/numbers/NumbersSolo';
 import { createLogger } from '../lib/logger';
@@ -82,6 +84,8 @@ export function App() {
         <Route path="/" element={<Hub />} />
         <Route path="/caro" element={<CaroSetup />} />
         <Route path="/caro/play" element={<CaroLocal />} />
+        <Route path="/coganh" element={<CoGanhSetup />} />
+        <Route path="/coganh/play" element={<CoGanhLocal />} />
         <Route path="/numbers" element={<NumbersSetup />} />
         <Route path="/numbers/play" element={<NumbersSolo />} />
         <Route path="/join" element={<JoinScreen />} />
