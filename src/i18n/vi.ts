@@ -106,7 +106,10 @@ export const vi = {
   save: 'Lưu',
 
   // settings
-  sound: 'Âm thanh & rung',
+  sound: 'Âm thanh',
+  music: 'Nhạc nền',
+  vibration: 'Rung',
+  aboutSounds: 'Âm thanh: UI SFX (CC0, romainsimon/uisfx).',
   bigText: 'Chữ to',
   language: 'Ngôn ngữ',
   theme: 'Giao diện',

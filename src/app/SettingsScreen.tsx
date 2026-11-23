@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { isNative } from '../lib/native';
 import { useT } from '../i18n';
 import { Avatar, ProfileModal, TopBar } from '../ui/components';
 import { setSettings, useProfile, useSettings, type Lang, type ThemeId } from './settings';
@@ -17,6 +18,9 @@ function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) =>
     </div>
   );
 }
+
+// Vibration only exists on phones (native app, or Android browsers).
+const canVibrate = isNative || 'vibrate' in navigator;
 
 export function SettingsScreen() {
   const t = useT();
@@ -53,6 +57,16 @@ export function SettingsScreen() {
         <span>🔊 {t('sound')}</span>
         <Toggle value={s.sound} onChange={(sound) => setSettings({ sound })} />
       </div>
+      <div className="setting-row" data-testid="setting-music">
+        <span>🎵 {t('music')}</span>
+        <Toggle value={s.music} onChange={(music) => setSettings({ music })} />
+      </div>
+      {canVibrate && (
+        <div className="setting-row" data-testid="setting-vibrate">
+          <span>📳 {t('vibration')}</span>
+          <Toggle value={s.vibrate} onChange={(vibrate) => setSettings({ vibrate })} />
+        </div>
+      )}
       <div className="setting-row">
         <span>🔠 {t('bigText')}</span>
         <Toggle value={s.bigText} onChange={(bigText) => setSettings({ bigText })} />

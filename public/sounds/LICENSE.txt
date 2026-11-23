@@ -1,0 +1,12 @@
+The audio files under `sounds/` are dedicated to the public domain under the
+Creative Commons CC0 1.0 Universal Public Domain Dedication.
+
+You may copy, modify, distribute, and use these files, including commercially,
+without asking permission. Attribution is appreciated but not required.
+
+Legal code: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+SPDX identifier: CC0-1.0
+
+Source: UI SFX (https://github.com/romainsimon/uisfx), redistributed in the npm
+package @wubbleai/community-sfx 0.1.0. Packs used: "soft" (classic theme) and
+"rubber" (cute theme). Files renamed to the game events they are used for.

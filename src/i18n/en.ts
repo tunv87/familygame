@@ -102,7 +102,10 @@ export const en: Record<MessageKey, string> = {
   pickAvatar: 'Pick a picture',
   save: 'Save',
 
-  sound: 'Sound & vibration',
+  sound: 'Sound',
+  music: 'Music',
+  vibration: 'Vibration',
+  aboutSounds: 'Sounds: UI SFX (CC0, romainsimon/uisfx).',
   bigText: 'Large text',
   language: 'Language',
   theme: 'Theme',

@@ -107,6 +107,12 @@ export function check(id: string, ok: boolean, detail: string) {
 }
 
 export async function waitCountdown(page: Page) {
+  // The app module loads asynchronously: wait for the countdown to appear first,
+  // otherwise "hidden" is true before the game screen has even rendered.
+  await page
+    .getByTestId('countdown')
+    .waitFor({ state: 'visible', timeout: 5000 })
+    .catch(() => {});
   await page.getByTestId('countdown').waitFor({ state: 'hidden', timeout: 10_000 });
 }
 

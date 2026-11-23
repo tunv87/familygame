@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v2.2** (sau review lần 1, run 01 và run 02, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v2.3** (thêm nhóm AU – âm thanh, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -19,23 +19,23 @@ Phiên bản: **v2.2** (sau review lần 1, run 01 và run 02, xem `review-log.m
 
 ## UX – Trải nghiệm theo chuẩn game
 
-| Mã    | Ưu tiên | Kiểm tra                                                                  | Kết quả mong đợi                                                |
-| ----- | ------- | ------------------------------------------------------------------------- | --------------------------------------------------------------- |
-| UX-01 | P1      | Bấm đúng số trong Tìm số (đo trong trang: từ sự kiện bấm đến khi DOM đổi) | Phản hồi hình ảnh trong ≤ 100 ms                                |
-| UX-02 | P1      | Máy (AI) đi nước ca rô 15×15 mức Khó                                      | Trả lời trong ≤ 1 giây                                          |
-| UX-03 | P1      | Mọi màn hình                                                              | Luôn có đường quay lại / thoát                                  |
-| UX-04 | P1      | Thoát giữa ván (ca rô, Tìm số)                                            | Hỏi xác nhận, chọn "Chơi tiếp" thì ván còn nguyên               |
-| UX-05 | P1      | Kết thúc ván                                                              | Hiện người thắng/hoà rõ ràng + "Chơi lại" + "Trang chủ"         |
-| UX-06 | P2      | Không bấm gì 15 giây trong Tìm số                                         | Số cần tìm được gợi ý (viền nhấp nháy)                          |
-| UX-07 | P1      | Đi lại (Undo) trong ca rô với máy                                         | Xoá cả nước của người và của máy                                |
-| UX-08 | P2      | Bật "Chữ to"                                                              | Cỡ chữ tăng trên mọi màn hình                                   |
-| UX-09 | P1      | Đổi cài đặt (giao diện, ngôn ngữ, âm thanh) rồi tải lại                   | Giữ nguyên lựa chọn                                             |
-| UX-10 | P1      | Tắt âm thanh                                                              | Không phát âm thanh / không rung                                |
-| UX-11 | P1      | Độ tương phản chữ (WCAG AA) ở cả 2 giao diện, trừ nút đang bị vô hiệu     | Chữ thường ≥ 4.5:1, chữ lớn (≥ 24 px, hoặc ≥ 18.7 px đậm) ≥ 3:1 |
-| UX-12 | P2      | Chơi lại ván Tìm số                                                       | Có đếm ngược 3-2-1 trước khi bắt đầu                            |
-| UX-13 | P1      | Nhập mã phòng không tồn tại                                               | Báo lỗi dễ hiểu trong ≤ 5 giây, nhập lại được                   |
-| UX-14 | P1      | Mất mạng rồi bấm "Tạo phòng"                                              | Báo không kết nối được trong ≤ 10 giây, không quay vô hạn       |
-| UX-15 | P2      | Màn hình chào mừng chỉ hiện lần đầu                                       | Đúng                                                            |
+| Mã    | Ưu tiên | Kiểm tra                                                                                               | Kết quả mong đợi                                                |
+| ----- | ------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- |
+| UX-01 | P1      | Bấm đúng số trong Tìm số (đo trong trang: từ sự kiện bấm đến khi DOM đổi)                              | Phản hồi hình ảnh trong ≤ 100 ms                                |
+| UX-02 | P1      | Máy (AI) đi nước ca rô 15×15 mức Khó                                                                   | Trả lời trong ≤ 1 giây                                          |
+| UX-03 | P1      | Mọi màn hình                                                                                           | Luôn có đường quay lại / thoát                                  |
+| UX-04 | P1      | Thoát giữa ván (ca rô, Tìm số)                                                                         | Hỏi xác nhận, chọn "Chơi tiếp" thì ván còn nguyên               |
+| UX-05 | P1      | Kết thúc ván                                                                                           | Hiện người thắng/hoà rõ ràng + "Chơi lại" + "Trang chủ"         |
+| UX-06 | P2      | Không bấm gì 15 giây trong Tìm số                                                                      | Số cần tìm được gợi ý (viền nhấp nháy)                          |
+| UX-07 | P1      | Đi lại (Undo) trong ca rô với máy                                                                      | Xoá cả nước của người và của máy                                |
+| UX-08 | P2      | Bật "Chữ to"                                                                                           | Cỡ chữ tăng trên mọi màn hình                                   |
+| UX-09 | P1      | Đổi cài đặt (giao diện, ngôn ngữ, âm thanh) rồi tải lại                                                | Giữ nguyên lựa chọn                                             |
+| UX-10 | P1      | Người dùng bản cũ đã tắt "Âm thanh & rung" (một công tắc), rồi cập nhật lên bản có công tắc Rung riêng | Vẫn không có âm và không rung                                   |
+| UX-11 | P1      | Độ tương phản chữ (WCAG AA) ở cả 2 giao diện, trừ nút đang bị vô hiệu                                  | Chữ thường ≥ 4.5:1, chữ lớn (≥ 24 px, hoặc ≥ 18.7 px đậm) ≥ 3:1 |
+| UX-12 | P2      | Chơi lại ván Tìm số                                                                                    | Có đếm ngược 3-2-1 trước khi bắt đầu                            |
+| UX-13 | P1      | Nhập mã phòng không tồn tại                                                                            | Báo lỗi dễ hiểu trong ≤ 5 giây, nhập lại được                   |
+| UX-14 | P1      | Mất mạng rồi bấm "Tạo phòng"                                                                           | Báo không kết nối được trong ≤ 10 giây, không quay vô hạn       |
+| UX-15 | P2      | Màn hình chào mừng chỉ hiện lần đầu                                                                    | Đúng                                                            |
 
 ## CR – Chống crash
 
@@ -68,6 +68,18 @@ Phiên bản: **v2.2** (sau review lần 1, run 01 và run 02, xem `review-log.m
 | LG-08 | P2      | Kỷ lục luyện tập chỉ lưu khi nhanh hơn                        | Đúng                                                 |
 | LG-09 | P1      | i18n: mọi câu có cùng biến `{name}`, `{n}`… ở VI và EN        | Đúng (thiếu biến = hiện sai tên người chơi)          |
 | LG-10 | P2      | Đọc dữ liệu lưu (load) với dữ liệu thiếu/sai                  | Lấy mặc định cho phần thiếu                          |
+
+## AU – Âm thanh
+
+| Mã    | Ưu tiên | Kiểm tra                                      | Kết quả mong đợi                                                        |
+| ----- | ------- | --------------------------------------------- | ----------------------------------------------------------------------- |
+| AU-01 | P1      | File âm thanh cho mọi sự kiện, cả 2 giao diện | Có đủ, đúng MP3, mỗi file < 50 KB, có giấy phép CC0, được cache offline |
+| AU-02 | P1      | Đếm ngược 3-2-1                               | 3 tiếng "tick" và 1 tiếng "go"                                          |
+| AU-03 | P1      | Kết thúc ván: thắng, hoà, kỷ lục mới          | Mỗi kết quả có âm riêng                                                 |
+| AU-04 | P1      | Bấm nút, bấm đúng/sai số, máy đi              | Không có âm (chỉ rung)                                                  |
+| AU-05 | P1      | Tắt "Âm thanh"                                | Không phát âm nào                                                       |
+| AU-06 | P1      | Nhạc nền                                      | Mặc định tắt; bật thì phát; giữ lựa chọn sau khi tải lại; tắt thì dừng  |
+| AU-07 | P2      | Đổi giao diện                                 | Tải bộ âm của giao diện mới                                             |
 
 ## SEC – Bảo mật
 

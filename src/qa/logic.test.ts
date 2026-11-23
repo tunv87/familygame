@@ -109,3 +109,20 @@ describe('[LG-10] corrupt settings, profile and records are cleaned', () => {
     expect(makeLayout('bogus' as never, 1).tiles).toHaveLength(30);
   });
 });
+
+describe('[LG-10] settings from the old single "sound & vibration" switch', () => {
+  it('sound off before the update → vibration stays off; sound on → vibration on; music off', async () => {
+    const { cleanSettings } = await import('../app/settings');
+    expect(cleanSettings({ sound: false } as never)).toMatchObject({
+      sound: false,
+      vibrate: false,
+      music: false,
+    });
+    expect(cleanSettings({ sound: true } as never)).toMatchObject({
+      sound: true,
+      vibrate: true,
+      music: false,
+    });
+    expect(cleanSettings({ sound: true, vibrate: false } as never).vibrate).toBe(false);
+  });
+});

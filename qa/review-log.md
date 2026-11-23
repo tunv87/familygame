@@ -48,3 +48,14 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | Log bộ e2e cũ có cảnh báo Firebase `permission_denied` khi người chơi đã có tên mở link mời, dù test vẫn PASS.                         | **Hồi quy do bản sửa B04** (rules chặt hơn) + lỗ hổng của bộ test: chỉ bắt `console.error`, trong khi Firebase báo lần ghi bị từ chối bằng `console.warn`. Ghi là B10. | Fixture tính mọi `permission_denied` là lỗi. Thêm case **CR-12**. |
 | Ảnh D10 (điện thoại xoay ngang): bàn ca rô/bàn số nằm gọn trong màn hình nhưng ô nhỏ (25–30 px). UI-02b chỉ đo kích thước ô ở màn dọc. | Hạn chế của bản web khi xoay ngang; app native khoá màn dọc. Ghi B11 mức Thấp, chấp nhận.                                                                              | Không đổi test (đã ghi giới hạn phạm vi UI-02b).                  |
 | Các ảnh còn lại (14 cấu hình × 16 màn hình)                                                                                            | Không thấy lỗi hiển thị.                                                                                                                                               | —                                                                 |
+
+## Review lần 4 – thêm nhóm AU (âm thanh), v2.2 → v2.3
+
+| Case         | Lý do                                                                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| AU-01        | Âm thanh là file: kiểm tra đủ file cho cả 2 giao diện, đúng định dạng MP3 (iPhone cũ không phát ogg), nhỏ, có giấy phép, có trong cache offline. |
+| AU-02, AU-03 | Đúng danh sách sự kiện chủ dự án chọn: đếm ngược, thắng/thua/hoà, kỷ lục. Các sự kiện Cờ gánh (gánh, chầu/vây, bị Mở) sẽ test khi có game.       |
+| AU-04        | Chủ dự án yêu cầu tắt hẳn các âm phản hồi nhỏ: đo số âm tổng hợp được tạo khi bấm, phải bằng 0.                                                  |
+| AU-05        | Thay cho phần âm thanh của UX-10 (UX-10 vẫn kiểm tra rung).                                                                                      |
+| AU-06        | Nhạc nền mặc định tắt theo yêu cầu. Trình duyệt chỉ cho phát sau lần chạm đầu, nên test chạm trước khi kiểm tra.                                 |
+| AU-07        | Âm thanh theo giao diện.                                                                                                                         |
