@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { useT } from '../../i18n';
 import { sfx } from '../../lib/sound';
 import { Avatar } from '../../ui/components';
-import { check, last, options, type Dict, type Side } from './logic';
+import { check, easiestOption, last, type Dict, type Side } from './logic';
 
 export const HINTS = 3;
 
@@ -129,11 +129,7 @@ export function AnswerBox({
   };
 
   const hint = () => {
-    const opts = options(dict, chain);
-    const easy = opts.filter((w) => dict.tier(w) === 1);
-    const pick = (easy.length ? easy : opts)[
-      Math.floor(Math.random() * (easy.length || opts.length))
-    ];
+    const pick = easiestOption(dict, chain);
     if (!pick) return;
     onHint();
     setText(pick.split(' ')[1]);

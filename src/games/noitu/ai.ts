@@ -1,6 +1,6 @@
 /**
  * Nối từ computer player.
- *  - easy:   knows about two thirds of the very common words only
+ *  - easy:   uses children's words; otherwise knows about two thirds of the very common words
  *  - medium: knows every common word
  *  - hard:   knows the whole dictionary and prefers words that leave you few answers
  * Returns null when it cannot find a word (it gives up and you win).
@@ -23,6 +23,8 @@ export function chooseNoiTuWord(
   rand: () => number = Math.random,
 ): string | null {
   const all = options(dict, s.chain);
+  const kids = level === 'easy' ? all.filter((w) => dict.tier(w) === 0) : [];
+  if (kids.length) return kids[Math.floor(rand() * kids.length)];
   const known = all.filter((w) =>
     level === 'easy'
       ? dict.tier(w) === 1 && knows(w)

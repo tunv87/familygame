@@ -97,3 +97,9 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | LG-24, UX-26 | Online có đồng hồ: dùng giờ máy chủ Firebase; người đến lượt tự xử thua khi hết giờ, nếu app của họ treo thì đối thủ được xử thắng sau 5 giây trễ.                                                                                                                  |
 | UX-25        | Kiểm tra hết giờ bằng đồng hồ giả lập của Playwright, không phải chờ 45 giây thật.                                                                                                                                                                                  |
 | UI-11        | Màn hình có bàn phím: ô nhập và các nút phải nằm trong màn hình, ≥ 44 px.                                                                                                                                                                                           |
+
+## Review lần 8 – từ cho trẻ em trong Nối từ, v2.6 → v2.7
+
+| Case  | Lý do                                                                                                                                                                                                                                                                                                                              |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LG-25 | Chơi thử thấy máy mức Dễ dùng từ khó ("sĩ phu"). Thử chọn tự động theo độ phổ biến của từng tiếng thì lọt "nạn nhân", "sống thử", "an tử": không dùng được. Chuyển sang danh sách chọn tay (≈ 900 từ theo chủ đề: gia đình, trường lớp, con vật, đồ ăn, thiên nhiên, đồ chơi, Tết…), có nghĩa tiếng Anh cho từ Wiktionary chưa có. |
