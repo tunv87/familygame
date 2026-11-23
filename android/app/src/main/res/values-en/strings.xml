@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Family Games</string>
-    <string name="title_activity_main">Family Games</string>
+    <string name="app_name">Family Game</string>
+    <string name="title_activity_main">Family Game</string>
 </resources>
