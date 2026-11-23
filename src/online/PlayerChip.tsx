@@ -1,4 +1,5 @@
 import { Avatar } from '../ui/components';
+import { inkOf } from '../games/numbers/NumbersBoard';
 import { useTheme } from '../app/theme';
 import type { RoomPlayer } from './types';
 
@@ -32,7 +33,7 @@ export function PlayerChip({
       {score !== undefined && (
         <span
           className="score"
-          style={color ? { color } : undefined}
+          style={color ? { color: inkOf(color) } : undefined}
           data-testid={testId && `${testId}-score`}
         >
           {score}

@@ -5,23 +5,51 @@
     "rooms": {
       "$code": {
         ".read": "auth != null",
-        ".write": "auth != null && (data.child('players').child(auth.uid).exists() || ((!data.exists() || data.child('createdAt').val() < now - 86400000) && newData.child('hostUid').val() === auth.uid))",
+        ".write": "auth != null && (((!data.exists() || data.child('createdAt').val() < now - 86400000) && newData.child('hostUid').val() === auth.uid) || (root.child('rooms').child($code).child('players').child(auth.uid).exists() && !newData.exists()))",
         ".validate": "$code.matches(/^[0-9]{4}$/) && (!newData.exists() || newData.hasChildren(['game', 'hostUid', 'createdAt', 'status']))",
+        "code": {
+          ".validate": "newData.val() === $code"
+        },
         "game": {
           ".validate": "newData.val() === 'numbers' || newData.val() === 'caro'"
         },
-        "status": {
-          ".validate": "newData.val() === 'waiting' || newData.val() === 'playing'"
+        "options": {
+          ".validate": "newData.hasChildren()"
         },
         "createdAt": {
           ".validate": "newData.isNumber() && newData.val() <= now + 60000"
         },
         "hostUid": {
-          ".validate": "!data.exists() || data.val() === newData.val() || data.parent().child('createdAt').val() < now - 86400000"
+          ".validate": "newData.isString()"
+        },
+        "status": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists()",
+          ".validate": "newData.val() === 'waiting' || newData.val() === 'playing'"
+        },
+        "round": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists()",
+          ".validate": "newData.isNumber()"
+        },
+        "state": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists()"
+        },
+        "results": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists()"
+        },
+        "rematch": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists() && !newData.exists()",
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($code).child('players').child(auth.uid).exists()",
+            ".validate": "newData.isBoolean()"
+          }
+        },
+        "guestUid": {
+          ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid && data.parent().exists()) || (data.val() === auth.uid && !newData.exists()))",
+          ".validate": "newData.isString()"
         },
         "players": {
           "$uid": {
-            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (data.parent().parent().child('hostUid').val() === $uid || newData.parent().parent().child('guestUid').val() === $uid)",
+            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (data.parent().parent().child('hostUid').val() === $uid || newData.parent().parent().child('guestUid').val() === $uid || (data.exists() && !newData.exists()))",
             ".validate": "!newData.exists() || newData.hasChildren(['name', 'avatar'])",
             "name": {
               ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"
@@ -34,12 +62,14 @@
             },
             "joinedAt": {
               ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
             }
           }
         },
-        "guestUid": {
-          ".write": "auth != null && newData.val() === auth.uid && !data.exists() && data.parent().exists()",
-          ".validate": "newData.isString()"
+        "$other": {
+          ".validate": false
         }
       }
     }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { applyCaroMove, initialCaroState, turnUid } from './online';
 
-describe('caro online moves', () => {
+describe('[LG-07] caro online moves', () => {
   it('enforces turns and empty cells, detects a win', () => {
     let s = initialCaroState(3, 'x', 'o');
     expect(turnUid(s)).toBe('x');

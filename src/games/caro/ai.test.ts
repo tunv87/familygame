@@ -36,7 +36,7 @@ const randomPlayer = (rand: () => number) => (b: Stone[]) => {
   return e[Math.floor(rand() * e.length)];
 };
 
-describe('caro AI 3×3', () => {
+describe('[LG-02] caro AI 3×3', () => {
   it('hard never loses against a random player (as X or O)', () => {
     const rand = createRng(42);
     for (let g = 0; g < 60; g++) {
@@ -69,7 +69,7 @@ describe('caro AI 3×3', () => {
   });
 });
 
-describe('caro AI 15×15', () => {
+describe('[LG-03] caro AI 15×15', () => {
   const levels: AiLevel[] = ['easy', 'medium', 'hard'];
 
   it('every level completes its own four to win', () => {

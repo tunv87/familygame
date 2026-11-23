@@ -9,11 +9,11 @@ import { ExitConfirm, ResultModal, useBackHandler } from '../../ui/components';
 import { Countdown, MiniPlayer, NumbersBoard, useCountdown } from './NumbersBoard';
 import {
   applyClaim,
+  asLevel,
   botDelayMs,
   initialState,
   makeLayout,
   numbersWinner,
-  type NumbersLevel,
   type NumbersState,
 } from './logic';
 import { formatSeconds, getRecord, submitTime } from './records';
@@ -28,7 +28,7 @@ export function NumbersSolo() {
   const navigate = useNavigate();
   const profile = useProfile();
   const [params] = useSearchParams();
-  const level = (params.get('level') ?? 'easy') as NumbersLevel;
+  const level = asLevel(params.get('level'));
   const practice = params.get('mode') === 'practice';
 
   const [round, setRound] = useState(0);
@@ -91,7 +91,7 @@ export function NumbersSolo() {
   const best = getRecord(level);
 
   return (
-    <main className="screen tight">
+    <main className="screen tight game">
       <div className="numbers-hud">
         <button
           className="icon-btn small"

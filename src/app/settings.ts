@@ -25,8 +25,8 @@ function detectLang(): Lang {
 
 export const AVATARS = ['🐶', '🐱', '🐰', '🐻', '🐼', '🦊', '🐯', '🐸', '🐵', '🦄', '🐧', '🐢'];
 
-function createStore<T>(key: string, fallback: T) {
-  let value = load(key, fallback);
+function createStore<T>(key: string, fallback: T, clean: (v: T) => T) {
+  let value = clean(load(key, fallback));
   const listeners = new Set<() => void>();
   return {
     get: () => value,
@@ -42,16 +42,37 @@ function createStore<T>(key: string, fallback: T) {
   };
 }
 
-const settingsStore = createStore<Settings>('settings', {
-  sound: true,
-  bigText: false,
-  lang: detectLang(),
-  theme: 'classic',
-});
-const profileStore = createStore<Profile>('profile', {
-  name: '',
-  avatar: AVATARS[Math.floor(Math.random() * AVATARS.length)],
-});
+const pick = <V>(v: unknown, allowed: readonly V[], fallback: V): V =>
+  allowed.includes(v as V) ? (v as V) : fallback;
+const bool = (v: unknown, fallback: boolean) => (typeof v === 'boolean' ? v : fallback);
+
+/** Saved data can be old, hand-edited or corrupt: keep only valid values. */
+export function cleanSettings(s: Settings): Settings {
+  return {
+    sound: bool(s.sound, true),
+    bigText: bool(s.bigText, false),
+    lang: pick(s.lang, ['vi', 'en'] as const, detectLang()),
+    theme: pick(s.theme, ['classic', 'cute'] as const, 'classic'),
+  };
+}
+
+export function cleanProfile(p: Profile): Profile {
+  return {
+    name: typeof p.name === 'string' ? p.name.slice(0, 20) : '',
+    avatar: pick(p.avatar, AVATARS, AVATARS[0]),
+  };
+}
+
+const settingsStore = createStore<Settings>(
+  'settings',
+  { sound: true, bigText: false, lang: detectLang(), theme: 'classic' },
+  cleanSettings,
+);
+const profileStore = createStore<Profile>(
+  'profile',
+  { name: '', avatar: AVATARS[Math.floor(Math.random() * AVATARS.length)] },
+  cleanProfile,
+);
 
 export const getSettings = settingsStore.get;
 export const setSettings = settingsStore.set;

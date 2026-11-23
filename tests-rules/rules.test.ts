@@ -76,7 +76,7 @@ afterAll(async () => {
   await Promise.all(apps.map((a) => deleteApp(a)));
 });
 
-describe('rooms rules', () => {
+describe('[SEC-01] rooms rules', () => {
   it('requires auth to read', async () => {
     const alice = await user();
     await admin('PUT', 'rooms/1234', room(alice.uid));
@@ -150,5 +150,63 @@ describe('rooms rules', () => {
     const alice = await user();
     await denied(set(ref(alice.db, 'other'), 1));
     await denied(get(ref(alice.db, 'other')));
+  });
+});
+
+describe('[SEC-06] players cannot tamper with each other', () => {
+  it('a member cannot rename or remove the other player', async () => {
+    const [alice, bob] = [await user(), await user()];
+    await admin('PUT', 'rooms/1234', room(alice.uid));
+    await ok(join(bob));
+    await denied(set(ref(bob.db, `rooms/1234/players/${alice.uid}/name`), 'Hacked'));
+    await denied(update(ref(bob.db, 'rooms/1234'), { [`players/${alice.uid}`]: null }));
+    await denied(set(ref(alice.db, `rooms/1234/players/${bob.uid}`), player('Fake')));
+  });
+
+  it('a member cannot take the host role or give the seat to someone else', async () => {
+    const [alice, bob] = [await user(), await user()];
+    await admin('PUT', 'rooms/1234', room(alice.uid));
+    await ok(join(bob));
+    await denied(update(ref(bob.db, 'rooms/1234'), { hostUid: bob.uid }));
+    await denied(update(ref(alice.db, 'rooms/1234'), { guestUid: 'mallory' }));
+  });
+
+  it('names must be text of at most 20 characters, even for members', async () => {
+    const [alice, bob] = [await user(), await user()];
+    await admin('PUT', 'rooms/1234', room(alice.uid));
+    await ok(join(bob));
+    await denied(set(ref(bob.db, `rooms/1234/players/${bob.uid}/name`), 12345));
+    await denied(set(ref(bob.db, `rooms/1234/players/${bob.uid}/name`), 'x'.repeat(21)));
+  });
+});
+
+describe('[SEC-07] rooms only hold game data (data minimisation)', () => {
+  it('extra fields on a player or a room are rejected', async () => {
+    const [alice, bob] = [await user(), await user()];
+    await admin('PUT', 'rooms/1234', room(alice.uid));
+    await ok(join(bob));
+    await denied(set(ref(bob.db, `rooms/1234/players/${bob.uid}/email`), 'bob@example.com'));
+    await denied(set(ref(alice.db, 'rooms/1234/phone'), '0900000000'));
+  });
+
+  it('the full game flow still works under the stricter rules', async () => {
+    const [alice, bob] = [await user(), await user()];
+    await ok(set(ref(alice.db, 'rooms/1234'), room(alice.uid)));
+    await ok(join(bob));
+    await ok(
+      update(ref(alice.db, 'rooms/1234'), {
+        status: 'playing',
+        round: 1,
+        state: { size: 3, xUid: alice.uid, oUid: bob.uid },
+        rematch: null,
+      }),
+    );
+    await ok(set(ref(bob.db, 'rooms/1234/state/moves'), [4]));
+    await ok(set(ref(bob.db, `rooms/1234/rematch/${bob.uid}`), true));
+    await denied(set(ref(bob.db, `rooms/1234/rematch/${alice.uid}`), true));
+    await ok(set(ref(alice.db, 'rooms/1234/results/r1'), alice.uid));
+    await ok(set(ref(bob.db, `rooms/1234/players/${bob.uid}/online`), false));
+    await ok(update(ref(bob.db, 'rooms/1234'), { [`players/${bob.uid}`]: null, guestUid: null }));
+    await ok(remove(ref(alice.db, 'rooms/1234')));
   });
 });

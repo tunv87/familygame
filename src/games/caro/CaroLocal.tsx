@@ -115,7 +115,7 @@ export function CaroLocal() {
 
   const mark = (isA: boolean) => ((isA ? aIsX : !aIsX) ? theme.x : theme.o);
   return (
-    <main className="screen">
+    <main className="screen game">
       <TopBar title={t('gameCaro')} onBack={exit} right={<HelpButton steps={CARO_HELP} />} />
       <div className="players">
         {[0, 1].map((k) => (

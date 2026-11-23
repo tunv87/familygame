@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getProfile, type Profile } from '../app/settings';
 import { useT } from '../i18n';
@@ -34,14 +34,19 @@ export function JoinScreen() {
         else if (e instanceof RoomError && e.code === 'full') setError(t('roomFull', { code: c }));
         else setError(t('connectError'));
         setCode('');
+        started.current = '';
         setBusy(false);
       }
     },
     [navigate, t],
   );
 
+  // One join per code, even if React runs this effect twice (StrictMode) or it re-renders.
+  const started = useRef('');
   useEffect(() => {
-    if (!needProfile && code.length === 4 && !busy && !error) void join(code, getProfile());
+    if (needProfile || code.length !== 4 || busy || error || started.current === code) return;
+    started.current = code;
+    void join(code, getProfile());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, needProfile]);
 

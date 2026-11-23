@@ -3,7 +3,7 @@ import { BIG, SMALL, boardFromMoves, outcomeOfMoves, winningLine, type Stone } f
 
 const at = (size: number, r: number, c: number) => r * size + c;
 
-describe('caro winningLine', () => {
+describe('[LG-01] caro winningLine', () => {
   it('detects horizontal, vertical and both diagonals on 3×3', () => {
     const cases: number[][] = [
       [0, 1, 2],
@@ -41,7 +41,7 @@ describe('caro winningLine', () => {
   });
 });
 
-describe('caro outcome', () => {
+describe('[LG-01] caro outcome', () => {
   it('X wins, draw, ongoing', () => {
     expect(outcomeOfMoves(SMALL, [0, 3, 1, 4, 2])?.winner).toBe(1);
     // X O X / X O O / O X X  → draw

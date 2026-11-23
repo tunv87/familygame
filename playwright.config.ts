@@ -5,6 +5,8 @@ const PORT = 5174;
 
 export default defineConfig({
   testDir: 'e2e',
+  // the QA suite has its own config (qa/playwright.qa.config.ts, npm run qa)
+  testIgnore: 'qa/**',
   timeout: 60_000,
   fullyParallel: false,
   workers: 1,

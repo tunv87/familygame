@@ -20,7 +20,9 @@
     "prebuild": "node scripts/make-privacy.mjs",
     "build:native": "VITE_BASE=./ npm run build",
     "cap:sync": "npm run build:native && cap sync",
-    "store:screenshots": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --config store/playwright.store.config.ts\""
+    "store:screenshots": "firebase emulators:exec --only auth,database --project demo-familygame \"playwright test --config store/playwright.store.config.ts\"",
+    "qa": "node scripts/qa.mjs",
+    "qa:report": "node scripts/qa-report.mjs"
   },
   "dependencies": {
     "@capacitor/android": "^8.6.2",
@@ -36,7 +38,7 @@
     "firebase": "^12.19.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-router-dom": "^6.30.6"
+    "react-router-dom": "^7.18.6"
   },
   "devDependencies": {
     "@capacitor/assets": "^4.0.0",
@@ -61,5 +63,8 @@
   },
   "engines": {
     "node": ">=20"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.7"
   }
 }

@@ -87,10 +87,18 @@ export async function joinRoom(code: string, profile: Profile) {
     online: true,
   };
   // Claim the guest seat and add ourselves in one atomic multi-path update.
-  await update(roomRef(code), {
-    [`players/${uid}`]: me,
-    ...(isHost || room.guestUid === uid ? {} : { guestUid: uid }),
-  });
+  try {
+    await update(roomRef(code), {
+      [`players/${uid}`]: me,
+      ...(isHost || room.guestUid === uid ? {} : { guestUid: uid }),
+    });
+  } catch (e) {
+    // A second, concurrent join from this device (double tap, re-render) loses the
+    // race for the seat to the first one: that is a success, not an error.
+    const after = (await get(roomRef(code))).val() as Room | null;
+    if (!after?.players?.[uid]) throw e;
+    log.info('already joined', { code });
+  }
   log.info('joined room', { code });
   return uid;
 }
@@ -101,6 +109,7 @@ export function watchRoom(
   uid: string,
   onRoom: (room: Room | null) => void,
   onError: (e: Error) => void,
+  onConnection: (connected: boolean) => void = () => {},
 ): Unsubscribe {
   const db = getDb();
   const meRef = ref(db, `rooms/${code}/players/${uid}`);
@@ -115,14 +124,19 @@ export function watchRoom(
   const unsubConn = onValue(ref(db, '.info/connected'), (snap) => {
     if (snap.val() !== true) {
       log.warn('disconnected');
+      onConnection(false);
       return;
     }
     log.info('connected');
-    void onDisconnect(ref(db, `rooms/${code}/players/${uid}/online`))
-      .set(false)
-      .then(async () => {
-        const me = await get(meRef);
-        if (me.exists()) await set(ref(db, `rooms/${code}/players/${uid}/online`), true);
+    onConnection(true);
+    // Only members have a presence flag: check first, so visiting someone else's
+    // room (or a bad link) never attempts a write the rules will reject.
+    void get(meRef)
+      .then(async (me) => {
+        if (!me.exists()) return;
+        const online = ref(db, `rooms/${code}/players/${uid}/online`);
+        await onDisconnect(online).set(false);
+        await set(online, true);
       })
       .catch((e) => log.warn('presence setup failed', String(e)));
   });

@@ -8,7 +8,7 @@ import {
   type NumbersLevel,
 } from './logic';
 
-describe('numbers layout', () => {
+describe('[LG-05] numbers layout', () => {
   const levels: NumbersLevel[] = ['easy', 'medium', 'hard'];
 
   it('contains every number exactly once', () => {
@@ -54,7 +54,7 @@ describe('numbers layout', () => {
   });
 });
 
-describe('numbers claims', () => {
+describe('[LG-06] numbers claims', () => {
   it('only the next number can be claimed and scores add up', () => {
     let s = initialState('easy', 1, ['a', 'b'], 0);
     expect(applyClaim(s, 'a', 2)).toBeNull();
@@ -81,7 +81,7 @@ describe('numbers claims', () => {
   });
 });
 
-describe('numbers bot', () => {
+describe('[LG-06] numbers bot', () => {
   it('waits within the configured range for every level', async () => {
     const { BOT_DELAY, botDelayMs } = await import('./logic');
     for (const level of ['easy', 'medium', 'hard'] as const) {
