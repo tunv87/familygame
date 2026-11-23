@@ -21,8 +21,19 @@ const ROUTES = [
   '/#/join/0000',
 ];
 
+/**
+ * True once the app has drawn something. Polls for up to 10 s: after a full reload
+ * (e.g. going back past the first page and forward again) the app module loads
+ * asynchronously, which can take a while when many tests run in parallel.
+ */
 async function rendered(page: import('@playwright/test').Page) {
-  return page.evaluate(() => (document.getElementById('root')?.innerText ?? '').trim().length > 0);
+  const has = () =>
+    page.evaluate(() => (document.getElementById('root')?.innerText ?? '').trim().length > 0);
+  for (let i = 0; i < 40; i++) {
+    if (await has()) return true;
+    await page.waitForTimeout(250);
+  }
+  return false;
 }
 
 test('[CR-01] no JS errors on any route', async ({ browser }) => {

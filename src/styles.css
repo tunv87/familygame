@@ -1342,3 +1342,19 @@ input {
     font-size: 2.8em;
   }
 }
+
+/* narrow phones (360 px): keep "Người 1" readable in the player chips */
+@media (max-width: 380px) {
+  .player {
+    gap: 4px;
+    padding: 4px 8px 4px 4px;
+  }
+
+  .player .avatar {
+    font-size: 0.95em;
+  }
+
+  .player .name {
+    font-size: 0.9em;
+  }
+}

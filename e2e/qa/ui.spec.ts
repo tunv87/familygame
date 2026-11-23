@@ -19,6 +19,7 @@ interface Layout {
   overflow: number;
   smallControls: string[];
   clippedText: string[];
+  cutNames: string[];
 }
 
 /** UI-01, UI-02, UI-05 measured in the page. */
@@ -52,10 +53,20 @@ async function measure(page: Page): Promise<Layout> {
         (el) => el.scrollWidth > el.clientWidth + 1 && getComputedStyle(el).overflowX !== 'visible',
       )
       .map((el) => label(el));
+    // Player names up to 8 characters ("Người 1", "Bé Na") must be shown in full.
+    const cutNames = [...document.querySelectorAll('.name, .mini-name')]
+      .filter(
+        (el) =>
+          vis(el) &&
+          (el.textContent ?? '').trim().length <= 8 &&
+          el.scrollWidth > el.clientWidth + 1,
+      )
+      .map((el) => `"${el.textContent}"`);
     return {
       overflow: document.documentElement.scrollWidth - window.innerWidth,
       smallControls,
       clippedText,
+      cutNames,
     };
   });
 }
@@ -109,6 +120,11 @@ async function screen(page: Page, d: Device, theme: string, name: string) {
     m.clippedText.length === 0,
     `${d.id} ${name}: clipped text: ${m.clippedText.join('; ')}`,
   );
+  check(
+    'UI-05',
+    m.cutNames.length === 0,
+    `${d.id} ${name}: short names cut off: ${m.cutNames.join('; ')}`,
+  );
   await evidence(page, theme, d.id, name);
 }
 
@@ -116,7 +132,7 @@ const FULL = DEVICES.map((d) => ({ d, theme: 'classic' as const }));
 const CUTE = ['D1', 'D2', 'D7'].map((id) => ({ d: deviceById(id), theme: 'cute' as const }));
 
 for (const { d, theme } of [...FULL, ...CUTE]) {
-  test(`[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07]${d.id === 'D11' ? '[UI-08]' : ''} ${d.id} ${d.name} ${d.width}×${d.height} ${theme}`, async ({
+  test(`[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09]${d.id === 'D11' ? '[UI-08]' : ''} ${d.id} ${d.name} ${d.width}×${d.height} ${theme}`, async ({
     browser,
   }) => {
     test.setTimeout(180_000);
@@ -214,6 +230,12 @@ for (const { d, theme } of [...FULL, ...CUTE]) {
         );
       }
     }
+
+    await page.goto('/#/coganh/play?mode=local');
+    await page.getByTestId('pt-10').click();
+    await screen(page, d, theme, '16-coganh');
+    const cg = await boardInView(page, 'cg-board');
+    check('UI-09', cg.inside, `${d.id} Cờ gánh board not fully visible: ${cg.rect}`);
 
     await page.goto('/#/join');
     await screen(page, d, theme, '14-join');

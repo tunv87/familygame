@@ -161,7 +161,8 @@ async function scene(
     case 'coganh':
       // Black "opens" a gap, White is forced to Gánh and takes two pieces
       await page.goto('/#/coganh/play?mode=local');
-      for (const i of [2, 7, 14, 8]) await page.getByTestId(`pt-${i}`).click();
+      // the forced White piece is picked up automatically: just tap where it must go
+      for (const i of [2, 7, 8]) await page.getByTestId(`pt-${i}`).click();
       await page.getByTestId('pt-10').click(); // Black picks up a piece: its moves are shown
       break;
     case 'online': {
