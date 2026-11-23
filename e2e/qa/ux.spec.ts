@@ -22,9 +22,9 @@ test('[UX-01] correct tap gives visual feedback within 100 ms', async ({ browser
   });
   for (let n = 1; n <= 5; n++) await page.getByTestId(`num-${n}`).click();
   await page.waitForTimeout(300);
-  const times = (await page.evaluate(() => (window as unknown as { __times: number[] }).__times)).map(
-    (t) => Math.round(t),
-  );
+  const times = (
+    await page.evaluate(() => (window as unknown as { __times: number[] }).__times)
+  ).map((t) => Math.round(t));
   expect(times.length, '[UX-01] taps not registered').toBe(5);
   expect(Math.max(...times), `[UX-01] feedback times ms: ${times.join(', ')}`).toBeLessThanOrEqual(
     100,

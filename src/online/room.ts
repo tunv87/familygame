@@ -87,10 +87,18 @@ export async function joinRoom(code: string, profile: Profile) {
     online: true,
   };
   // Claim the guest seat and add ourselves in one atomic multi-path update.
-  await update(roomRef(code), {
-    [`players/${uid}`]: me,
-    ...(isHost || room.guestUid === uid ? {} : { guestUid: uid }),
-  });
+  try {
+    await update(roomRef(code), {
+      [`players/${uid}`]: me,
+      ...(isHost || room.guestUid === uid ? {} : { guestUid: uid }),
+    });
+  } catch (e) {
+    // A second, concurrent join from this device (double tap, re-render) loses the
+    // race for the seat to the first one: that is a success, not an error.
+    const after = (await get(roomRef(code))).val() as Room | null;
+    if (!after?.players?.[uid]) throw e;
+    log.info('already joined', { code });
+  }
   log.info('joined room', { code });
   return uid;
 }

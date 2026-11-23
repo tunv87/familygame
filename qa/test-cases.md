@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v2.1** (sau review lần 1 và sau run 01, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v2.2** (sau review lần 1, run 01 và run 02, xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -39,19 +39,20 @@ Phiên bản: **v2.1** (sau review lần 1 và sau run 01, xem `review-log.md`).
 
 ## CR – Chống crash
 
-| Mã    | Ưu tiên | Kiểm tra                                              | Kết quả mong đợi                                       |
-| ----- | ------- | ----------------------------------------------------- | ------------------------------------------------------ |
-| CR-01 | P1      | Đi qua mọi route                                      | Không có lỗi JS (pageerror) hay console.error          |
-| CR-02 | P1      | Route không tồn tại                                   | Về trang chủ                                           |
-| CR-03 | P1      | Tham số URL sai (`size=999`, `level=abc`, `mode=xyz`) | Không crash, dùng giá trị mặc định                     |
-| CR-04 | P1      | localStorage hỏng (JSON lỗi, sai kiểu)                | App vẫn mở, dùng mặc định                              |
-| CR-05 | P1      | Bấm loạn 300 lần vào bàn Tìm số và ca rô              | Không lỗi JS, trạng thái hợp lệ                        |
-| CR-06 | P2      | Bấm Back/Forward liên tục                             | Không lỗi                                              |
-| CR-07 | P1      | Mất mạng giữa ván online rồi có mạng lại              | Hiện trạng thái mất kết nối, có mạng lại thì chơi tiếp |
-| CR-08 | P1      | Tải lại trang giữa ván online                         | Vào lại đúng phòng, ván còn nguyên                     |
-| CR-09 | P2      | Chơi 20 ván ca rô liên tiếp                           | Không lỗi, không chậm dần                              |
-| CR-10 | P1      | Trình duyệt chặn localStorage (Safari riêng tư)       | App vẫn chạy được                                      |
-| CR-11 | P1      | Bạn chơi cùng rời phòng giữa ván                      | Hiện thông báo, không crash, thoát được                |
+| Mã    | Ưu tiên | Kiểm tra                                                                         | Kết quả mong đợi                                         |
+| ----- | ------- | -------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| CR-01 | P1      | Đi qua mọi route                                                                 | Không có lỗi JS (pageerror) hay console.error            |
+| CR-02 | P1      | Route không tồn tại                                                              | Về trang chủ                                             |
+| CR-03 | P1      | Tham số URL sai (`size=999`, `level=abc`, `mode=xyz`)                            | Không crash, dùng giá trị mặc định                       |
+| CR-04 | P1      | localStorage hỏng (JSON lỗi, sai kiểu)                                           | App vẫn mở, dùng mặc định                                |
+| CR-05 | P1      | Bấm loạn 300 lần vào bàn Tìm số và ca rô                                         | Không lỗi JS, trạng thái hợp lệ                          |
+| CR-06 | P2      | Bấm Back/Forward liên tục                                                        | Không lỗi                                                |
+| CR-07 | P1      | Mất mạng giữa ván online rồi có mạng lại                                         | Hiện trạng thái mất kết nối, có mạng lại thì chơi tiếp   |
+| CR-08 | P1      | Tải lại trang giữa ván online                                                    | Vào lại đúng phòng, ván còn nguyên                       |
+| CR-09 | P2      | Chơi 20 ván ca rô liên tiếp                                                      | Không lỗi, không chậm dần                                |
+| CR-10 | P1      | Trình duyệt chặn localStorage (Safari riêng tư)                                  | App vẫn chạy được                                        |
+| CR-11 | P1      | Bạn chơi cùng rời phòng giữa ván                                                 | Hiện thông báo, không crash, thoát được                  |
+| CR-12 | P1      | Mở link mời khi đã có tên sẵn (vào phòng ngay, React có thể chạy hiệu ứng 2 lần) | Vào được phòng, không có lần ghi nào bị Firebase từ chối |
 
 ## LG – Logic
 

@@ -84,6 +84,8 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
   page.on('console', (m) => {
     if (m.type() === 'error') errors.push(`console.error: ${m.text()}`);
+    // Firebase reports rejected writes as warnings; for the app they are failures
+    else if (/permission_denied/i.test(m.text())) errors.push(`denied: ${m.text()}`);
   });
   return { ctx, page, errors };
 }

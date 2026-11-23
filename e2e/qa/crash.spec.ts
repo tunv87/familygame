@@ -150,9 +150,15 @@ test('[CR-07] losing the connection mid-game and getting it back', async ({ brow
   await a.page.getByTestId('cell-0').click();
   await expect(b.page.getByTestId('status')).toContainText('Đến lượt bạn');
   await b.ctx.setOffline(true);
-  await expect(b.page.getByTestId('offline'), '[CR-07] no offline notice for the player who lost the connection').toBeVisible({ timeout: 10_000 });
+  await expect(
+    b.page.getByTestId('offline'),
+    '[CR-07] no offline notice for the player who lost the connection',
+  ).toBeVisible({ timeout: 10_000 });
   await b.ctx.setOffline(false);
-  await expect(b.page.getByTestId('offline'), '[CR-07] offline notice stays after reconnect').toBeHidden({ timeout: 15_000 });
+  await expect(
+    b.page.getByTestId('offline'),
+    '[CR-07] offline notice stays after reconnect',
+  ).toBeHidden({ timeout: 15_000 });
   await b.page.getByTestId('cell-4').click();
   await expect(
     a.page.getByTestId('status'),
@@ -250,4 +256,23 @@ test('[CR-11] friend leaves mid-game', async ({ browser }) => {
     timeout: 10_000,
   });
   expect([...a.errors, ...b.errors], '[CR-11] errors').toEqual([]);
+});
+
+test('[CR-12] joining by link with a saved name has no rejected writes', async ({ browser }) => {
+  const a = await openApp(browser, { name: 'An' });
+  const b = await openApp(browser, { name: 'Bình' }); // name already saved → joins straight away
+  await a.page.goto('/#/caro');
+  await a.page.getByTestId('mode-online').click();
+  await a.page.getByTestId('size-3').click();
+  const code = await createRoomAs(a.page, 'An');
+  await b.page.goto(`/#/join/${code}`);
+  await expect(b.page.getByTestId('caro-board'), '[CR-12] guest not in the game').toBeVisible({
+    timeout: 15_000,
+  });
+  await b.page.waitForTimeout(1500);
+  await expect(
+    b.page.getByText('Không kết nối được'),
+    '[CR-12] error shown to the guest',
+  ).toHaveCount(0);
+  expect([...a.errors, ...b.errors], '[CR-12] errors / rejected writes').toEqual([]);
 });
