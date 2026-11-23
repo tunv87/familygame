@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GAMES } from '../games/registry';
+import { GAMES, GROUPS } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
 import { setSettings, useSettings } from './settings';
@@ -46,19 +46,26 @@ export function Hub() {
           </button>
         }
       />
-      <div className="hub-grid">
-        {GAMES.map((g) => (
-          <Card
-            key={g.id}
-            className="hub-card"
-            testId={`game-${g.id}`}
-            emoji={theme.gameEmoji[g.id] ?? g.emoji}
-            title={t(g.title)}
-            hint={t(g.desc)}
-            onClick={() => navigate(g.path)}
-          />
-        ))}
-      </div>
+      {GROUPS.map((grp) => (
+        <section key={grp.id} className="hub-group" data-testid={`group-${grp.id}`}>
+          <h2 className="hub-group-title">
+            {grp.emoji} {t(grp.title)}
+          </h2>
+          <div className="hub-grid">
+            {GAMES.filter((g) => g.group === grp.id).map((g) => (
+              <Card
+                key={g.id}
+                className="hub-card"
+                testId={`game-${g.id}`}
+                emoji={theme.gameEmoji[g.id] ?? g.emoji}
+                title={t(g.title)}
+                hint={t(g.desc)}
+                onClick={() => navigate(g.path)}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
       {welcome && <Welcome onDone={() => setWelcome(false)} />}
       <div className="grow" />
       <Card

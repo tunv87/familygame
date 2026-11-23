@@ -6,3 +6,5 @@ export const COGANH_HELP: [string, MessageKey][] = [
   ['🔒', 'cgHelp3'],
   ['⚠️', 'cgHelp4'],
 ];
+
+export const COGANH_STORY: MessageKey[] = ['cgStory1', 'cgStory2', 'cgStory3'];

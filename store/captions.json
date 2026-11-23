@@ -6,6 +6,11 @@
       "sub": "Từ bé 7 tuổi đến ông bà 70 tuổi"
     },
     {
+      "id": "oanquan",
+      "title": "Ô ăn quan dân gian",
+      "sub": "Rải sỏi, ăn quan – kèm câu chuyện nguồn gốc"
+    },
+    {
       "id": "numbers",
       "title": "Thi tìm số siêu nhanh",
       "sub": "Với máy, một mình hay cùng bạn"
@@ -41,6 +46,11 @@
       "id": "hub",
       "title": "Games for the whole family",
       "sub": "From age 7 to 70"
+    },
+    {
+      "id": "oanquan",
+      "title": "Ô Ăn Quan folk game",
+      "sub": "Sow stones, capture the mandarins"
     },
     {
       "id": "numbers",

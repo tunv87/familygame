@@ -16,7 +16,7 @@ import {
 import { chooseMove, type AiLevel } from './ai';
 import { boardFromMoves, configFor, outcomeOfMoves, type Player } from './logic';
 import { CaroBoard } from './CaroBoard';
-import { CARO_HELP } from './help';
+import { CARO_HELP, CARO_STORY } from './help';
 
 const log = createLogger('caro');
 
@@ -116,7 +116,11 @@ export function CaroLocal() {
   const mark = (isA: boolean) => ((isA ? aIsX : !aIsX) ? theme.x : theme.o);
   return (
     <main className="screen game">
-      <TopBar title={t('gameCaro')} onBack={exit} right={<HelpButton steps={CARO_HELP} />} />
+      <TopBar
+        title={t('gameCaro')}
+        onBack={exit}
+        right={<HelpButton steps={CARO_HELP} story={CARO_STORY} />}
+      />
       <div className="players">
         {[0, 1].map((k) => (
           <div key={k} className={`player ${!outcome && currentIsA === (k === 0) ? 'active' : ''}`}>

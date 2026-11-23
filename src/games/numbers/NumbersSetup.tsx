@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
-import { NUMBERS_HELP } from './help';
+import { NUMBERS_HELP, NUMBERS_STORY } from './help';
 import type { NumbersLevel } from './logic';
 import { formatSeconds, getRecord } from './records';
 
@@ -35,7 +35,11 @@ export function NumbersSetup() {
 
   return (
     <main className="screen">
-      <TopBar title={t('gameNumbers')} onBack={back} right={<HelpButton steps={NUMBERS_HELP} />} />
+      <TopBar
+        title={t('gameNumbers')}
+        onBack={back}
+        right={<HelpButton steps={NUMBERS_HELP} story={NUMBERS_STORY} />}
+      />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

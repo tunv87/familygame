@@ -1,4 +1,4 @@
-Trò chơi gia đình – ba trò chơi quen thuộc, giao diện to rõ để bé 7 tuổi hay ông bà 70 tuổi đều chơi được.
+Trò chơi gia đình – bốn trò chơi quen thuộc, giao diện to rõ để bé 7 tuổi hay ông bà 70 tuổi đều chơi được.
 
 🔢 TÌM SỐ
 Các số từ 1 đến 30, 60 hay 100 nằm lộn xộn trên bàn. Ai tìm và bấm số tiếp theo nhanh hơn sẽ được số đó!
@@ -11,12 +11,20 @@ Các số từ 1 đến 30, 60 hay 100 nằm lộn xộn trên bàn. Ai tìm và
 • Bàn lớn 15×15 cho người lớn: 5 quân thẳng hàng là thắng
 • Chơi với máy (3 mức), hai người cùng một máy, hoặc chơi với bạn ở xa
 
+🪨 Ô ĂN QUAN – TRÒ CHƠI DÂN GIAN
+Mỗi bên 5 ô dân, hai đầu là 2 ô quan. Bốc sỏi, chọn hướng rải, gặp ô trống thì ăn!
+• Rải tiếp, ăn liên tiếp, rải lại khi hết dân – đúng luật dân gian, app tự đếm điểm
+• Chơi với máy (Dễ, Vừa, Khó), hai người cùng máy, hoặc với bạn ở xa
+
 ⚫ CỜ GÁNH – TRÒ CHƠI DÂN GIAN
 Bàn 5×5, mỗi bên 8 quân. Không ăn bỏ quân mà đổi màu quân!
 • Gánh: đi vào giữa 2 quân địch thẳng hàng → 2 quân đó thành của bạn
 • Vây: quân địch hết đường đi → thành của bạn
 • Mở: đối phương để hở chỗ cho bạn gánh thì bạn bắt buộc phải gánh – app nhắc và tô sáng nước bắt buộc
 • Chơi với máy (Dễ, Vừa, Khó), hai người cùng máy, hoặc với bạn ở xa
+
+📖 MỖI TRÒ MỘT CÂU CHUYỆN
+Mỗi game có phần hướng dẫn từng bước và câu chuyện về nguồn gốc, tên gọi – để ông bà, cha mẹ kể cho con cháu nghe.
 
 👫 CHƠI VỚI BẠN THẬT DỄ
 Tạo phòng, gửi mã 4 số qua Zalo hay Messenger là bắt đầu. Bạn chưa cài app vẫn chơi được trên trình duyệt.

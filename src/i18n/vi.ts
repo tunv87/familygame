@@ -145,6 +145,52 @@ export const vi = {
   debug: 'Nhật ký lỗi',
   copyLogs: 'Chép nhật ký',
   clearLogs: 'Xoá',
+  groupFolk: 'Trò chơi dân gian',
+  groupMind: 'Trí tuệ & phản xạ',
+  helpRules: 'Cách chơi',
+  helpStory: 'Câu chuyện',
+  gameOAQ: 'Ô ăn quan',
+  gameOAQDesc: 'Rải sỏi, ăn quan',
+  oaqQuan: 'Ô quan',
+  oaqField: 'Ô dân',
+  oaqYourTurn: 'Đến lượt bạn: chạm một ô sỏi hàng dưới',
+  oaqPickDir: 'Chọn hướng rải sỏi',
+  oaqLeft: 'Trái',
+  oaqRight: 'Phải',
+  oaqGained: 'Ăn được {n} điểm!',
+  oaqTookQuan: 'Ăn quan! +{n} điểm',
+  oaqReseed: '{name} hết sỏi, rải lại 5 viên',
+  oaqEnd: 'Hết quan, tàn dân, thu quân!',
+  oaqHelp1:
+    'Mỗi bên có 5 ô dân, mỗi ô 5 viên sỏi. Hai đầu là 2 ô quan, mỗi ô có 1 viên quan to đáng 10 điểm.',
+  oaqHelp2: 'Đến lượt: chạm một ô của bạn rồi chọn hướng. Sỏi được rải lần lượt, mỗi ô 1 viên.',
+  oaqHelp3: 'Rải hết mà ô kế tiếp còn sỏi thì bốc lên rải tiếp. Gặp ô quan thì dừng.',
+  oaqHelp4: 'Ô kế tiếp trống thì ăn hết sỏi ở ô sau nó. Cứ một ô trống, một ô có sỏi thì ăn tiếp!',
+  oaqHelp5:
+    'Hết sỏi trong ô của mình thì lấy 5 viên đã ăn rải lại. Ăn hết 2 quan là hết ván: ai nhiều điểm hơn thì thắng.',
+  oaqStory1:
+    'Ô ăn quan là trò chơi dân gian của trẻ em Việt Nam, nhất là ở miền Bắc. Ngày xưa các bạn nhỏ vẽ bàn bằng phấn hay than trên sân gạch, nền đất, rồi dùng sỏi, hạt nhãn, hạt vải làm quân.',
+  oaqStory2:
+    'Tên gọi rất dễ hiểu: "ô" là những ô vuông, "quan" là ông quan – viên sỏi to ở hai đầu bàn. Dân thì nhiều mà nhỏ, quan thì một mà to: ăn được quan là được nhiều điểm nhất. Hết quan, người chơi hô "hết quan, tàn dân, thu quân, bán ruộng" rồi đếm sỏi.',
+  oaqStory3:
+    'Ô ăn quan thuộc họ trò chơi "gieo hạt" (mancala) có từ hàng nghìn năm, được chơi ở châu Phi, Trung Đông và châu Á. Trò chơi giúp bé tập đếm, biết tính trước, và là dịp để ông bà kể chuyện ngày xưa.',
+  cgStory1:
+    'Cờ gánh là trò chơi dân gian lâu đời, phổ biến ở miền Trung Việt Nam. Bàn cờ chỉ là 25 điểm kẻ trên đất, quân cờ là sỏi, mảnh sành hay vỏ ốc, nên ai cũng chơi được ngay ngoài sân.',
+  cgStory2:
+    'Tên "gánh" lấy từ hình ảnh chiếc đòn gánh: quân của bạn đứng giữa, hai quân đối phương ở hai bên như hai đầu quang gánh – và bị "gánh" về phe bạn. Quân bị ăn đổi phe chứ không mất đi, nên ván cờ có thể lật ngược rất nhanh.',
+  cgStory3:
+    'Cờ gánh dạy người chơi quan sát và nhìn trước: một nước đi sơ hở có thể "mở" đường cho đối phương. Ông bà, cha mẹ có thể dạy con cháu chỉ trong vài phút.',
+  caroStory1:
+    'Cờ ca-rô có tên từ chữ "carreau" trong tiếng Pháp, nghĩa là ô vuông: bao thế hệ học sinh Việt Nam kẻ bàn cờ ngay trên giấy ô li của vở, chơi trong giờ ra chơi.',
+  caroStory2:
+    'Bàn lớn 5 quân thẳng hàng giống trò Gomoku của Nhật Bản, vốn chơi trên bàn cờ vây. Bàn nhỏ 3×3 (tic-tac-toe) là trò rất cổ, có ở nhiều nước trên thế giới.',
+  caroStory3:
+    'Mẹo nhỏ: luôn để ý hàng 2–3 quân của đối phương và chặn sớm. Ở bàn lớn, tạo được hai hàng cùng lúc thì đối phương khó chặn kịp.',
+  numbersStory1:
+    'Trò tìm số lấy cảm hứng từ "bảng Schulte" mà các nhà tâm lý học dùng để luyện sự tập trung: tìm thật nhanh các số theo thứ tự trên một bảng xáo trộn.',
+  numbersStory2:
+    'Ở Việt Nam, học sinh hay viết các số lung tung lên giấy rồi thi xem ai khoanh được số tiếp theo nhanh hơn. Trò này giúp mắt quét nhanh, nhận biết số, rất hợp để ông bà chơi cùng cháu.',
+  numbersStory3: 'Mẹo: đừng dò từng ô. Hãy nhìn bao quát cả bảng và nhớ vị trí những số sắp tới.',
 } as const;
 
 export type MessageKey = keyof typeof vi;

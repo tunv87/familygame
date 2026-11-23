@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CaroOnline } from '../games/caro/CaroOnline';
 import { CoGanhOnline } from '../games/coganh/CoGanhOnline';
+import { OAQOnline } from '../games/oanquan/OAQOnline';
 import { NumbersOnline } from '../games/numbers/NumbersOnline';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
@@ -114,7 +115,9 @@ export function RoomScreen() {
         ? t('gameNumbers')
         : room?.game === 'coganh'
           ? t('gameCoGanh')
-          : t('gameCaro');
+          : room?.game === 'oanquan'
+            ? t('gameOAQ')
+            : t('gameCaro');
     const text = t('shareText', { game, code });
     if (await shareInvite({ title: t('appName'), text, url })) return;
     try {
@@ -132,7 +135,9 @@ export function RoomScreen() {
         ? t('gameCaro')
         : room?.game === 'coganh'
           ? t('gameCoGanh')
-          : t('online');
+          : room?.game === 'oanquan'
+            ? t('gameOAQ')
+            : t('online');
 
   // Android back button: same as the exit button (asks mid-game). Set below once known.
   const backRef = useRef<() => void>(() => void leave());
@@ -227,6 +232,8 @@ export function RoomScreen() {
         <NumbersOnline {...props} />
       ) : room.game === 'coganh' ? (
         <CoGanhOnline {...props} />
+      ) : room.game === 'oanquan' ? (
+        <OAQOnline {...props} />
       ) : (
         <CaroOnline {...props} />
       )}

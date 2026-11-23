@@ -3,6 +3,7 @@ No login or account is needed.
 Try on one device:
 - Home → "Tìm số / Find the Number" → "Chơi với máy / Play vs computer" → Easy.
 - Home → "Cờ ca rô / Gomoku" → "Chơi với máy / Play vs computer" → Small board → Easy.
+- Home → "Ô ăn quan / Ô Ăn Quan" → "Chơi với máy / Play vs computer" → Easy; tap a bottom-row square, then Left/Right.
 - Home → "Cờ gánh / Co Ganh" → "Chơi với máy / Play vs computer" → Easy.
 - Practice mode and two players on one device also work offline.
 

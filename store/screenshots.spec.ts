@@ -158,6 +158,16 @@ async function scene(
       for (const m of moves) await page.getByTestId(`cell-${m}`).click();
       break;
     }
+    case 'oanquan':
+      // one move each, then the player picks a field: the direction buttons light up
+      await page.goto('/#/oanquan/play?mode=local');
+      await page.getByTestId('cell-1').dispatchEvent('pointerdown');
+      await page.getByTestId('dir-right').click();
+      await page.getByTestId('cell-9').dispatchEvent('pointerdown');
+      await page.getByTestId('dir-left').click();
+      await page.waitForTimeout(1500);
+      await page.getByTestId('cell-4').dispatchEvent('pointerdown');
+      break;
     case 'coganh':
       // Black "opens" a gap, White is forced to Gánh and takes two pieces
       await page.goto('/#/coganh/play?mode=local');

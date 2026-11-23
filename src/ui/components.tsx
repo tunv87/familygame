@@ -106,27 +106,64 @@ export function Avatar({ emoji }: { emoji: string }) {
   return <span className="avatar">{emoji}</span>;
 }
 
-export function HelpButton({ steps }: { steps: [string, MessageKey][] }) {
+export function HelpButton({
+  steps,
+  story,
+}: {
+  steps: [string, MessageKey][];
+  /** paragraphs about the game's history, shown in a second tab */
+  story?: MessageKey[];
+}) {
   const t = useT();
   const [open, setOpen] = useState(false);
+  const [tab, setTab] = useState<'rules' | 'story'>('rules');
+  const show = () => {
+    setTab('rules');
+    setOpen(true);
+  };
   return (
     <>
-      <button className="icon-btn" aria-label={t('help')} onClick={() => setOpen(true)}>
+      <button className="icon-btn" aria-label={t('help')} data-testid="help" onClick={show}>
         ❓
       </button>
       {open && (
         <Modal onClose={() => setOpen(false)}>
-          <h2>{t('help')}</h2>
-          <div className="help-steps">
-            {steps.map(([emoji, key], i) => (
-              <div key={key}>
-                <b>{i + 1}</b>
-                <span>
-                  {emoji} {t(key)}
-                </span>
-              </div>
-            ))}
-          </div>
+          {story?.length ? (
+            <div className="help-tabs" role="tablist">
+              {(['rules', 'story'] as const).map((k) => (
+                <button
+                  key={k}
+                  role="tab"
+                  aria-selected={tab === k}
+                  className={tab === k ? 'active' : ''}
+                  data-testid={`help-tab-${k}`}
+                  onClick={() => setTab(k)}
+                >
+                  {k === 'rules' ? `📖 ${t('helpRules')}` : `🏮 ${t('helpStory')}`}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <h2>{t('help')}</h2>
+          )}
+          {tab === 'rules' || !story?.length ? (
+            <div className="help-steps" data-testid="help-rules">
+              {steps.map(([emoji, key], i) => (
+                <div key={key}>
+                  <b>{i + 1}</b>
+                  <span>
+                    {emoji} {t(key)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="help-story" data-testid="help-story">
+              {story.map((key) => (
+                <p key={key}>{t(key)}</p>
+              ))}
+            </div>
+          )}
           <button className="btn" onClick={() => setOpen(false)}>
             {t('ok')}
           </button>

@@ -14,7 +14,7 @@ import {
 } from '../../ui/components';
 import { chooseCoGanhMove, type CoGanhLevel } from './ai';
 import { CoGanhBoard } from './CoGanhBoard';
-import { COGANH_HELP } from './help';
+import { COGANH_HELP, COGANH_STORY } from './help';
 import {
   QUIET_LIMIT,
   applyMove,
@@ -189,7 +189,11 @@ export function CoGanhLocal() {
 
   return (
     <main className="screen game">
-      <TopBar title={t('gameCoGanh')} onBack={exit} right={<HelpButton steps={COGANH_HELP} />} />
+      <TopBar
+        title={t('gameCoGanh')}
+        onBack={exit}
+        right={<HelpButton steps={COGANH_HELP} story={COGANH_STORY} />}
+      />
       <div className="players">
         {([0, 1] as const).map((k) => (
           <div

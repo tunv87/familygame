@@ -74,3 +74,15 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | english.spec (bộ e2e cũ)    | Báo "Cờ Gánh" là chữ Việt sót trên giao diện tiếng Anh. Quyết định: giữ tên riêng của trò chơi dân gian (như "Sudoku", "Go"), trang store tiếng Anh cũng dùng tên này. Test được phép chấp nhận "Cờ Gánh", "Gánh", "Mở".                                                                                   |
 | UI-05, UI-09                | Soát ảnh store sau run 06 thấy tên "Người 1" bị cắt trên màn 360 px (B15). UI-05 bỏ qua ô tên người chơi. Bổ sung: tên ≤ 8 ký tự không được cắt, trên mọi thiết bị; thêm màn Cờ gánh vào vòng chụp 11 thiết bị (UI-09).                                                                                    |
 | CR-06 (run 07)              | Lỗi test, chỉ xảy ra khi chạy song song nặng (chạy riêng 5/5 pass): vòng lặp cuối lùi quá trang đầu về `about:blank`, tiến lại thì app nạp lại từ đầu, mà test chỉ chờ cố định 0,8 giây. Đổi `rendered()` sang chờ tới khi app vẽ xong (tối đa 10 giây). Dùng chung cho CR-01, CR-03, CR-04, CR-06, CR-10. |
+
+## Review lần 6 – thêm Ô ăn quan, nhóm game, câu chuyện, v2.4 → v2.5
+
+| Case                       | Lý do                                                                                                                                                                                      |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| LG-18                      | Luật miền Bắc: 5 sỏi/ô dân, quan = 10 điểm, ăn quan bất kỳ lúc nào (không áp dụng "quan non"), hết dân thì rải lại 5 (được vay). Thêm kiểm tra bảo toàn tổng số sỏi qua 50 ván ngẫu nhiên. |
+| LG-19                      | Máy: luôn đi đúng luật, có quan thì ăn, mức Khó thắng mức Dễ, trả lời nhanh trên điện thoại.                                                                                               |
+| LG-20, UX-22, SEC-08       | Online: kiểm tra nước đi trong transaction; mỗi người thấy ô của mình ở hàng dưới (đảo bàn 180°); rules thêm `oanquan`.                                                                    |
+| UI-10                      | Bàn 7 cột: trên màn 360 px ô dân phải ≥ 44 px, nên ô quan (không bấm được) được thu hẹp.                                                                                                   |
+| UX-20, UX-21, AU-09, CR-14 | Chọn ô rồi chọn hướng bằng 2 nút lớn (dễ cho người lớn tuổi hơn vuốt), máy, đi lại, âm thanh khi ăn, link sai.                                                                             |
+| UX-23                      | Màn hình chính chia 2 nhóm; mỗi game có tab "Câu chuyện" (nguồn gốc, ý nghĩa tên gọi, mẹo chơi).                                                                                           |
+| CR-01, UX-03               | Thêm các màn Ô ăn quan vào danh sách màn hình kiểm tra.                                                                                                                                    |

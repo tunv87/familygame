@@ -139,4 +139,54 @@ export const en: Record<MessageKey, string> = {
   debug: 'Error log',
   copyLogs: 'Copy log',
   clearLogs: 'Clear',
+  groupFolk: 'Vietnamese folk games',
+  groupMind: 'Brain & speed',
+  helpRules: 'How to play',
+  helpStory: 'The story',
+  gameOAQ: 'Ô Ăn Quan',
+  gameOAQDesc: 'Sow stones, capture the mandarins',
+  oaqQuan: 'Mandarin square',
+  oaqField: 'Rice field',
+  oaqYourTurn: 'Your turn: tap one of your squares (bottom row)',
+  oaqPickDir: 'Choose a direction to sow',
+  oaqLeft: 'Left',
+  oaqRight: 'Right',
+  oaqGained: 'Captured {n} points!',
+  oaqTookQuan: 'Got a mandarin! +{n} points',
+  oaqReseed: '{name} ran out of stones and puts 5 back',
+  oaqEnd: 'Both mandarins are gone – count your stones!',
+  oaqHelp1:
+    'Each side has 5 squares with 5 small stones each. At both ends is a mandarin square with one big stone worth 10 points.',
+  oaqHelp2:
+    'On your turn, tap one of your squares and choose a direction. The stones are dropped one per square.',
+  oaqHelp3:
+    'If the next square still has stones, pick them up and keep sowing. Stop in front of a mandarin square.',
+  oaqHelp4:
+    'If the next square is empty, capture everything in the square after it. Empty, full, empty, full… capture again!',
+  oaqHelp5:
+    'If all your squares are empty, put back 5 captured stones. When both mandarins are taken the game ends: most points wins.',
+  oaqStory1:
+    "Ô Ăn Quan is a Vietnamese children's folk game, especially loved in the North. Children drew the board with chalk or charcoal on a brick yard or the ground and played with pebbles or longan and lychee seeds.",
+  oaqStory2:
+    'The name says it all: "ô" means squares and "quan" means mandarin – the big stone at each end. Villagers are many but small; the mandarin is one but big, so capturing it scores the most. When both are gone, players call out "no mandarins, no villagers, gather the stones" and count.',
+  oaqStory3:
+    'Ô Ăn Quan belongs to the mancala ("sowing") family of games, played for thousands of years across Africa, the Middle East and Asia. It teaches counting and thinking ahead – and gives grandparents a chance to tell stories of the old days.',
+  cgStory1:
+    'Cờ Gánh is an old folk game from Central Vietnam. The board is just 25 points scratched on the ground and the pieces are pebbles, pottery shards or shells, so anyone can play in the yard.',
+  cgStory2:
+    '"Gánh" is the carrying pole Vietnamese people balance on one shoulder: your piece stands in the middle and the two enemy pieces on either side are like its two baskets – they are "carried" over to your side. Captured pieces change sides instead of leaving the board, so games can turn around fast.',
+  cgStory3:
+    'Cờ Gánh teaches you to watch closely and think ahead: one careless move can "open" the way for your opponent. Grandparents can teach it to grandchildren in a few minutes.',
+  caroStory1:
+    'In Vietnam this game is called "cờ ca-rô", from the French word "carreau" (square): generations of pupils drew the board on the squared paper of their notebooks and played at break time.',
+  caroStory2:
+    'Five in a row on the big board is like Japanese Gomoku, traditionally played on a Go board. The small 3×3 game (tic-tac-toe) is very old and is played all over the world.',
+  caroStory3:
+    "Tip: always watch for two or three of your opponent's pieces in a row and block early. On the big board, make two lines at once – your opponent can only block one.",
+  numbersStory1:
+    'Find the Number is inspired by the "Schulte table", which psychologists use to train attention: find the numbers in order, as fast as you can, on a shuffled grid.',
+  numbersStory2:
+    'Vietnamese pupils play a paper version: scribble numbers all over a page, then race to circle the next one. It trains quick eyes and number sense – perfect for grandparents and grandchildren.',
+  numbersStory3:
+    "Tip: don't check square by square. Take in the whole board and remember where the next few numbers are.",
 };

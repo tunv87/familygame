@@ -1334,8 +1334,8 @@ input {
   .hub-card {
     flex-direction: row;
     text-align: left;
-    padding: 14px 18px;
-    min-height: calc(var(--tap) * 1.6);
+    padding: 12px 18px;
+    min-height: calc(var(--tap) * 1.35);
   }
 
   .hub-card .emoji {
@@ -1356,5 +1356,254 @@ input {
 
   .player .name {
     font-size: 0.9em;
+  }
+}
+
+/* ---------- hub groups ---------- */
+.hub-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hub-group-title {
+  margin: 4px 0 0;
+  font-size: 0.95em;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+/* ---------- help: rules / story tabs ---------- */
+.help-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.help-tabs button {
+  flex: 1;
+  min-height: 48px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface);
+  color: var(--text);
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.help-tabs button.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: var(--primary-ink);
+}
+
+.help-story {
+  text-align: left;
+  line-height: 1.5;
+  max-height: 55vh;
+  overflow-y: auto;
+}
+
+.help-story p {
+  margin: 0 0 12px;
+}
+
+/* ---------- ô ăn quan ---------- */
+:root {
+  --oaq-board: #e9c98f;
+  --oaq-cell: #f7e3bb;
+  --oaq-line: #8a6d3b;
+  --oaq-stone: #6b7280;
+  --oaq-big: #3f3f46;
+  --oaq-mine: #2563eb;
+}
+
+:root[data-theme='cute'] {
+  --oaq-board: #ffd6ec;
+  --oaq-cell: #fff3f9;
+  --oaq-line: #d17aa9;
+  --oaq-stone: #c39bff;
+  --oaq-big: #e0489b;
+  --oaq-mine: #e0489b;
+}
+
+.oaq-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.oaq-board {
+  width: 100%;
+  max-width: 720px;
+  aspect-ratio: 7 / 2.6;
+  display: grid;
+  grid-template-columns: 1.3fr repeat(5, 1fr) 1.3fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+  padding: 6px;
+  background: var(--oaq-board);
+  border: 3px solid var(--oaq-line);
+  border-radius: 16px;
+}
+
+.oaq-row {
+  display: contents;
+}
+
+.oaq-row.top > .oaq-cell {
+  grid-row: 1;
+}
+
+.oaq-row.bottom > .oaq-cell {
+  grid-row: 2;
+}
+
+.oaq-cell.quan.left {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  border-radius: 999px 12px 12px 999px;
+}
+
+.oaq-cell.quan.right {
+  grid-column: 7;
+  grid-row: 1 / 3;
+  border-radius: 12px 999px 999px 12px;
+}
+
+.oaq-cell {
+  position: relative;
+  min-width: 0;
+  min-height: 44px;
+  padding: 2px;
+  border: 2px solid var(--oaq-line);
+  border-radius: 10px;
+  background: var(--oaq-cell);
+  color: var(--text);
+  font: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.oaq-cell:disabled {
+  cursor: default;
+}
+
+.oaq-cell.mine {
+  border-color: var(--oaq-mine);
+}
+
+.oaq-cell.playable {
+  box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--oaq-mine) 35%, transparent);
+}
+
+.oaq-cell.selected {
+  background: var(--primary);
+  box-shadow: 0 0 0 4px var(--oaq-mine);
+}
+
+.oaq-cell.sown {
+  animation: oaq-drop 0.5s both;
+}
+
+.oaq-cell.caught {
+  animation: oaq-caught 0.9s 0.4s both;
+}
+
+@keyframes oaq-drop {
+  0% {
+    background: var(--oaq-cell);
+  }
+  40% {
+    background: #fde68a;
+  }
+  100% {
+    background: var(--oaq-cell);
+  }
+}
+
+@keyframes oaq-caught {
+  0%,
+  100% {
+    background: var(--oaq-cell);
+  }
+  30% {
+    background: #fca5a5;
+    transform: scale(1.06);
+  }
+}
+
+.oaq-stones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  min-height: 10px;
+}
+
+.oaq-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--oaq-stone);
+}
+
+.oaq-big {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--oaq-big);
+  border: 2px solid #fff;
+}
+
+.oaq-count {
+  font-size: 1.2em;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.oaq-dirs .btn:disabled {
+  opacity: 0.45;
+}
+
+.oaq-final {
+  font-size: 1.3em;
+  font-weight: 900;
+  margin: 8px 0;
+}
+
+@media (orientation: portrait) and (max-width: 600px) {
+  /* fields stay ≥ 44 px wide on a 360 px phone; the (untappable) quan cells give way */
+  .oaq-board {
+    aspect-ratio: 7 / 3.6;
+    grid-template-columns: 0.75fr repeat(5, 1fr) 0.75fr;
+    gap: 3px;
+    padding: 4px;
+    border-width: 2px;
+  }
+
+  .oaq-dot {
+    width: 6px;
+    height: 6px;
+  }
+
+  .oaq-big {
+    width: 16px;
+    height: 16px;
+  }
+
+  .oaq-count {
+    font-size: 1em;
   }
 }
