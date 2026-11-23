@@ -54,15 +54,34 @@
 
 ## Phần B – Game Cờ gánh
 
-### Luật (bản dùng trong app – cần chủ dự án xác nhận)
+### Luật (theo đặc tả của chủ dự án, 23/11/2026, đã review)
 
-- **Bàn**: 5×5 = 25 điểm. Có đường ngang, đường dọc, và đường chéo ở các điểm có (hàng + cột) chẵn (kiểu bàn alquerque).
-- **Xếp quân** (mỗi bên 8): bên A chiếm cả hàng trên (5 quân), 2 đầu hàng thứ 2, và đầu phải hàng giữa; bên B đối xứng ở phía dưới.
-- **Đi**: mỗi lượt đi 1 quân 1 bước theo đường kẻ, tới điểm trống kề bên.
-- **Gánh**: quân vừa đi tới nằm **giữa 2 quân địch thẳng hàng** thì 2 quân đó **đổi sang màu mình**. Xét mọi hướng cùng lúc, nên một nước có thể gánh 2 đôi (chầu 4) hoặc 3 đôi (chầu 6). Tự đi vào giữa 2 quân địch thì **không** bị gánh.
-- **Vây (chẹt)**: sau nước đi, mọi nhóm quân địch nối liền nhau mà **không còn điểm trống kề** thì đổi sang màu mình.
-- **Mở (bắt buộc)**: đối phương vừa rời một điểm khiến điểm đó nằm giữa 2 quân của họ, và mình có quân đi vào gánh được, thì mình **phải** đi nước gánh đó (có nhiều quân đi vào được thì chọn một). App tô sáng nước bắt buộc và khoá các nước khác.
-- **Thắng**: đối phương hết quân (tất cả đã bị đổi màu). **Hoà**: 60 nước liên tiếp không ai gánh/vây được (chống ván kéo dài vô hạn), hoặc cùng thế cờ lặp lại 3 lần.
+Toạ độ `(x, y)`: x là cột, y là hàng, từ 0 đến 4.
+
+1. **Bàn**: 25 điểm. Mọi điểm nối 4 hướng ngang/dọc. Điểm có `(x + y) % 2 == 0` nối thêm 4 hướng chéo. Bảng kề nhau (adjacency) và bảng "đường thẳng qua mỗi điểm" được tính sẵn một lần.
+2. **Xếp quân**: Đen (đi trước) ở `(0..4,0)`, `(0,1)`, `(4,1)`, `(0,2)`. Trắng ở `(4,2)`, `(0,3)`, `(4,3)`, `(0..4,4)`. Hai bên đối xứng tâm qua `(2,2)`.
+3. **Đi**: 1 quân sang điểm kề và trống. Không nhảy qua quân.
+4. **Thứ tự xử lý một nước đi**: di chuyển → **Gánh** → cập nhật bàn → **Chẹt** → kiểm tra thắng/hoà → tính nước **Mở** bắt buộc cho lượt sau.
+5. **Gánh**: trên mỗi trục qua điểm đích (2 trục, hoặc 4 trục ở điểm chẵn), nếu 2 điểm kề hai bên đều là quân đối phương thì cả 2 đổi màu. Gánh nhiều trục cùng lúc được (2–4 cặp).
+6. **Chẹt**: mọi nhóm quân đối phương nối liền nhau (theo bảng kề) mà không còn điểm trống kề nào thì đổi màu toàn bộ.
+7. **Mở**: `bắt buộc = các nước gánh của đối phương sau nước vừa đi` **trừ** `các nước gánh mà đối phương đã có sẵn trên bàn trước nước đó`. Nếu tập này không rỗng thì lượt kế tiếp chỉ được chọn trong tập này. Ràng buộc chỉ kéo dài 1 lượt.
+8. **Thắng**: đối phương hết quân. (Luật "hết nước đi thì thua" vẫn được cài để phòng hờ, nhưng theo luật Chẹt thì không bao giờ xảy ra, xem ghi chú review.)
+9. **Hoà**: cùng thế cờ (vị trí quân + bên đi + nước bắt buộc) lặp lại 3 lần, hoặc **100 lượt đi liên tiếp** (tính cả hai bên) không có quân nào đổi màu.
+
+### Ghi chú review đặc tả
+
+| #   | Điểm                                                                                                                                                                                                                          | Quyết định trong code                                                                                                                                                                           |
+| --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1  | Cách xếp quân khác bản nháp ban đầu (quân lẻ ở hàng giữa nằm bên trái cho Đen)                                                                                                                                                | Theo đặc tả                                                                                                                                                                                     |
+| R2  | Hoà sau N nước: đặc tả 100, plan cũ 60                                                                                                                                                                                        | Theo đặc tả: 100 lượt đi (khoảng 50 mỗi bên)                                                                                                                                                    |
+| R3  | "Hết nước đi thì thua" không bao giờ xảy ra: một nhóm không còn nước đi chính là một nhóm không còn điểm trống kề, và nhóm đó đã bị Chẹt đổi màu ngay cuối lượt trước. Do đó mọi quân còn lại của bên sắp đi luôn có nước đi. | Vẫn cài, kèm unit test chứng minh trường hợp này không thể xảy ra                                                                                                                               |
+| R4  | Đặc tả nêu 2 ví dụ Mở: (a) rút quân để hở khe, (b) đưa quân vào thế bị kẹp. Hai ví dụ dẫn tới 2 cách hiểu khác nhau.                                                                                                          | Dùng định nghĩa thuật toán ở mục 7 (so sánh trước/sau theo cặp _từ ô → tới ô_). Định nghĩa này bao gồm cả (a), (b), và trường hợp nước gánh của bên vừa đi tạo ra thế gánh mới cho đối phương.  |
+| R5  | Không có phản ứng dây chuyền: quân vừa bị đổi màu không gánh tiếp                                                                                                                                                             | Nói rõ trong code và có test                                                                                                                                                                    |
+| R6  | Chẹt chỉ cần chạy 1 lần: đổi màu không làm thay đổi ô trống, nên khí của các nhóm khác giữ nguyên                                                                                                                             | Chạy 1 lần, có test                                                                                                                                                                             |
+| R7  | Tự đi vào giữa 2 quân đối phương thì **không** bị gánh (gánh chỉ do bên vừa đi gây ra)                                                                                                                                        | Theo luật truyền thống, có test                                                                                                                                                                 |
+| R8  | Chẹt chỉ áp cho quân đối phương. Nhóm quân của chính bên vừa đi mà hết khí thì không đổi màu.                                                                                                                                 | Theo đặc tả, có test                                                                                                                                                                            |
+| R9  | Ai đi trước mỗi ván                                                                                                                                                                                                           | Ván 1 người tạo phòng / Người 1 cầm Đen (đi trước). Mỗi ván mới đổi bên, giống Ca rô.                                                                                                           |
+| R10 | Cấu trúc dữ liệu                                                                                                                                                                                                              | Mảng 25 ô (`Int8Array`) với bảng kề và bảng trục tính sẵn. Bàn chỉ có 25 điểm nên chưa cần bitboard: alpha-beta 4–5 nước vẫn dưới 300 ms. Sẽ đo thật; nếu chậm mới chuyển sang bitboard 32 bit. |
 
 ### Cấu trúc (theo cách làm của Ca rô)
 
@@ -88,7 +107,7 @@
 
 ## Phần C – Kiểm thử (dùng lại bộ QA đã có)
 
-- **LG**: xếp quân, đi đúng đường, gánh 1/2/3 đôi, không tự bị gánh, vây 1 quân và cả nhóm, mở bắt buộc, thắng, hoà sau 60 nước và lặp 3 lần, chuỗi online. Máy không bao giờ đi nước sai luật (thử 1.000 thế cờ), luôn gánh khi bị bắt buộc, chạy dưới 300 ms.
+- **LG** (theo đặc tả): bảng kề (không đi chéo ở điểm lẻ), xếp quân đối xứng; gánh đơn, gánh nhiều trục (2–4 cặp); gánh làm hở đường thở cho nhóm đang bị vây; chẹt 1 quân và cả nhóm lớn; không có phản ứng dây chuyền (R5–R8); Mở kiểu (a) rút quân, (b) đưa quân vào thế bị kẹp, và thế gánh có sẵn không bị bắt buộc; ràng buộc Mở chỉ kéo dài 1 lượt; thắng; hoà sau 100 lượt và lặp 3 lần; trường hợp R3; kiểm tra nước đi online. Máy không bao giờ đi nước sai luật (thử 1.000 thế cờ), luôn gánh khi bị bắt buộc, chạy dưới 300 ms.
 - **UI**: bàn Cờ gánh nằm gọn trong 11 kích thước màn hình, quân ≥ 44 px trên điện thoại; chụp ảnh evidence cả 2 giao diện.
 - **UX**: chọn quân hiện nước đi được; nước bắt buộc được tô và khoá nước khác; có âm/rung cho gánh; Undo; hỏi trước khi thoát.
 - **Âm thanh**: mỗi sự kiện có file ở cả 2 bộ âm; đổi giao diện thì đổi bộ âm; tắt âm thì không phát; nhạc nền mặc định tắt và giữ lựa chọn sau khi tải lại; file âm thanh được cache offline; bấm loạn không lỗi.
@@ -111,6 +130,6 @@
 
 ## Việc của chủ dự án
 
-1. Xác nhận luật Cờ gánh ở Phần B (đặc biệt cách xếp quân và luật hoà), hoặc chỉ ra chỗ khác với cách nhà mình hay chơi.
+1. ~~Xác nhận luật Cờ gánh~~: đã có đặc tả (23/11). Chỉ cần xem 10 quyết định ở mục "Ghi chú review đặc tả".
 2. Sau khi merge: dán lại `database.rules.json` lên Firebase.
 3. Nghe thử bộ âm thanh trên điện thoại khi có bản mới, góp ý nếu cần đổi.
