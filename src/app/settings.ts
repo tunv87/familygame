@@ -5,7 +5,11 @@ export type Lang = 'vi' | 'en';
 export type ThemeId = 'classic' | 'cute';
 
 export interface Settings {
+  /** game sound effects */
   sound: boolean;
+  vibrate: boolean;
+  /** background music (off by default) */
+  music: boolean;
   bigText: boolean;
   lang: Lang;
   theme: ThemeId;
@@ -50,6 +54,9 @@ const bool = (v: unknown, fallback: boolean) => (typeof v === 'boolean' ? v : fa
 export function cleanSettings(s: Settings): Settings {
   return {
     sound: bool(s.sound, true),
+    // older versions had one switch for sound + vibration
+    vibrate: bool(s.vibrate, bool(s.sound, true)),
+    music: bool(s.music, false),
     bigText: bool(s.bigText, false),
     lang: pick(s.lang, ['vi', 'en'] as const, detectLang()),
     theme: pick(s.theme, ['classic', 'cute'] as const, 'classic'),
@@ -65,7 +72,15 @@ export function cleanProfile(p: Profile): Profile {
 
 const settingsStore = createStore<Settings>(
   'settings',
-  { sound: true, bigText: false, lang: detectLang(), theme: 'classic' },
+  // `vibrate` has no default here on purpose: when it was never saved, cleanSettings
+  // derives it from `sound`, so people who had turned off "sound & vibration" stay silent.
+  {
+    sound: true,
+    music: false,
+    bigText: false,
+    lang: detectLang(),
+    theme: 'classic',
+  } as Settings,
   cleanSettings,
 );
 const profileStore = createStore<Profile>(

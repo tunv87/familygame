@@ -34,6 +34,23 @@ export const vi = {
   gameCaro: 'Cờ ca rô',
   gameCaroDesc: 'Xếp hàng để thắng',
 
+  // cờ gánh
+  gameCoGanh: 'Cờ gánh',
+  gameCoGanhDesc: 'Gánh quân, vây quân',
+  cgBlack: 'Đen',
+  cgWhite: 'Trắng',
+  cgYourTurn: 'Đến lượt bạn: chạm quân rồi chạm chỗ đi',
+  cgTurn: 'Lượt của {name}',
+  cgForced: 'Bị Mở! Phải gánh ngay',
+  cgGanh: 'Gánh được {n} quân!',
+  cgChet: 'Vây được {n} quân!',
+  cgDrawQuiet: 'Hoà: 100 lượt không ai ăn được quân',
+  cgDrawRepeat: 'Hoà: thế cờ lặp lại 3 lần',
+  cgHelp1: 'Mỗi lượt đi 1 quân sang điểm trống kề bên, theo đường kẻ.',
+  cgHelp2: 'Gánh: đi vào giữa 2 quân địch thẳng hàng → 2 quân đó thành của bạn.',
+  cgHelp3: 'Vây: quân địch không còn đường đi → thành của bạn. Ăn hết quân là thắng!',
+  cgHelp4: 'Mở: đối phương vừa để hở chỗ cho bạn gánh thì bạn bắt buộc phải gánh.',
+
   // caro
   caroBoard: 'Chọn bàn cờ',
   caroSmall: 'Bàn nhỏ 3×3',
@@ -106,7 +123,10 @@ export const vi = {
   save: 'Lưu',
 
   // settings
-  sound: 'Âm thanh & rung',
+  sound: 'Âm thanh',
+  music: 'Nhạc nền',
+  vibration: 'Rung',
+  aboutSounds: 'Âm thanh: UI SFX (CC0, romainsimon/uisfx).',
   bigText: 'Chữ to',
   language: 'Ngôn ngữ',
   theme: 'Giao diện',

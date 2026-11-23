@@ -198,18 +198,22 @@ export function ExitConfirm({
 export function ResultModal({
   title,
   win,
+  sound,
   children,
   actions,
 }: {
   title: string;
+  /** true = confetti + win sound, false = lose sound, undefined = draw / finished */
   win?: boolean;
+  /** overrides the sound picked from `win` (e.g. a new record) */
+  sound?: 'win' | 'lose' | 'draw' | 'record';
   children?: ReactNode;
   actions: ReactNode;
 }) {
   useEffect(() => {
-    if (win === true) sfx.win();
-    else if (win === false) sfx.lose();
-  }, [win]);
+    sfx[sound ?? (win === true ? 'win' : win === false ? 'lose' : 'draw')]();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <>
       {win && <Confetti />}

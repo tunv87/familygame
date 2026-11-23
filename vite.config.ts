@@ -40,7 +40,7 @@ export default defineConfig({
         skipWaiting: true,
         cleanupOutdatedCaches: true,
         globPatterns: [
-          '**/*.{js,css,html,svg,png}',
+          '**/*.{js,css,html,svg,png,mp3}',
           '**/nunito-{latin,latin-ext,vietnamese}-*-normal-*.woff2',
         ],
       },

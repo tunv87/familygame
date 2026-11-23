@@ -3,7 +3,7 @@ import type { MessageKey } from '../i18n';
 export type Mode = 'solo' | 'local' | 'online';
 
 export interface GameInfo {
-  id: 'numbers' | 'caro';
+  id: 'numbers' | 'caro' | 'coganh';
   emoji: string;
   title: MessageKey;
   desc: MessageKey;
@@ -27,6 +27,14 @@ export const GAMES: GameInfo[] = [
     title: 'gameCaro',
     desc: 'gameCaroDesc',
     path: '/caro',
+    modes: ['solo', 'local', 'online'],
+  },
+  {
+    id: 'coganh',
+    emoji: '⚫',
+    title: 'gameCoGanh',
+    desc: 'gameCoGanhDesc',
+    path: '/coganh',
     modes: ['solo', 'local', 'online'],
   },
 ];

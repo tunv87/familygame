@@ -1,7 +1,8 @@
 import type { CaroOnlineState } from '../games/caro/online';
+import type { CoGanhOnlineState } from '../games/coganh/online';
 import type { NumbersState } from '../games/numbers/logic';
 
-export type GameId = 'numbers' | 'caro';
+export type GameId = 'numbers' | 'caro' | 'coganh';
 
 export interface RoomPlayer {
   name: string;
@@ -29,7 +30,7 @@ export interface Room {
   rematch?: Record<string, boolean>;
   /** results[round] = winner uid or 'draw' */
   results?: Record<string, string>;
-  state?: NumbersState | CaroOnlineState;
+  state?: NumbersState | CaroOnlineState | CoGanhOnlineState;
 }
 
 export const MAX_PLAYERS = 2;

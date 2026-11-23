@@ -19,6 +19,17 @@ export function useCountdown(round: unknown): number {
 }
 
 export function Countdown({ count }: { count: number }) {
+  // 3, 2, 1 → tick; 0 → go
+  const started = useRef(false);
+  useEffect(() => {
+    if (count > 0) {
+      started.current = true;
+      sfx.tick();
+    } else if (started.current) {
+      started.current = false;
+      sfx.go();
+    }
+  }, [count]);
   return count > 0 ? (
     <div className="countdown" data-testid="countdown">
       {count}

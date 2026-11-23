@@ -21,6 +21,11 @@
       "sub": "5 quân thẳng hàng là thắng"
     },
     {
+      "id": "coganh",
+      "title": "Cờ gánh dân gian",
+      "sub": "Gánh, vây, mở – với máy hay với bạn"
+    },
+    {
       "id": "online",
       "title": "Chơi với bạn ở xa",
       "sub": "Chỉ cần gửi mã phòng 4 số"
@@ -51,6 +56,11 @@
       "id": "caro-big",
       "title": "Big 15×15 Gomoku",
       "sub": "Five in a row wins"
+    },
+    {
+      "id": "coganh",
+      "title": "Cờ Gánh, a Vietnamese classic",
+      "sub": "Carry, surround, open – vs robot or friends"
     },
     {
       "id": "online",

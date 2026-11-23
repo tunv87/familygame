@@ -5,7 +5,7 @@ export interface ThemeAssets {
   x: string;
   o: string;
   confetti: string[];
-  gameEmoji: Record<'numbers' | 'caro', string>;
+  gameEmoji: Record<'numbers' | 'caro' | 'coganh', string>;
   /** hub title decoration */
   titleEmoji: string;
   themeColor: string;
@@ -16,7 +16,7 @@ export const THEMES: Record<ThemeId, ThemeAssets> = {
     x: '✕',
     o: '◯',
     confetti: ['🎉', '⭐', '🎈', '✨', '🏆'],
-    gameEmoji: { numbers: '🔢', caro: '⭕' },
+    gameEmoji: { numbers: '🔢', caro: '⭕', coganh: '⚫' },
     titleEmoji: '',
     themeColor: '#ffb703',
   },
@@ -24,7 +24,7 @@ export const THEMES: Record<ThemeId, ThemeAssets> = {
     x: '💖',
     o: '⭐',
     confetti: ['💖', '🌸', '🦄', '✨', '🎀'],
-    gameEmoji: { numbers: '🦄', caro: '💖' },
+    gameEmoji: { numbers: '🦄', caro: '💖', coganh: '🌸' },
     titleEmoji: '🎀',
     themeColor: '#ff8fc8',
   },
