@@ -6,7 +6,13 @@ import {
   signInAnonymously,
   type Auth,
 } from 'firebase/auth';
-import { connectDatabaseEmulator, getDatabase, type Database } from 'firebase/database';
+import {
+  connectDatabaseEmulator,
+  getDatabase,
+  onValue,
+  ref,
+  type Database,
+} from 'firebase/database';
 import { createLogger } from '../lib/logger';
 
 const log = createLogger('firebase');
@@ -50,6 +56,19 @@ function init() {
 export function getDb(): Database {
   init();
   return db!;
+}
+
+let offset = 0;
+let watchingOffset = false;
+/** Date.now() corrected to the Firebase server clock, so turn timers agree on both devices. */
+export function serverNow(): number {
+  if (!watchingOffset) {
+    watchingOffset = true;
+    onValue(ref(getDb(), '.info/serverTimeOffset'), (s) => {
+      offset = Number(s.val()) || 0;
+    });
+  }
+  return Date.now() + offset;
 }
 
 let uidPromise: Promise<string> | null = null;

@@ -158,6 +158,26 @@ async function scene(
       for (const m of moves) await page.getByTestId(`cell-${m}`).click();
       break;
     }
+    case 'noitu':
+      // a few words into the chain: the next word is being typed
+      await page.goto('/#/noitu/play?mode=local');
+      await page.getByTestId('nt-input').waitFor({ timeout: 15_000 });
+      for (let i = 0; i < 3; i++) {
+        await page.getByTestId('nt-hint').click();
+        await page.getByTestId('nt-go').click();
+      }
+      await page.getByTestId('nt-hint').click();
+      break;
+    case 'oanquan':
+      // one move each, then the player picks a field: the direction buttons light up
+      await page.goto('/#/oanquan/play?mode=local');
+      await page.getByTestId('cell-1').dispatchEvent('pointerdown');
+      await page.getByTestId('dir-right').click();
+      await page.getByTestId('cell-9').dispatchEvent('pointerdown');
+      await page.getByTestId('dir-left').click();
+      await page.waitForTimeout(1500);
+      await page.getByTestId('cell-4').dispatchEvent('pointerdown');
+      break;
     case 'coganh':
       // Black "opens" a gap, White is forced to Gánh and takes two pieces
       await page.goto('/#/coganh/play?mode=local');
@@ -209,7 +229,7 @@ for (const lang of ['vi', 'en'] as const) {
     const ctx = await browser.newContext({ viewport: { width: 1024, height: 500 } });
     const page = await ctx.newPage();
     const icon = readFileSync(join(ROOT, 'assets/icon-only.png')).toString('base64');
-    const title = lang === 'vi' ? 'Tìm số & Cờ ca rô' : 'Numbers & Gomoku';
+    const title = 'Family Game';
     const sub = lang === 'vi' ? 'Trò chơi cho cả nhà' : 'Games for the whole family';
     await page.setContent(`<html><head><style>${FONT_CSS}
       body{margin:0;width:1024px;height:500px;background:linear-gradient(120deg,#ffb703,#ffd166);font-family:Nunito;display:flex;align-items:center;gap:56px;padding:0 72px;box-sizing:border-box;color:#3d2c00}

@@ -5,9 +5,8 @@ Mọi thứ build, ký, upload đã tự động bằng GitHub Actions. Phần d
 |                                   | Giá trị                                          |
 | --------------------------------- | ------------------------------------------------ |
 | Mã app (Bundle ID / Package name) | `io.github.tunv87.familygame`                    |
-| Tên trên store (VI)               | Tìm số & Cờ ca rô: Gia đình                      |
-| Tên trên store (EN)               | Family Games: Numbers & Gomoku                   |
-| Tên dưới icon                     | Gia đình (Android máy tiếng Anh: Family Games)   |
+| Tên trên store (VI + EN)          | Family Game                                      |
+| Tên dưới icon                     | Family Game                                      |
 | Chính sách quyền riêng tư         | https://tunv87.github.io/familygame/privacy.html |
 | Trang hỗ trợ                      | https://github.com/tunv87/familygame/issues      |
 | Danh mục                          | Games → Board (phụ: Family)                      |
@@ -27,7 +26,7 @@ Thêm secret: GitHub repo → **Settings → Secrets and variables → Actions �
    - Tự tạo (cần Java): `keytool -genkeypair -v -keystore upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`
    - Lưu file `.jks` + mật khẩu ở nơi an toàn (Google Drive riêng/trình quản lý mật khẩu). Mất khoá thì phải xin Google đặt lại.
    - Thêm secret: `ANDROID_KEYSTORE_BASE64` (nội dung `base64 -w0 upload.jks`), `ANDROID_KEYSTORE_PASSWORD`, `ANDROID_KEY_ALIAS` (= `upload`), `ANDROID_KEY_PASSWORD`.
-3. **Tạo app** trong Play Console: _Create app_ → tên "Tìm số & Cờ ca rô: Gia đình", ngôn ngữ mặc định Tiếng Việt, _Game_, _Free_.
+3. **Tạo app** trong Play Console: _Create app_ → tên "Family Game", ngôn ngữ mặc định Tiếng Việt, _Game_, _Free_.
 4. **Bản build đầu tiên** (Google bắt upload tay lần đầu):
    - GitHub → **Actions → Mobile release → Run workflow** (platform `android`).
    - Mở lượt chạy → tải artifact **android-release-aab** → giải nén ra `app-release.aab`.
@@ -47,8 +46,8 @@ Thêm secret: GitHub repo → **Settings → Secrets and variables → Actions �
 ## B. Apple App Store
 
 1. **Tài khoản**: https://developer.apple.com/programs/enroll → _Individual_, 99 USD/năm (dùng Apple ID có bật xác thực 2 lớp). Duyệt 1–2 ngày.
-2. **Đăng ký mã app**: https://developer.apple.com/account/resources/identifiers → **+** → _App IDs_ → _App_ → Bundle ID **Explicit** `io.github.tunv87.familygame`, mô tả "Family Games" → Register.
-3. **Tạo app**: https://appstoreconnect.apple.com → _Apps_ → **+ New App** → iOS, tên "Tìm số & Cờ ca rô: Gia đình", ngôn ngữ chính **Vietnamese**, Bundle ID ở trên, SKU `familygame`.
+2. **Đăng ký mã app**: https://developer.apple.com/account/resources/identifiers → **+** → _App IDs_ → _App_ → Bundle ID **Explicit** `io.github.tunv87.familygame`, mô tả "Family Game" → Register.
+3. **Tạo app**: https://appstoreconnect.apple.com → _Apps_ → **+ New App** → iOS, tên "Family Game", ngôn ngữ chính **Vietnamese**, Bundle ID ở trên, SKU `familygame`.
 4. **API key cho CI**: App Store Connect → **Users and Access → Integrations → App Store Connect API** → _Generate API Key_, quyền **Admin** (cần để Xcode tự tạo chứng chỉ ký) → tải file `.p8` (chỉ tải được 1 lần).
    - Secrets: `ASC_KEY_ID` (Key ID), `ASC_ISSUER_ID` (Issuer ID ở đầu trang), `ASC_KEY_P8` (toàn bộ nội dung file .p8, cả dòng BEGIN/END), `APPLE_TEAM_ID` (developer.apple.com → Membership details → Team ID).
 5. **Build lên TestFlight**: Actions → **Mobile release** → Run workflow (platform `ios`, hoặc `both`) → ~20 phút sau bản build xuất hiện trong App Store Connect → TestFlight → cài thử bằng app TestFlight trên iPhone.

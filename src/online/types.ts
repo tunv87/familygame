@@ -1,8 +1,10 @@
 import type { CaroOnlineState } from '../games/caro/online';
 import type { CoGanhOnlineState } from '../games/coganh/online';
 import type { NumbersState } from '../games/numbers/logic';
+import type { NoiTuOnlineState } from '../games/noitu/online';
+import type { OAQOnlineState } from '../games/oanquan/online';
 
-export type GameId = 'numbers' | 'caro' | 'coganh';
+export type GameId = 'numbers' | 'caro' | 'coganh' | 'oanquan' | 'noitu';
 
 export interface RoomPlayer {
   name: string;
@@ -30,7 +32,7 @@ export interface Room {
   rematch?: Record<string, boolean>;
   /** results[round] = winner uid or 'draw' */
   results?: Record<string, string>;
-  state?: NumbersState | CaroOnlineState | CoGanhOnlineState;
+  state?: NumbersState | CaroOnlineState | CoGanhOnlineState | OAQOnlineState | NoiTuOnlineState;
 }
 
 export const MAX_PLAYERS = 2;

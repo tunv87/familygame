@@ -7,10 +7,10 @@ async function noVietnamese(page: Page, screen: string) {
   // The language picker intentionally shows "Tiếng Việt"; ignore that button only.
   const text = await page.evaluate(() =>
     // Allowed: the language picker, and the Vietnamese game name (a proper noun, like "Sudoku")
-    // with its rule names Gánh / Mở.
+    // with its rule names Gánh / Mở, and Ô Ăn Quan.
     document.body.innerText
       .replace('Tiếng Việt', '')
-      .replace(/Cờ Gánh|Gánh|Mở/g, '')
+      .replace(/Cờ Gánh|Gánh|Mở|Ô Ăn Quan|Nối từ/g, '')
       .replace(/\s+/g, ' '),
   );
   expect(

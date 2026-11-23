@@ -18,7 +18,7 @@ export function AboutScreen() {
           v{__APP_VERSION__}
         </div>
         <div className="muted" style={{ fontSize: 14 }}>
-          {t('aboutSounds')}
+          {t('aboutSounds')} {t('aboutWords')}
         </div>
       </div>
       <article className="about-text" data-testid="privacy">

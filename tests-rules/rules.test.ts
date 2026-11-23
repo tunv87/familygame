@@ -212,10 +212,18 @@ describe('[SEC-07] rooms only hold game data (data minimisation)', () => {
 });
 
 describe('[SEC-08] game types', () => {
-  it('Cờ gánh rooms are allowed, unknown games are not', async () => {
+  it('Cờ gánh and Ô ăn quan rooms are allowed, unknown games are not', async () => {
     const alice = await user();
     await ok(
       set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'coganh', options: { v: 1 } }),
+    );
+    await admin('DELETE', '');
+    await ok(
+      set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'oanquan', options: { v: 1 } }),
+    );
+    await admin('DELETE', '');
+    await ok(
+      set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'noitu', options: { v: 1 } }),
     );
     await admin('DELETE', '');
     await denied(set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'chess' }));

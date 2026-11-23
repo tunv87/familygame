@@ -6,6 +6,16 @@
       "sub": "Từ bé 7 tuổi đến ông bà 70 tuổi"
     },
     {
+      "id": "oanquan",
+      "title": "Ô ăn quan dân gian",
+      "sub": "Rải sỏi, ăn quan – kèm câu chuyện nguồn gốc"
+    },
+    {
+      "id": "noitu",
+      "title": "Nối từ tiếng Việt",
+      "sub": "Vừa chơi vừa học nghĩa tiếng Anh"
+    },
+    {
       "id": "numbers",
       "title": "Thi tìm số siêu nhanh",
       "sub": "Với máy, một mình hay cùng bạn"
@@ -14,11 +24,6 @@
       "id": "caro-small",
       "title": "Cờ ca rô 3×3 cho bé",
       "sub": "Máy có 3 mức: Dễ, Vừa, Khó"
-    },
-    {
-      "id": "caro-big",
-      "title": "Ca rô lớn 15×15",
-      "sub": "5 quân thẳng hàng là thắng"
     },
     {
       "id": "coganh",
@@ -43,6 +48,16 @@
       "sub": "From age 7 to 70"
     },
     {
+      "id": "oanquan",
+      "title": "Ô Ăn Quan folk game",
+      "sub": "Sow stones, capture the mandarins"
+    },
+    {
+      "id": "noitu",
+      "title": "Vietnamese Word Chain",
+      "sub": "Learn English meanings as you play"
+    },
+    {
       "id": "numbers",
       "title": "Race to find the numbers",
       "sub": "vs computer, solo or with a friend"
@@ -51,11 +66,6 @@
       "id": "caro-small",
       "title": "3×3 for little ones",
       "sub": "Computer with 3 levels"
-    },
-    {
-      "id": "caro-big",
-      "title": "Big 15×15 Gomoku",
-      "sub": "Five in a row wins"
     },
     {
       "id": "coganh",

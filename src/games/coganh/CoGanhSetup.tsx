@@ -5,7 +5,7 @@ import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
 import type { Mode } from '../registry';
 import type { CoGanhLevel } from './ai';
-import { COGANH_HELP } from './help';
+import { COGANH_HELP, COGANH_STORY } from './help';
 
 export function CoGanhSetup() {
   const t = useT();
@@ -27,7 +27,11 @@ export function CoGanhSetup() {
 
   return (
     <main className="screen">
-      <TopBar title={t('gameCoGanh')} onBack={back} right={<HelpButton steps={COGANH_HELP} />} />
+      <TopBar
+        title={t('gameCoGanh')}
+        onBack={back}
+        right={<HelpButton steps={COGANH_HELP} story={COGANH_STORY} />}
+      />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

@@ -13,8 +13,12 @@ import { createLogger } from '../lib/logger';
 import { randomSeed } from '../lib/rng';
 import { initialCaroState } from '../games/caro/online';
 import { initialCoGanhState } from '../games/coganh/online';
+import { initialOAQState } from '../games/oanquan/online';
+import { loadDict } from '../games/noitu/dict';
+import { startWord } from '../games/noitu/logic';
+import { initialNoiTuState } from '../games/noitu/online';
 import { initialState as initialNumbersState, type NumbersLevel } from '../games/numbers/logic';
-import { ensureAuth, getDb } from './firebase';
+import { ensureAuth, getDb, serverNow } from './firebase';
 import { MAX_PLAYERS, ROOM_TTL_MS, type GameId, type Room, type RoomOptions } from './types';
 import type { Profile } from '../app/settings';
 
@@ -147,7 +151,7 @@ export function watchRoom(
   };
 }
 
-function newState(room: Room, round: number) {
+async function newState(room: Room, round: number) {
   const uids = Object.entries(room.players ?? {})
     .sort((a, b) => a[1].joinedAt - b[1].joinedAt)
     .map(([u]) => u);
@@ -162,6 +166,11 @@ function newState(room: Room, round: number) {
   // Alternate who plays X (first) each round.
   const [a, b] = round % 2 === 1 ? uids : [uids[1], uids[0]]; // host is X in round 1
   if (room.game === 'coganh') return initialCoGanhState(a, b); // a = Black, moves first
+  if (room.game === 'oanquan') return initialOAQState(a, b); // a moves first
+  if (room.game === 'noitu') {
+    const { dict, words } = await loadDict();
+    return initialNoiTuState(a, b, startWord(dict, words), serverNow()); // a answers first
+  }
   return initialCaroState(room.options.size ?? 3, a, b);
 }
 
@@ -171,7 +180,7 @@ export async function startGame(room: Room) {
   await update(roomRef(room.code), {
     status: 'playing',
     round: 1,
-    state: newState(room, 1),
+    state: await newState(room, 1),
     rematch: null,
   });
 }
@@ -184,7 +193,7 @@ export async function requestRematch(code: string, uid: string) {
 export async function startRematch(room: Room) {
   const round = (room.round ?? 1) + 1;
   log.info('rematch', { code: room.code, round });
-  await update(roomRef(room.code), { round, state: newState(room, round), rematch: null });
+  await update(roomRef(room.code), { round, state: await newState(room, round), rematch: null });
 }
 
 export async function leaveRoom(code: string, uid: string) {

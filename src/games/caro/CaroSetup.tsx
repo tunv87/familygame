@@ -5,7 +5,7 @@ import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
 import type { Mode } from '../registry';
 import type { AiLevel } from './ai';
-import { CARO_HELP } from './help';
+import { CARO_HELP, CARO_STORY } from './help';
 
 export function CaroSetup() {
   const t = useT();
@@ -34,7 +34,11 @@ export function CaroSetup() {
 
   return (
     <main className="screen">
-      <TopBar title={t('gameCaro')} onBack={back} right={<HelpButton steps={CARO_HELP} />} />
+      <TopBar
+        title={t('gameCaro')}
+        onBack={back}
+        right={<HelpButton steps={CARO_HELP} story={CARO_STORY} />}
+      />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

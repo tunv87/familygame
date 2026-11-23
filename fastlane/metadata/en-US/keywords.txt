@@ -1,1 +1,1 @@
-tic tac toe,gomoku,co ganh,vietnamese,number search,family,kids,offline,2 player,board game
+learn vietnamese,word chain,o an quan,mancala,co ganh,gomoku,tic tac toe,family,kids,offline
