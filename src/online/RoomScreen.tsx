@@ -49,6 +49,10 @@ export function RoomScreen() {
 
   useEffect(() => {
     let unsub: (() => void) | undefined;
+    if (!/^\d{4}$/.test(code)) {
+      setRoom(null); // not a room code: show "room not found" without touching the database
+      return;
+    }
     ensureAuth()
       .then((u) => {
         setUid(u);

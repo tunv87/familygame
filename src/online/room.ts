@@ -129,11 +129,14 @@ export function watchRoom(
     }
     log.info('connected');
     onConnection(true);
-    void onDisconnect(ref(db, `rooms/${code}/players/${uid}/online`))
-      .set(false)
-      .then(async () => {
-        const me = await get(meRef);
-        if (me.exists()) await set(ref(db, `rooms/${code}/players/${uid}/online`), true);
+    // Only members have a presence flag: check first, so visiting someone else's
+    // room (or a bad link) never attempts a write the rules will reject.
+    void get(meRef)
+      .then(async (me) => {
+        if (!me.exists()) return;
+        const online = ref(db, `rooms/${code}/players/${uid}/online`);
+        await onDisconnect(online).set(false);
+        await set(online, true);
       })
       .catch((e) => log.warn('presence setup failed', String(e)));
   });
