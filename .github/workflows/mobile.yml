@@ -1,11 +1,11 @@
 name: Mobile
 
-# Builds the iOS and Android apps on every push to check the native projects compile.
+# Builds the iOS and Android apps to check the native projects compile.
 # The Android debug APK is attached to the run so it can be installed for testing.
 # Signed store uploads live in mobile-release.yml.
+# Paused while the web version comes first: run it by hand (Actions → Mobile → Run workflow).
+# To build on every push again, add back `push:` and `pull_request:` below.
 on:
-  push:
-  pull_request:
   workflow_dispatch:
 
 jobs:

@@ -9,7 +9,9 @@ because it is adapted from:
   Changes: two-syllable words only, filtered for children, glosses shortened.
 - Word commonness ranks computed from **FrequencyWords** by Hermit Dave
   (https://github.com/hermitdave/FrequencyWords, content CC BY-SA 4.0). Only the ranks are used.
-- About 300 everyday words written for this project (`scripts/noitu-extra.py`).
+- About 300 everyday words and a hand-picked list of about 900 words for children, with English
+  glosses where Wiktionary has none, written for this project (`scripts/noitu-extra.py`,
+  `scripts/noitu-kids.py`).
 
 The credit is shown in the app (About screen and the game's "story" tab).
 The rest of the app's code is not covered by this licence.

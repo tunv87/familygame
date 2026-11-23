@@ -147,12 +147,17 @@ test('[CR-05] 300 random taps on the boards', async ({ browser }) => {
 
 test('[CR-06] rapid back/forward navigation', async ({ browser }) => {
   const { page, errors } = await openApp(browser);
+  // Stay inside the app (a player cannot go back past its first screen), and press quickly:
+  // don't wait for each page to finish loading.
+  await page.goto(ROUTES[0]);
   for (const r of ROUTES.slice(0, 9)) await page.goto(r);
+  const quick = { waitUntil: 'commit' } as const;
   for (let i = 0; i < 8; i++) {
-    await page.goBack();
-    await page.goBack();
-    await page.goForward();
+    await page.goBack(quick);
+    await page.goBack(quick);
+    await page.goForward(quick);
   }
+  expect(await page.evaluate(() => location.origin), '[CR-06] left the app').not.toBe('null');
   await settle(page, 800);
   expect(await rendered(page), '[CR-06] blank screen').toBe(true);
   expect(errors, '[CR-06] errors').toEqual([]);

@@ -9,7 +9,8 @@ Inputs (downloaded by hand, not committed):
 
 Usage: python3 scripts/build-noitu-words.py kaikki-vi.jsonl vi_50k.txt
 
-Output: {"w": [[word, english gloss, tier], ...]} where tier 1 = very common, 2 = common, 3 = rare.
+Output: {"w": [[word, english gloss, tier], ...]} where tier 0 = for children, 1 = very common,
+2 = common, 3 = rare.
 Two-syllable words only. Names, archaic/dialect-only words and anything unsuitable for children
 (Wiktionary tags + a blocklist below) are left out.
 """
@@ -92,6 +93,27 @@ from importlib import import_module
 for w, g in import_module('noitu-extra').EXTRA:
     if w not in words or words[w][1] > 1:
         words[w] = (words[w][0] if w in words else g, 1)
+
+# words for children (scripts/noitu-kids.py): tier 0, used first by the easy computer,
+# hints and opening words. Matched across both tone placements (hoà / hòa).
+def canon(s):
+    s = unicodedata.normalize('NFD', s.lower())
+    s = re.sub(r'o([\u0300\u0301\u0303\u0309\u0323])([ae])(?=\s|$)', r'o\2\1', s)
+    s = re.sub(r'u([\u0300\u0301\u0303\u0309\u0323])y(?=\s|$)', r'uy\1', s)
+    return unicodedata.normalize('NFC', s)
+
+
+kids = import_module('noitu-kids')
+by_canon = {}
+for w in words:
+    by_canon.setdefault(canon(w), []).append(w)
+for w, g in kids.KIDS_NEW.items():
+    if canon(w) not in by_canon and w not in kids.KIDS_DROP:
+        words[w] = (g, 0)
+        by_canon[canon(w)] = [w]
+for w in kids.KIDS:
+    for k in by_canon.get(canon(w), []):
+        words[k] = (words[k][0], 0)
 
 out = sorted(([w, g, t] for w, (g, t) in words.items()), key=lambda x: x[0])
 json.dump({'w': out}, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))

@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { chooseNoiTuWord } from './ai';
 import {
   check,
+  easiestOption,
   initialState,
   lose,
   makeDict,
@@ -133,6 +134,31 @@ describe('[LG-22] Nối từ computer', () => {
   });
 });
 
+describe("[LG-25] Nối từ children's words", () => {
+  const kd = makeDict([
+    ['con mèo', 'cat', 0],
+    ['mèo con', 'kitten', 0],
+    ['mèo mướp', 'tabby cat', 1],
+    ['mèo rừng', 'wild cat', 2],
+    ['con gà', 'chicken', 0],
+    ['con người', 'human', 1],
+    ['gà con', 'chick', 0],
+    ['con chó', 'dog', 0],
+  ]);
+  it("the easy computer and hints use children's words first", () => {
+    for (let i = 0; i < 20; i++) {
+      expect(chooseNoiTuWord(kd, initialState('con mèo'), 'easy', Math.random)).toBe('mèo con');
+      expect(easiestOption(kd, ['con mèo'])).toBe('mèo con');
+      expect(['con gà', 'con chó']).toContain(easiestOption(kd, ['gà con', 'con mèo', 'mèo con']));
+    }
+    expect(easiestOption(kd, ['x mướp'])).toBe('');
+  });
+  it("children's games open with a children's word that is easy to continue", () => {
+    // "gà con" → con mèo, con gà, con chó (3 children's words)
+    expect(startWord(kd, ['mèo rừng', 'gà con', 'con người'], () => 0, true)).toBe('gà con');
+  });
+});
+
 describe('[LG-23] Nối từ word list', () => {
   const rows = (JSON.parse(readFileSync('src/games/noitu/words.json', 'utf8')) as { w: Row[] }).w;
   const real = makeDict(rows);
@@ -141,7 +167,7 @@ describe('[LG-23] Nối từ word list', () => {
     for (const [w, g, t] of rows) {
       expect(w.split(' ')).toHaveLength(2);
       expect(g.length).toBeGreaterThan(0);
-      expect([1, 2, 3]).toContain(t);
+      expect([0, 1, 2, 3]).toContain(t);
     }
   });
   it('has the everyday words children say and none of the blocked ones', () => {
@@ -150,6 +176,17 @@ describe('[LG-23] Nối từ word list', () => {
     for (const w of ['gái điếm', 'bỏ mẹ', 'đồ chó']) expect(real.has(w), w).toBe(false);
     const bad = /(^| )(đụ|địt|lồn|cặc|buồi|đéo|đĩ|điếm)( |$)/;
     expect(rows.filter(([w]) => bad.test(w))).toEqual([]);
+  });
+  it("has a hand-picked list of children's words that can open a game", () => {
+    const kids = rows.filter(([, , t]) => t === 0).map(([w]) => w);
+    expect(kids.length).toBeGreaterThan(800);
+    for (const w of ['con mèo', 'bà nội', 'quả táo', 'đi học', 'cầu vồng'])
+      expect(kids).toContain(w);
+    for (const w of ['sĩ phu', 'nạn nhân']) expect(kids).not.toContain(w);
+    const openers = kids.filter(
+      (w) => options(real, [w]).filter((x) => real.tier(x) === 0).length >= 3,
+    );
+    expect(openers.length).toBeGreaterThan(100);
   });
   it('most common words can be continued', () => {
     const common = rows.filter(([, , t]) => t === 1).map(([w]) => w);

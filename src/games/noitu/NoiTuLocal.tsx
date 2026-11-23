@@ -15,7 +15,7 @@ import {
 import { chooseNoiTuWord, type NoiTuLevel } from './ai';
 import { useDict, type Loaded } from './dict';
 import { NOITU_HELP, NOITU_STORY } from './help';
-import { initialState, lose, options, play, startWord, type NoiTuState } from './logic';
+import { easiestOption, initialState, lose, play, startWord, type NoiTuState } from './logic';
 import { AnswerBox, Chain, HINTS, TimerBar, useCountdown } from './NoiTuPlay';
 
 const log = createLogger('noitu');
@@ -50,9 +50,13 @@ function Game({ loaded }: { loaded: Loaded }) {
   const levelParam = params.get('level') as NoiTuLevel;
   const level: NoiTuLevel = LEVELS.includes(levelParam) ? levelParam : 'easy';
   const seconds = SECONDS[mode === 'local' ? 'local' : level];
+  // children's opening words on the easy level and on one device (often a child with a grown-up)
+  const kids = mode === 'local' || level === 'easy';
 
   const [round, setRound] = useState(0);
-  const [state, setState] = useState<NoiTuState>(() => initialState(startWord(dict, words), 1));
+  const [state, setState] = useState<NoiTuState>(() =>
+    initialState(startWord(dict, words, Math.random, kids), 1),
+  );
   const [deadline, setDeadline] = useState(() => Date.now() + seconds * 1000);
   const [hints, setHints] = useState<[number, number]>([HINTS, HINTS]);
   const [score, setScore] = useState<[number, number]>([0, 0]);
@@ -109,7 +113,7 @@ function Game({ loaded }: { loaded: Loaded }) {
     const first = r % 2 === 0 ? 1 : 2;
     setRound(r);
     setFirstSide(first);
-    setState(initialState(startWord(dict, words), first));
+    setState(initialState(startWord(dict, words, Math.random, kids), first));
     setDeadline(Date.now() + seconds * 1000);
     setHints([HINTS, HINTS]);
   };
@@ -122,7 +126,7 @@ function Game({ loaded }: { loaded: Loaded }) {
     i === 0 ? 0 : (i - 1) % 2 === 0 ? firstSide : firstSide === 1 ? 2 : 1;
   const loser = state.winner ? (state.winner === 1 ? 2 : 1) : null;
   const couldSay = useMemo(
-    () => (loser ? (options(dict, state.chain).find((w) => dict.tier(w) === 1) ?? '') : ''),
+    () => (loser ? easiestOption(dict, state.chain) : ''),
     [dict, loser, state.chain],
   );
 

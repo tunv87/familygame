@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v2.6** (thêm Nối từ; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v2.7** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -99,6 +99,7 @@ Phiên bản: **v2.6** (thêm Nối từ; xem `review-log.md`). Mỗi case có m
 | LG-22 | P1      | Máy Nối từ                                                    | Chỉ đi từ hợp lệ; hết từ thì chịu; Vừa không dùng từ hiếm; Khó chọn từ để lại ít đường nối nhất                                                                                    |
 | LG-23 | P1      | Từ điển Nối từ                                                | > 15.000 từ 2 tiếng, mỗi từ có nghĩa tiếng Anh; có từ thông dụng của trẻ (con mèo, mèo con…); không có từ thô tục; > 80% từ thông dụng nối tiếp được                               |
 | LG-24 | P1      | Nối từ online                                                 | Đúng lượt, từ được kiểm tra, đồng hồ đặt lại; chỉ người đến lượt được chịu, đối thủ chỉ được xử thắng khi quá giờ + 5 giây; dữ liệu hỏng không crash                               |
+| LG-25 | P1      | Từ cho trẻ em trong Nối từ                                    | > 800 từ chọn tay (không có từ khó như "sĩ phu", "nạn nhân"); máy mức Dễ, Gợi ý, "Có thể nối" dùng từ trẻ em trước; mức Dễ và cùng máy mở ván bằng từ trẻ em có ≥ 3 từ nối tiếp    |
 
 ## AU – Âm thanh
 

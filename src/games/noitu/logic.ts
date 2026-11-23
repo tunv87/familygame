@@ -5,12 +5,13 @@
  * of the previous word: "học sinh" → "sinh viên" → "viên phấn" … Words cannot be repeated.
  * A player who cannot answer in time (or gives up) loses.
  *
- * Players only type the second syllable; tones may be left out ("vien" → "viên") when that
- * leaves a single dictionary word, otherwise they pick from the candidates.
+ * Players only type the second syllable, with its tone marks ("viên", not "vien").
+ *
+ * Tiers: 0 = words for children (hand-picked), 1 = very common, 2 = common, 3 = rare.
  */
 
 export type Side = 1 | 2;
-export type Tier = 1 | 2 | 3;
+export type Tier = 0 | 1 | 2 | 3;
 export type Row = [word: string, gloss: string, tier: Tier];
 
 export interface Dict {
@@ -115,13 +116,34 @@ export function check(dict: Dict, chain: readonly string[], input: string): Verd
   return { ok: false, reason: 'unknown' };
 }
 
-/** A friendly opening word: very common and easy to continue. */
-export function startWord(dict: Dict, words: readonly string[], rand = Math.random): string {
+/**
+ * A friendly opening word that is easy to continue. For children: a children's word with at
+ * least 3 children's words after it; otherwise a very common word with 4 common follow-ups.
+ */
+export function startWord(
+  dict: Dict,
+  words: readonly string[],
+  rand = Math.random,
+  kids = false,
+): string {
+  const max = kids ? 0 : 1;
+  const need = kids ? 3 : 4;
   const good = words.filter(
-    (w) => dict.tier(w) === 1 && options(dict, [w]).filter((x) => dict.tier(x) === 1).length >= 4,
+    (w) =>
+      dict.tier(w) <= max && options(dict, [w]).filter((x) => dict.tier(x) <= max).length >= need,
   );
   const pool = good.length ? good : words;
   return pool[Math.floor(rand() * pool.length)];
+}
+
+/** The easiest word that follows the chain now (children's words first), or ''. */
+export function easiestOption(dict: Dict, chain: readonly string[], rand = Math.random): string {
+  const opts = options(dict, chain);
+  for (const max of [0, 1, 2, 3]) {
+    const pool = opts.filter((w) => dict.tier(w) <= max);
+    if (pool.length) return pool[Math.floor(rand() * pool.length)];
+  }
+  return '';
 }
 
 export function initialState(start: string, turn: Side = 1): NoiTuState {
