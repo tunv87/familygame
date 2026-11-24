@@ -86,15 +86,18 @@ export async function joinRoom(code: string, profile: Profile) {
   const players = room.players ?? {};
   const isHost = room.hostUid === uid;
   const member = !!players[uid];
-  if (!member && Object.keys(players).length >= maxPlayers(room.game)) throw new RoomError('full');
   const seats = ['guestUid', 'seat3', 'seat4'] as const;
   const mine = seats.find((k) => room[k] === uid);
   // the seat to claim: the guest seat, then (Cờ cá ngựa, before the game starts) seats 3 and 4
   const free = isHost || mine ? undefined : seats.find((k) => !room[k]);
-  if (!isHost && !mine) {
-    if (!free || (free !== 'guestUid' && (room.game !== 'cangua' || room.status !== 'waiting')))
-      throw new RoomError('full');
-  }
+  const noSeat =
+    !member &&
+    !isHost &&
+    !mine &&
+    (Object.keys(players).length >= maxPlayers(room.game) ||
+      !free ||
+      (free !== 'guestUid' && (room.game !== 'cangua' || room.status !== 'waiting')));
+  if (noSeat) return watchAs(code, uid, profile, room);
   const me = {
     name: profile.name,
     avatar: profile.avatar,
@@ -118,6 +121,19 @@ export async function joinRoom(code: string, profile: Profile) {
   return uid;
 }
 
+/** No seat left (or the game has started): join as a spectator, who only watches. */
+async function watchAs(code: string, uid: string, profile: Profile, room: Room) {
+  const me = {
+    name: profile.name,
+    avatar: profile.avatar,
+    joinedAt: room.spectators?.[uid]?.joinedAt ?? Date.now(),
+    online: true,
+  };
+  await set(ref(getDb(), `rooms/${code}/spectators/${uid}`), me);
+  log.info('watching room', { code });
+  return uid;
+}
+
 /** Subscribe to the room and keep our presence flag up to date. */
 export function watchRoom(
   code: string,
@@ -127,7 +143,8 @@ export function watchRoom(
   onConnection: (connected: boolean) => void = () => {},
 ): Unsubscribe {
   const db = getDb();
-  const meRef = ref(db, `rooms/${code}/players/${uid}`);
+  const playerRef = ref(db, `rooms/${code}/players/${uid}`);
+  const watcherRef = ref(db, `rooms/${code}/spectators/${uid}`);
   const unsubRoom = onValue(
     roomRef(code),
     (snap) => onRoom(snap.val() as Room | null),
@@ -146,10 +163,11 @@ export function watchRoom(
     onConnection(true);
     // Only members have a presence flag: check first, so visiting someone else's
     // room (or a bad link) never attempts a write the rules will reject.
-    void get(meRef)
-      .then(async (me) => {
-        if (!me.exists()) return;
-        const online = ref(db, `rooms/${code}/players/${uid}/online`);
+    void Promise.all([get(playerRef), get(watcherRef)])
+      .then(async ([asPlayer, asWatcher]) => {
+        if (!asPlayer.exists() && !asWatcher.exists()) return;
+        const where = asPlayer.exists() ? 'players' : 'spectators';
+        const online = ref(db, `rooms/${code}/${where}/${uid}/online`);
         await onDisconnect(online).set(false);
         await set(online, true);
       })
@@ -213,8 +231,14 @@ export async function leaveRoom(code: string, uid: string) {
   const db = getDb();
   try {
     await onDisconnect(ref(db, `rooms/${code}/players/${uid}/online`)).cancel();
+    await onDisconnect(ref(db, `rooms/${code}/spectators/${uid}/online`)).cancel();
     const snap = await get(roomRef(code));
     const room = snap.val() as Room | null;
+    if (room?.spectators?.[uid] && !room.players?.[uid]) {
+      await remove(ref(db, `rooms/${code}/spectators/${uid}`));
+      log.info('stopped watching', { code });
+      return;
+    }
     const others = Object.keys(room?.players ?? {}).filter((u) => u !== uid);
     if (others.length === 0) await remove(roomRef(code));
     else

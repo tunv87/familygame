@@ -81,7 +81,7 @@ export function NumbersOnline(props: OnlineGameProps) {
         me={uid}
         next={s.next}
         round={room.round}
-        disabled={count > 0 || s.done || props.oppGone}
+        disabled={count > 0 || s.done || props.oppGone || !!props.spectate}
         onFind={find}
       />
       <Countdown count={count} />

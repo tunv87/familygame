@@ -21,7 +21,8 @@ export function OAQOnline(props: OnlineGameProps) {
   const state = useMemo(() => toLocal(o), [o]);
   const [pending, setPending] = useState(false);
   const mySide = o.uid1 === uid ? 1 : 2;
-  const myTurn = !o.winner && turnUidOf(o) === uid && !props.oppGone;
+  const hostTurn = !o.winner && turnUidOf(o) === uid;
+  const myTurn = hostTurn && !props.oppGone && !props.spectate;
   const sowing = useSowing();
   const busy = sowing.animating;
   const shownScore = sowing.frame?.score ?? state.score;
@@ -70,20 +71,22 @@ export function OAQOnline(props: OnlineGameProps) {
     ? t('oaqSowing')
     : o.winner
       ? ''
-      : myTurn
-        ? selected !== null
-          ? t('oaqPickDir')
-          : t('oaqYourTurn')
-        : t('caroWaitTurn', { name: opp?.name ?? '' });
+      : props.spectate
+        ? t('turnOf', { name: (hostTurn ? me?.name : opp?.name) ?? '' })
+        : myTurn
+          ? selected !== null
+            ? t('oaqPickDir')
+            : t('oaqYourTurn')
+          : t('caroWaitTurn', { name: opp?.name ?? '' });
 
   return (
     <>
       <div className="players">
-        <PlayerChip player={me} score={shownScore[mySide - 1]} active={myTurn} testId="me" />
+        <PlayerChip player={me} score={shownScore[mySide - 1]} active={hostTurn} testId="me" />
         <PlayerChip
           player={opp}
           score={shownScore[mySide === 1 ? 1 : 0]}
-          active={!o.winner && !myTurn}
+          active={!o.winner && !hostTurn}
           testId="opp"
         />
       </div>

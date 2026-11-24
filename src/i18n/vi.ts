@@ -266,6 +266,10 @@ export const vi = {
   gameOff: 'Đang bảo trì',
   gameUnavailable: 'Trò chơi này tạm thời chưa mở. Mời bạn chơi trò khác nhé!',
   onlineOff: 'Tạm thời chưa tạo được phòng mới cho trò này.',
+  spectating: 'Bạn đang xem – không thể tham gia trận này',
+  watchers: '{n} người đang xem',
+  roomEnded: 'Trận đã kết thúc: người chơi đã rời phòng.',
+  turnOf: 'Lượt của {name}',
 } as const;
 
 export type MessageKey = keyof typeof vi;

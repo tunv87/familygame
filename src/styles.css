@@ -2088,3 +2088,11 @@ input {
 .card .off-note {
   font-weight: 800;
 }
+
+/* ---------- spectators ---------- */
+.watchers {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}

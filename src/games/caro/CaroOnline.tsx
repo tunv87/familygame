@@ -21,7 +21,9 @@ export function CaroOnline(props: OnlineGameProps) {
   const moves = useMemo(() => s.moves ?? [], [s.moves]);
   const board = useMemo(() => boardFromMoves(s.size, moves), [s.size, moves]);
   const [pending, setPending] = useState(false);
-  const myTurn = !s.winner && turnUid(s) === uid;
+  // a spectator sees the host's side: hostTurn lights the right chip, myTurn allows moves
+  const hostTurn = !s.winner && turnUid(s) === uid;
+  const myTurn = hostTurn && !props.spectate;
   const iAmX = s.xUid === uid;
 
   // Cue when the opponent moves.
@@ -57,20 +59,22 @@ export function CaroOnline(props: OnlineGameProps) {
           player={me}
           mark={iAmX ? 'x' : 'o'}
           score={winsOf(room, uid)}
-          active={myTurn}
+          active={hostTurn}
           testId="me"
         />
         <PlayerChip
           player={opp}
           mark={iAmX ? 'o' : 'x'}
           score={winsOf(room, oppUid)}
-          active={!s.winner && !myTurn}
+          active={!s.winner && !hostTurn}
           testId="opp"
         />
       </div>
       <div className="status-line" data-testid="status">
         {s.winner ? (
           ''
+        ) : props.spectate ? (
+          t('turnOf', { name: (hostTurn ? me?.name : opp?.name) ?? '' })
         ) : myTurn ? (
           <>
             {markOf(iAmX)} {t('caroYourTurn')}

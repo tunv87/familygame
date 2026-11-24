@@ -75,7 +75,7 @@ test('online numbers easy: race to find 1→30', async ({ browser }) => {
   await expect(b.getByTestId('me-score')).toHaveText('10');
 });
 
-test('joining a missing room shows an error; a third player is refused', async ({ browser }) => {
+test('joining a missing room shows an error; a third person only watches', async ({ browser }) => {
   const a = await newPlayer(browser);
   await a.goto('/#/join/0000');
   await a.getByTestId('name-input').fill('Ai đó');
@@ -92,7 +92,8 @@ test('joining a missing room shows an error; a third player is refused', async (
   await expect(guest.getByTestId('caro-board')).toBeVisible({ timeout: 15_000 });
   const third = await newPlayer(browser);
   await joinByLink(third, code, 'Cô');
-  await expect(third.getByText(`Phòng ${code} đã đủ 2 người`)).toBeVisible({ timeout: 15_000 });
+  await expect(third.getByTestId('spectating')).toBeVisible({ timeout: 15_000 });
+  await expect(third.getByTestId('caro-board')).toBeVisible();
 });
 
 test('exit asks for confirmation mid-game and the friend sees you left', async ({ browser }) => {

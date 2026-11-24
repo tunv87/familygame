@@ -161,3 +161,11 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | UX-29  | Chủ dự án: hiện tổng lượt chơi ở trang chủ và từng game; đếm chung mọi người chơi, mỗi ván bắt đầu là một lượt (online: chủ phòng đếm một lần cho cả phòng).              |
 | SEC-11 | Bộ đếm là dữ liệu dùng chung ai cũng ghi được, nên rules chỉ cho cộng đúng 1 và chỉ với 6 game có thật; không lưu mã người chơi. Chính sách quyền riêng tư được cập nhật. |
+
+## Review lần 17 – bật/tắt game, người xem, v3.6 → v3.7
+
+| Case          | Lý do                                                                                                                                                                                                            |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LG-31, UX-30  | Chủ dự án muốn bật/tắt từng game và từng chế độ, sửa trong Firebase Console. Test e2e giả lập cấu hình riêng cho từng trang (không ảnh hưởng test khác chạy song song).                                          |
+| SEC-12        | Cấu hình chỉ đọc từ app.                                                                                                                                                                                         |
+| UX-31, SEC-13 | Người thứ 3 (Cờ cá ngựa: thứ 5, hoặc vào khi ván đã bắt đầu) thành người xem. Rules cũ đã chặn người không phải người chơi ghi vào ván; thêm test cho từng đường ghi. Lần chạy đầu: regex lớp ô cờ của test sai. |

@@ -265,4 +265,8 @@ export const en: Record<MessageKey, string> = {
   gameOff: 'Under maintenance',
   gameUnavailable: 'This game is closed for now. Try another one!',
   onlineOff: 'New rooms for this game are closed for now.',
+  spectating: 'You are watching – you cannot take part in this game',
+  watchers: '{n} watching',
+  roomEnded: 'The game is over: the players have left the room.',
+  turnOf: "{name}'s turn",
 };
