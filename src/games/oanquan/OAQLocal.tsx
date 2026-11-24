@@ -1,3 +1,4 @@
+import { useCountPlay } from '../../online/plays';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
@@ -108,6 +109,7 @@ export function OAQLocal() {
   const level: OAQLevel = LEVELS.includes(levelParam) ? levelParam : 'easy';
 
   const [round, setRound] = useState(0);
+  useCountPlay('oanquan', round);
   const [history, setHistory] = useState<OAQState[]>(() => [initialState(1)]);
   const sowing = useSowing();
   const [score, setScore] = useState<[number, number]>([0, 0]);

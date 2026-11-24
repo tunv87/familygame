@@ -62,6 +62,22 @@ export function getDb(): Database {
   return db!;
 }
 
+/** REST address of a database path (the play counter uses plain HTTPS, no live connection). */
+export function restUrl(path: string, token?: string): string {
+  const emuHost = env.VITE_EMULATOR_HOST || location.hostname || '127.0.0.1';
+  const base = useEmulator
+    ? `http://${emuHost}:9000/${path}.json?ns=demo-familygame-default-rtdb`
+    : `${String(env.VITE_FIREBASE_DATABASE_URL).replace(/\/$/, '')}/${path}.json`;
+  if (!token) return base;
+  return `${base}${base.includes('?') ? '&' : '?'}auth=${encodeURIComponent(token)}`;
+}
+
+/** ID token of the anonymous user, for REST writes. */
+export async function idToken(quiet = false): Promise<string> {
+  await ensureAuth(quiet);
+  return auth!.currentUser!.getIdToken();
+}
+
 let offset = 0;
 let watchingOffset = false;
 /** Date.now() corrected to the Firebase server clock, so turn timers agree on both devices. */
@@ -78,7 +94,7 @@ export function serverNow(): number {
 let uidPromise: Promise<string> | null = null;
 
 /** Signs in anonymously once per device and resolves to the stable uid. */
-export function ensureAuth(): Promise<string> {
+export function ensureAuth(quiet = false): Promise<string> {
   init();
   if (!uidPromise) {
     uidPromise = new Promise<string>((resolve, reject) => {
@@ -92,7 +108,9 @@ export function ensureAuth(): Promise<string> {
       signInAnonymously(auth!).catch((e) => {
         unsub();
         uidPromise = null;
-        log.error('anonymous sign-in failed', e);
+        // quiet: background work (the play counter) that may simply fail offline
+        if (quiet) log.info('anonymous sign-in failed', String(e));
+        else log.error('anonymous sign-in failed', e);
         reject(e);
       });
     });

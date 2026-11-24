@@ -1,3 +1,4 @@
+import { useCountPlay } from '../../online/plays';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
@@ -54,6 +55,7 @@ function Game({ loaded }: { loaded: Loaded }) {
   const kids = mode === 'local' || level === 'easy';
 
   const [round, setRound] = useState(0);
+  useCountPlay('noitu', round);
   const [state, setState] = useState<NoiTuState>(() =>
     initialState(startWord(dict, words, Math.random, kids), 1),
   );

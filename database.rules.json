@@ -81,6 +81,15 @@
         }
       }
     },
+    "stats": {
+      "plays": {
+        ".read": true,
+        "$game": {
+          ".write": "auth != null && newData.exists()",
+          ".validate": "($game === 'numbers' || $game === 'caro' || $game === 'coganh' || $game === 'oanquan' || $game === 'noitu' || $game === 'cangua') && newData.isNumber() && newData.val() === (data.exists() ? data.val() : 0) + 1"
+        }
+      }
+    },
     "suggestions": {
       "$id": {
         ".write": "auth != null && !data.exists()",

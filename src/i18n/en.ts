@@ -260,4 +260,6 @@ export const en: Record<MessageKey, string> = {
     'In England it became Ludo (late 19th century) with a single die, and printed boards travelled the world. In Vietnam it is called Cờ Cá Ngựa – "betting on horses".',
   cnStory3:
     'A paper or plastic board with four colours of horses was in almost every home, a favourite at Tết when the whole family gathers: luck, plus a bit of planning to knock out a horse.',
+  playCount: '{n} games played',
+  playCountTotal: '{n} games played so far',
 };

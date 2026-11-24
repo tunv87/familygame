@@ -1,3 +1,4 @@
+import { useCountPlay } from '../../online/plays';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
@@ -76,6 +77,7 @@ export function CoGanhLocal() {
   const level: CoGanhLevel = LEVELS.includes(levelParam) ? levelParam : 'easy';
 
   const [round, setRound] = useState(0);
+  useCountPlay('coganh', round);
   const [history, setHistory] = useState<CoGanhState[]>(() => [initialState()]);
   const [score, setScore] = useState<[number, number]>([0, 0]);
   const [flipped, setFlipped] = useState<number[]>([]);

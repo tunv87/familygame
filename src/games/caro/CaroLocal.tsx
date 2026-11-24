@@ -1,3 +1,4 @@
+import { useCountPlay } from '../../online/plays';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
@@ -34,6 +35,7 @@ export function CaroLocal() {
 
   const [moves, setMoves] = useState<number[]>([]);
   const [round, setRound] = useState(0);
+  useCountPlay('caro', round);
   const [score, setScore] = useState<[number, number]>([0, 0]); // [player A, player B]
   // Who plays X alternates every round. In solo mode "A" is the human.
   const aIsX = round % 2 === 0;

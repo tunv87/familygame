@@ -20,6 +20,7 @@ import { startWord } from '../games/noitu/logic';
 import { initialNoiTuState } from '../games/noitu/online';
 import { initialState as initialNumbersState, type NumbersLevel } from '../games/numbers/logic';
 import { ensureAuth, getDb, serverNow } from './firebase';
+import { countPlay } from './plays';
 import { ROOM_TTL_MS, maxPlayers, type GameId, type Room, type RoomOptions } from './types';
 import type { Profile } from '../app/settings';
 
@@ -193,6 +194,7 @@ export async function startGame(room: Room) {
     state: await newState(room, 1),
     rematch: null,
   });
+  countPlay(room.game); // one play per online round, counted by the host
 }
 
 export async function requestRematch(code: string, uid: string) {
@@ -204,6 +206,7 @@ export async function startRematch(room: Room) {
   const round = (room.round ?? 1) + 1;
   log.info('rematch', { code: room.code, round });
   await update(roomRef(room.code), { round, state: await newState(room, round), rematch: null });
+  countPlay(room.game);
 }
 
 export async function leaveRoom(code: string, uid: string) {
