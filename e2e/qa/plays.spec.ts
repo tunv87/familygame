@@ -30,6 +30,8 @@ test('[UX-29] starting a game adds one play; the hub shows all games together', 
   await page.goto('/#/caro/play?mode=local&size=3');
   for (const i of [0, 3, 1, 4, 2]) await page.getByTestId(`cell-${i}`).click();
   await page.getByTestId('play-again').click();
+  // a play is sent a moment after the round starts (a real round lasts much longer)
+  await page.waitForTimeout(1500);
   await expect
     .poll(() => freshCount(page, '/#/caro'), {
       message: '[UX-29] caro plays not counted',

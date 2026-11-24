@@ -31,9 +31,19 @@ async function addOne(game: GameId) {
   if (!res.ok) throw new Error(`write ${res.status}`);
 }
 
-export function countPlay(game: GameId) {
-  if (!online()) return;
-  addOne(game).catch((e) => log.info('play not counted', { game, e: String(e) }));
+/**
+ * Counting waits a moment after the game opens: the game screen appears without extra work
+ * (signing in, starting Firebase), and a page reloaded at once sends nothing instead of a
+ * request cut off halfway, which Safari reports as an error. Returns a cancel function.
+ */
+const DELAY_MS = 1000;
+
+export function countPlay(game: GameId): () => void {
+  const id = setTimeout(() => {
+    if (!online()) return;
+    addOne(game).catch((e) => log.info('play not counted', { game, e: String(e) }));
+  }, DELAY_MS);
+  return () => clearTimeout(id);
 }
 
 /** Counts a play each time `round` changes (once per round, also under StrictMode). */
@@ -50,14 +60,17 @@ export function useCountPlay(game: GameId, round: number, enabled = true) {
 export function usePlayCounts(): PlayCounts | null {
   const [counts, setCounts] = useState<PlayCounts | null>(null);
   useEffect(() => {
-    if (!online()) return;
     let live = true;
-    fetch(restUrl('stats/plays'))
-      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`read ${r.status}`))))
-      .then((v: PlayCounts | null) => live && setCounts(v ?? {}))
-      .catch((e) => log.info('play counts unavailable', String(e)));
+    const id = setTimeout(() => {
+      if (!online()) return;
+      fetch(restUrl('stats/plays'))
+        .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`read ${r.status}`))))
+        .then((v: PlayCounts | null) => live && setCounts(v ?? {}))
+        .catch((e) => log.info('play counts unavailable', String(e)));
+    }, 300); // not during the page's first render, and not for pages left at once
     return () => {
       live = false;
+      clearTimeout(id);
     };
   }, []);
   return counts;
