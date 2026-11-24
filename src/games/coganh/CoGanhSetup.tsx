@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PlayCount } from '../../ui/PlayCount';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
@@ -32,6 +33,7 @@ export function CoGanhSetup() {
         onBack={back}
         right={<HelpButton steps={COGANH_HELP} story={COGANH_STORY} />}
       />
+      <PlayCount game="coganh" />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

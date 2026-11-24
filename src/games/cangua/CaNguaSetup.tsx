@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { PlayCount } from '../../ui/PlayCount';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { HelpButton, TopBar, useBackHandler } from '../../ui/components';
@@ -16,6 +17,7 @@ export function CaNguaSetup() {
         onBack={() => navigate('/')}
         right={<HelpButton steps={CN_HELP} story={CN_STORY} />}
       />
+      <PlayCount game="cangua" />
       <div className="stack">
         <div className="muted center" data-testid="cn-intro">
           🐴 {t('cnIntro')}

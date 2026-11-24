@@ -154,3 +154,10 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | LG-29  | Chủ dự án chọn chơi online. Xí ngầu tính từ seed của ván và số lần đã đổ, nên người chơi không thể đổ lại để lấy số đẹp; mọi máy thấy cùng một số. Thêm một ván ngẫu nhiên dài tới khi có người thắng để chắc không bao giờ kẹt. |
 | SEC-10 | Cờ cá ngựa cần 4 người, các game khác vẫn 2: thêm ghế 3, 4 vào rules, chỉ mở cho Cờ cá ngựa và chỉ khi phòng đang chờ (không chen vào ván đang chơi).                                                                            |
 | UX-28  | Ba trình duyệt cùng chơi: chủ phòng bấm Bắt đầu, lần lượt đổ và đi, bàn cờ ba bên giống nhau; một người thoát thì ván chơi tiếp với hai người.                                                                                   |
+
+## Review lần 16 – bộ đếm lượt chơi, v3.5 → v3.6
+
+| Case   | Lý do                                                                                                                                                                     |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-29  | Chủ dự án: hiện tổng lượt chơi ở trang chủ và từng game; đếm chung mọi người chơi, mỗi ván bắt đầu là một lượt (online: chủ phòng đếm một lần cho cả phòng).              |
+| SEC-11 | Bộ đếm là dữ liệu dùng chung ai cũng ghi được, nên rules chỉ cho cộng đúng 1 và chỉ với 6 game có thật; không lưu mã người chơi. Chính sách quyền riêng tư được cập nhật. |

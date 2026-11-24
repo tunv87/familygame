@@ -2068,3 +2068,12 @@ input {
     animation: none;
   }
 }
+
+/* ---------- play counter ---------- */
+.play-count {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+  margin: -4px 0 2px;
+}

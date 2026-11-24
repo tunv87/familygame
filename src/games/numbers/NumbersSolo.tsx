@@ -1,3 +1,4 @@
+import { useCountPlay } from '../../online/plays';
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
@@ -32,6 +33,7 @@ export function NumbersSolo() {
   const practice = params.get('mode') === 'practice';
 
   const [round, setRound] = useState(0);
+  useCountPlay('numbers', round);
   const newState = () => initialState(level, randomSeed(), practice ? [ME] : [ME, BOT], Date.now());
   const [s, setS] = useState<NumbersState>(newState);
   const layout = useMemo(() => makeLayout(s.level, s.seed), [s.level, s.seed]);

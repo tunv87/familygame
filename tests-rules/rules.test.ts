@@ -286,3 +286,21 @@ describe('[SEC-10] Cờ cá ngựa rooms of up to four', () => {
     await denied(seat(c, 'seat3', 'Chi'));
   });
 });
+
+describe('[SEC-11] play counter', () => {
+  it('anyone can read; signed-in players can only add exactly one', async () => {
+    const a = await user();
+    const anon = await anonymousDb();
+    const p = (db: Database, g = 'caro') => ref(db, `stats/plays/${g}`);
+    await ok(set(p(a.db), 1)); // first play
+    await ok(set(p(a.db), 2));
+    await denied(set(p(a.db), 4)); // +2
+    await denied(set(p(a.db), 1)); // going down
+    await denied(set(p(a.db), '3')); // not a number
+    await denied(remove(p(a.db)));
+    await denied(set(p(a.db, 'chess'), 1)); // unknown game
+    await denied(set(p(anon), 3)); // not signed in
+    expect((await get(ref(anon, 'stats/plays'))).val()).toEqual({ caro: 2 });
+    await denied(set(ref(a.db, 'stats/other'), 1));
+  });
+});

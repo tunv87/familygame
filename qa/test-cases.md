@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.5** (Cờ cá ngựa online 2–4 người; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -53,6 +53,7 @@ Phiên bản: **v3.5** (Cờ cá ngựa online 2–4 người; xem `review-log.m
 | UX-26 | P1      | Nối từ online                                                                                          | Từ hiện ở cả 2 máy (từ của mình bên phải); đổi lượt; chịu thua kết thúc ván ở cả 2 máy                                                                                               |
 | UX-27 | P2      | Nối từ: báo "là từ có thật"                                                                            | Từ bị báo chưa có trong từ điển hiện nút gửi; bấm thì gửi đi và cảm ơn                                                                                                               |
 | UX-28 | P1      | Cờ cá ngựa online 3 người                                                                              | Chủ phòng chỉ bắt đầu được khi có ≥2 người; 3 máy cùng đổ/đi, bàn cờ giống nhau; một người thoát thì ngựa của họ rời bàn, ván chơi tiếp                                              |
+| UX-29 | P2      | Bộ đếm lượt chơi                                                                                       | Trang chủ hiện tổng lượt chơi mọi game, trang mỗi game hiện số của game đó; bắt đầu ván / ván mới +1; mất mạng thì ẩn, không lỗi                                                     |
 
 ## CR – Chống crash
 
@@ -139,6 +140,7 @@ Phiên bản: **v3.5** (Cờ cá ngựa online 2–4 người; xem `review-log.m
 | SEC-08 | P1      | Loại game trong rules                                                     | Chấp nhận `coganh`, `oanquan`, `noitu`, từ chối game lạ                                                                                                |
 | SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                       |
 | SEC-10 | P1      | Phòng 4 người (Cờ cá ngựa)                                                | Ghế 3, 4 chỉ cho Cờ cá ngựa, chỉ khi đang chờ và ghế 2 đã có người; mỗi người một ghế; game khác vẫn 2 người                                           |
+| SEC-11 | P1      | Bộ đếm lượt chơi                                                          | Ai cũng đọc được; chỉ người đã đăng nhập ẩn danh mới cộng, mỗi lần đúng +1; không giảm, không xoá, không game lạ; không lưu gì về người chơi           |
 
 ## BR – Trình duyệt
 

@@ -261,6 +261,8 @@ export const vi = {
     'Người Anh làm gọn thành trò Ludo (cuối thế kỷ 19) với một con xí ngầu, rồi trò chơi theo bàn cờ in sẵn đi khắp thế giới, đến Việt Nam và được gọi là cờ cá ngựa: "cá" là đặt cược, như xem đua ngựa.',
   cnStory3:
     'Bàn cờ giấy hay nhựa với bốn màu ngựa từng có mặt ở hầu hết các nhà, là trò quen thuộc ngày Tết khi cả nhà quây quần, vừa may rủi vừa phải tính đường đá ngựa.',
+  playCount: '{n} lượt chơi',
+  playCountTotal: 'Đã có {n} lượt chơi',
 } as const;
 
 export type MessageKey = keyof typeof vi;
