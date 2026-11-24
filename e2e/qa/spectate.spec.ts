@@ -30,7 +30,9 @@ test('[UX-31] a third person watches a Ca rô game: sees moves, cannot play, can
   // tapping the board does nothing
   await c.page.getByTestId('cell-0').click({ force: true });
   await c.page.waitForTimeout(800);
-  await expect(b.page.getByTestId('cell-0'), '[UX-31] spectator moved').not.toHaveClass(/\b(x|o)\b/);
+  await expect(b.page.getByTestId('cell-0'), '[UX-31] spectator moved').not.toHaveClass(
+    /\b(x|o)\b/,
+  );
   await evidence(c.page, 'spectate', 'D2', 'UX-31-watching');
   // the game ends: the spectator sees who won, but no "play again"
   await b.page.getByTestId('cell-0').click();
