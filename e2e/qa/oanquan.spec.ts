@@ -1,6 +1,6 @@
 /** Ô ăn quan, hub groups and the help "story" tab through the real UI (qa/test-cases.md). */
 import { expect, test } from '@playwright/test';
-import { PHONES, createRoomAs, evidence, joinAs, openApp } from './fixtures';
+import { PHONES, createRoomAs, evidence, joinAs, openApp, pickField } from './fixtures';
 
 const played = (page: import('@playwright/test').Page) =>
   page.evaluate(() => [...((window as unknown as { __fgSounds?: string[] }).__fgSounds ?? [])]);
@@ -44,7 +44,7 @@ test('[UX-21] vs computer: it answers, undo goes back to my turn, leaving asks f
   await page.goto('/#/oanquan');
   await page.getByTestId('mode-solo').click();
   await page.getByTestId('level-hard').click();
-  await page.getByTestId('cell-3').dispatchEvent('pointerdown');
+  await pickField(page, 3);
   await page.getByTestId('dir-left').click();
   await expect(page.getByTestId('status'), '[UX-21] computer did not answer').toContainText(
     'Đến lượt bạn',
@@ -54,7 +54,7 @@ test('[UX-21] vs computer: it answers, undo goes back to my turn, leaving asks f
   await expect(page.getByTestId('count-3'), '[UX-21] undo did not restore my field').toHaveText(
     '5',
   );
-  await page.getByTestId('cell-3').dispatchEvent('pointerdown');
+  await pickField(page, 3);
   await page.getByTestId('dir-left').click();
   await page.getByRole('button', { name: 'Quay lại' }).click();
   await expect(page.getByTestId('keep-playing'), '[UX-21] no exit confirmation').toBeVisible();
@@ -87,7 +87,7 @@ test('[UX-22] online Ô ăn quan: each player sees their own fields at the botto
   await expect(b.page.getByTestId('cell-7'), '[UX-22] guest fields not at the bottom').toHaveClass(
     /mine/,
   );
-  await a.page.getByTestId('cell-1').dispatchEvent('pointerdown');
+  await pickField(a.page, 1);
   await a.page.getByTestId('dir-right').click();
   await expect(
     b.page.getByTestId('oaq-hand'),
@@ -100,7 +100,7 @@ test('[UX-22] online Ô ăn quan: each player sees their own fields at the botto
     'Đến lượt bạn',
     { timeout: 15_000 },
   );
-  await b.page.getByTestId('cell-9').dispatchEvent('pointerdown');
+  await pickField(b.page, 9);
   await b.page.getByTestId('dir-left').click();
   await expect(a.page.getByTestId('status'), '[UX-22] host not back on turn').toContainText(
     'Đến lượt bạn',
@@ -145,7 +145,7 @@ for (const d of PHONES) {
     for (const theme of ['classic', 'cute'] as const) {
       const { page, ctx } = await openApp(browser, { device: d, theme });
       await page.goto('/#/oanquan/play?mode=local');
-      await page.getByTestId('cell-3').dispatchEvent('pointerdown');
+      await pickField(page, 3);
       const r = await page.evaluate(() => {
         const box = (sel: string) => document.querySelector(sel)!.getBoundingClientRect();
         const b = box('[data-testid="oaq-board"]');

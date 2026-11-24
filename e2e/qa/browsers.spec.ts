@@ -4,7 +4,15 @@
  * qa/playwright.browsers.config.ts in CI.
  */
 import { expect, test } from '@playwright/test';
-import { QA_PROJECT, createRoomAs, deviceById, evidence, joinAs, openApp } from './fixtures';
+import {
+  QA_PROJECT,
+  createRoomAs,
+  deviceById,
+  evidence,
+  joinAs,
+  openApp,
+  pickField,
+} from './fixtures';
 
 const MOBILE = QA_PROJECT.startsWith('mobile');
 const DEVICE = deviceById(MOBILE ? 'D2' : 'D8');
@@ -74,7 +82,7 @@ test(`[BR-03] one move in every game (${TAG})`, async ({ browser }) => {
   await expect(page.getByTestId('pt-11'), '[BR-03] cờ gánh').toHaveClass(/black/);
   // Ô ăn quan: sow, skip the replay
   await page.goto('/#/oanquan/play?mode=local');
-  await page.getByTestId('cell-1').dispatchEvent('pointerdown');
+  await pickField(page, 1);
   await page.getByTestId('dir-right').click();
   await page.getByTestId('cell-8').dispatchEvent('pointerdown');
   await expect(page.getByTestId('me-score'), '[BR-03] ô ăn quan').toHaveText('6');
