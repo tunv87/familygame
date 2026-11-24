@@ -22,11 +22,7 @@ async function withRetry<T>(load: () => Promise<T>): Promise<T> {
   }
 }
 
-export function lazyGame<M>(
-  game: GameId,
-  load: () => Promise<M>,
-  pick: (m: M) => ComponentType,
-) {
+export function lazyGame<M>(game: GameId, load: () => Promise<M>, pick: (m: M) => ComponentType) {
   loaders.set(game, [...(loaders.get(game) ?? []), load]);
   return lazy(() => withRetry(load).then((m) => ({ default: pick(m) })));
 }
