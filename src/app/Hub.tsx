@@ -4,6 +4,7 @@ import { GAMES, GROUPS } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
 import { PlayCount } from '../ui/PlayCount';
+import { gameStatus, useGamesConfig } from './gameConfig';
 import { setSettings, useSettings } from './settings';
 import { useTheme } from './theme';
 import { Welcome, needsWelcome } from './Welcome';
@@ -13,6 +14,7 @@ export function Hub() {
   const navigate = useNavigate();
   const settings = useSettings();
   const theme = useTheme();
+  const config = useGamesConfig();
   const taps = useRef<number[]>([]);
   const [welcome, setWelcome] = useState(needsWelcome);
   // Hidden shortcut: tap the title 5 times quickly to open the debug log.
@@ -47,26 +49,33 @@ export function Hub() {
           </button>
         }
       />
-      {GROUPS.map((grp) => (
-        <section key={grp.id} className="hub-group" data-testid={`group-${grp.id}`}>
-          <h2 className="hub-group-title">
-            {grp.emoji} {t(grp.title)}
-          </h2>
-          <div className="hub-grid">
-            {GAMES.filter((g) => g.group === grp.id).map((g) => (
-              <Card
-                key={g.id}
-                className="hub-card"
-                testId={`game-${g.id}`}
-                emoji={theme.gameEmoji[g.id] ?? g.emoji}
-                title={t(g.title)}
-                hint={t(g.desc)}
-                onClick={() => navigate(g.path)}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+      {GROUPS.map((grp) => {
+        const games = GAMES.filter(
+          (g) => g.group === grp.id && gameStatus(config, g.id) !== 'hidden',
+        );
+        if (games.length === 0) return null;
+        return (
+          <section key={grp.id} className="hub-group" data-testid={`group-${grp.id}`}>
+            <h2 className="hub-group-title">
+              {grp.emoji} {t(grp.title)}
+            </h2>
+            <div className="hub-grid">
+              {games.map((g) => (
+                <Card
+                  key={g.id}
+                  className="hub-card"
+                  testId={`game-${g.id}`}
+                  emoji={theme.gameEmoji[g.id] ?? g.emoji}
+                  title={t(g.title)}
+                  hint={t(g.desc)}
+                  off={gameStatus(config, g.id) === 'off' ? t('gameOff') : undefined}
+                  onClick={() => navigate(g.path)}
+                />
+              ))}
+            </div>
+          </section>
+        );
+      })}
       {welcome && <Welcome onDone={() => setWelcome(false)} />}
       <div className="grow" />
       <PlayCount />

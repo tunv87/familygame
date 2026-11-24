@@ -263,6 +263,9 @@ export const vi = {
     'Bàn cờ giấy hay nhựa với bốn màu ngựa từng có mặt ở hầu hết các nhà, là trò quen thuộc ngày Tết khi cả nhà quây quần, vừa may rủi vừa phải tính đường đá ngựa.',
   playCount: '{n} lượt chơi',
   playCountTotal: 'Đã có {n} lượt chơi',
+  gameOff: 'Đang bảo trì',
+  gameUnavailable: 'Trò chơi này tạm thời chưa mở. Mời bạn chơi trò khác nhé!',
+  onlineOff: 'Tạm thời chưa tạo được phòng mới cho trò này.',
 } as const;
 
 export type MessageKey = keyof typeof vi;

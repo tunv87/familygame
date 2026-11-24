@@ -1,11 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CaNguaOnline } from '../games/cangua/CaNguaOnline';
-import { CaroOnline } from '../games/caro/CaroOnline';
-import { CoGanhOnline } from '../games/coganh/CoGanhOnline';
-import { NoiTuOnline } from '../games/noitu/NoiTuOnline';
-import { OAQOnline } from '../games/oanquan/OAQOnline';
-import { NumbersOnline } from '../games/numbers/NumbersOnline';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
 import { sfx } from '../lib/sound';
@@ -15,6 +9,26 @@ import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
 import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
 import { maxPlayers, type Room, type RoomPlayer } from './types';
+
+// each game's online screen is loaded when a room of that game opens
+const CaNguaOnline = lazy(() =>
+  import('../games/cangua/CaNguaOnline').then((m) => ({ default: m.CaNguaOnline })),
+);
+const CaroOnline = lazy(() =>
+  import('../games/caro/CaroOnline').then((m) => ({ default: m.CaroOnline })),
+);
+const CoGanhOnline = lazy(() =>
+  import('../games/coganh/CoGanhOnline').then((m) => ({ default: m.CoGanhOnline })),
+);
+const NoiTuOnline = lazy(() =>
+  import('../games/noitu/NoiTuOnline').then((m) => ({ default: m.NoiTuOnline })),
+);
+const OAQOnline = lazy(() =>
+  import('../games/oanquan/OAQOnline').then((m) => ({ default: m.OAQOnline })),
+);
+const NumbersOnline = lazy(() =>
+  import('../games/numbers/NumbersOnline').then((m) => ({ default: m.NumbersOnline })),
+);
 
 const log = createLogger('roomscreen');
 
@@ -248,19 +262,21 @@ export function RoomScreen() {
       {!multi && oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
       )}
-      {room.game === 'numbers' ? (
-        <NumbersOnline {...props} />
-      ) : room.game === 'coganh' ? (
-        <CoGanhOnline {...props} />
-      ) : room.game === 'oanquan' ? (
-        <OAQOnline {...props} />
-      ) : room.game === 'noitu' ? (
-        <NoiTuOnline {...props} />
-      ) : room.game === 'cangua' ? (
-        <CaNguaOnline {...props} />
-      ) : (
-        <CaroOnline {...props} />
-      )}
+      <Suspense fallback={null}>
+        {room.game === 'numbers' ? (
+          <NumbersOnline {...props} />
+        ) : room.game === 'coganh' ? (
+          <CoGanhOnline {...props} />
+        ) : room.game === 'oanquan' ? (
+          <OAQOnline {...props} />
+        ) : room.game === 'noitu' ? (
+          <NoiTuOnline {...props} />
+        ) : room.game === 'cangua' ? (
+          <CaNguaOnline {...props} />
+        ) : (
+          <CaroOnline {...props} />
+        )}
+      </Suspense>
       {confirmExit && (
         <ExitConfirm
           hint={t('exitOnlineHint')}

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ModeCard } from '../../ui/GameGate';
 import { PlayCount } from '../../ui/PlayCount';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
@@ -44,21 +45,27 @@ export function CaroSetup() {
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
-          <Card
+          <ModeCard
+            game="caro"
+            mode="solo"
             emoji="🤖"
             title={t('modeSolo')}
             hint={t('modeSoloHint')}
             onClick={() => setMode('solo')}
             testId="mode-solo"
           />
-          <Card
+          <ModeCard
+            game="caro"
+            mode="local"
             emoji="👫"
             title={t('modeLocal')}
             hint={t('modeLocalHint')}
             onClick={() => setMode('local')}
             testId="mode-local"
           />
-          <Card
+          <ModeCard
+            game="caro"
+            mode="online"
             emoji="🌏"
             title={t('modeOnline')}
             hint={t('modeOnlineHint')}

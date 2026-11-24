@@ -304,3 +304,15 @@ describe('[SEC-11] play counter', () => {
     await denied(set(ref(a.db, 'stats/other'), 1));
   });
 });
+
+describe('[SEC-12] game availability config', () => {
+  it('anyone can read it; nobody can change it from the app', async () => {
+    const a = await user();
+    const anon = await anonymousDb();
+    await admin('PUT', 'config/games', { caro: { status: 'off' } });
+    expect((await get(ref(anon, 'config/games'))).val()).toEqual({ caro: { status: 'off' } });
+    await denied(set(ref(a.db, 'config/games/caro/status'), 'on'));
+    await denied(remove(ref(a.db, 'config/games')));
+    await denied(set(ref(anon, 'config/games/noitu'), { status: 'hidden' }));
+  });
+});

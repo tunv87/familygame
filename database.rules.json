@@ -81,6 +81,9 @@
         }
       }
     },
+    "config": {
+      ".read": true
+    },
     "stats": {
       "plays": {
         ".read": true,

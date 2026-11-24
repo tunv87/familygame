@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -54,6 +54,7 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | UX-27 | P2      | Nối từ: báo "là từ có thật"                                                                            | Từ bị báo chưa có trong từ điển hiện nút gửi; bấm thì gửi đi và cảm ơn                                                                                                               |
 | UX-28 | P1      | Cờ cá ngựa online 3 người                                                                              | Chủ phòng chỉ bắt đầu được khi có ≥2 người; 3 máy cùng đổ/đi, bàn cờ giống nhau; một người thoát thì ngựa của họ rời bàn, ván chơi tiếp                                              |
 | UX-29 | P2      | Bộ đếm lượt chơi                                                                                       | Trang chủ hiện tổng lượt chơi mọi game, trang mỗi game hiện số của game đó; bắt đầu ván / ván mới +1; mất mạng thì ẩn, không lỗi                                                     |
+| UX-30 | P1      | Admin bật/tắt/ẩn game và từng chế độ                                                                   | Game off: hiện mờ "Đang bảo trì", không mở được; hidden: không có ở trang chủ, link báo tạm chưa mở; chế độ off/hidden tương tự; mất mạng giữ cấu hình cũ                            |
 
 ## CR – Chống crash
 
@@ -110,6 +111,7 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | LG-28 | P1      | Luật Cờ cá ngựa                                               | Ra quân bằng 6 hoặc 1; không nhảy qua ngựa; không đứng lên ngựa cùng màu; đá ngựa khác màu; không quá cửa chuồng; lên bậc đúng số; 6 được đổ tiếp; 4 ngựa bậc 3–6 thì thắng        |
 | LG-29 | P1      | Cờ cá ngựa online                                             | 2 người ngồi đối diện, 3–4 người lấy màu kế tiếp; xí ngầu tính từ seed (không đổ lại được); chỉ đúng lượt; người rời phòng bị loại, người cuối thắng                               |
 | LG-30 | P2      | Bàn Cờ cá ngựa                                                | Đường đi 52 ô liền nhau, khép kín, không trùng chuồng; cửa chuồng mỗi màu nằm ngay trước bậc 1                                                                                     |
+| LG-31 | P2      | Đọc cấu hình bật/tắt                                          | on/off/hidden cho game và chế độ; giá trị lạ coi là on; game off thì mọi chế độ off                                                                                                |
 
 ## AU – Âm thanh
 
@@ -141,6 +143,7 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                       |
 | SEC-10 | P1      | Phòng 4 người (Cờ cá ngựa)                                                | Ghế 3, 4 chỉ cho Cờ cá ngựa, chỉ khi đang chờ và ghế 2 đã có người; mỗi người một ghế; game khác vẫn 2 người                                           |
 | SEC-11 | P1      | Bộ đếm lượt chơi                                                          | Ai cũng đọc được; chỉ người đã đăng nhập ẩn danh mới cộng, mỗi lần đúng +1; không giảm, không xoá, không game lạ; không lưu gì về người chơi           |
+| SEC-12 | P1      | Cấu hình bật/tắt game                                                     | Ai cũng đọc được; không ai ghi/xoá được từ app (chỉ sửa trong Firebase Console)                                                                        |
 
 ## BR – Trình duyệt
 
