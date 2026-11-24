@@ -3,9 +3,11 @@ import { expect, test, type Page } from '@playwright/test';
 import { createRoomAs, evidence, joinAs, openApp } from './fixtures';
 
 const positions = (p: Page) =>
-  p.locator('[data-testid^="horse-"]').evaluateAll((els) =>
-    els.map((e) => `${e.getAttribute('data-testid')}=${e.getAttribute('data-pos')}`).join(' '),
-  );
+  p
+    .locator('[data-testid^="horse-"]')
+    .evaluateAll((els) =>
+      els.map((e) => `${e.getAttribute('data-testid')}=${e.getAttribute('data-pos')}`).join(' '),
+    );
 
 test('[UX-28] three players: the host starts, everyone rolls and moves, boards agree', async ({
   browser,
@@ -48,7 +50,8 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
         break;
       }
     }
-    if (!acted) await a.page.waitForTimeout(300); // a roll is animating or syncing
+    if (!acted)
+      await a.page.waitForTimeout(300); // a roll is animating or syncing
     else await a.page.waitForTimeout(150);
   }
   await expect(a.page.getByTestId('cn-die')).not.toHaveAttribute('data-value', '');
@@ -63,7 +66,10 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
 
   // Chi leaves: the other two play on, Chi's horses disappear
   await c.page.getByTestId('exit').click();
-  await c.page.getByTestId('confirm-exit').click().catch(() => {});
+  await c.page
+    .getByTestId('confirm-exit')
+    .click()
+    .catch(() => {});
   await expect(a.page.locator('[data-testid^="horse-"]'), '[UX-28] leaver not dropped').toHaveCount(
     8,
     { timeout: 15_000 },

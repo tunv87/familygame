@@ -53,7 +53,10 @@ describe('[LG-28] Cờ cá ngựa rules', () => {
     expect(legalMoves(s, 3).map((m) => m.horse)).toEqual([1]); // 2→5 is own horse
     expect(legalMoves(s, 4)).toEqual([]); // 2→6 jumps over 5, 5→9 over the green horse
     expect(legalMoves(s, 3).find((m) => m.horse === 1)).toEqual({ horse: 1, to: 8, kick: 8 });
-    expect(legalMoves(s, 2)).toEqual([{ horse: 0, to: 4 }, { horse: 1, to: 7 }]);
+    expect(legalMoves(s, 2)).toEqual([
+      { horse: 0, to: 4 },
+      { horse: 1, to: 7 },
+    ]);
   });
 
   it('landing on another colour kicks it back to its stable', () => {

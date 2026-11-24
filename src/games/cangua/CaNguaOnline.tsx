@@ -129,7 +129,11 @@ export function CaNguaOnline(props: OnlineGameProps) {
       <div className="numbers-toast" data-testid="cn-message">
         {message}
       </div>
-      <CaNguaBoard state={s} playable={playable} onHorse={(h) => void act({ t: 'move', horse: h })} />
+      <CaNguaBoard
+        state={s}
+        playable={playable}
+        onHorse={(h) => void act({ t: 'move', horse: h })}
+      />
       <div className="cn-controls">
         <DieFace value={rolling ? null : shownRoll} rolling={rolling} />
         <button
@@ -150,7 +154,12 @@ export function CaNguaOnline(props: OnlineGameProps) {
         </div>
       )}
       {o.winner && (
-        <OnlineResult {...props} opp={winnerPlayer} oppGone={Object.keys(players).length < 2} winner={o.winner} />
+        <OnlineResult
+          {...props}
+          opp={winnerPlayer}
+          oppGone={Object.keys(players).length < 2}
+          winner={o.winner}
+        />
       )}
     </>
   );

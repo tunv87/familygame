@@ -242,7 +242,9 @@ export function RoomScreen() {
           📶 {t('offlineSelf')}
         </div>
       )}
-      {!multi && !oppEntry && opp && <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>}
+      {!multi && !oppEntry && opp && (
+        <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>
+      )}
       {!multi && oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
       )}

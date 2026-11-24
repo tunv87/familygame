@@ -165,7 +165,8 @@ export function applyMove(s: CaNguaState, horse: number): CaNguaState | null {
     horses,
     roll: null,
     turn: s.roll === 6 ? s.turn : nextColor(s),
-    last: m.kick !== undefined ? { horse, from, to: m.to, kick: m.kick } : { horse, from, to: m.to },
+    last:
+      m.kick !== undefined ? { horse, from, to: m.to, kick: m.kick } : { horse, from, to: m.to },
   };
   if (hasWon(next, s.turn)) return { ...next, winner: s.turn, turn: s.turn };
   if (next.rolls >= MAX_ROLLS) return { ...next, winner: leader(next) };

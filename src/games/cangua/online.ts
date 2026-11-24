@@ -35,7 +35,8 @@ export interface CaNguaOnlineState {
   winner?: string;
 }
 
-export type CaNguaAction = { t: 'roll' } | { t: 'move'; horse: number } | { t: 'drop'; uid: string };
+export type CaNguaAction =
+  { t: 'roll' } | { t: 'move'; horse: number } | { t: 'drop'; uid: string };
 
 /** Colours for 2, 3 or 4 players: two players sit opposite each other. */
 export function colorsFor(n: number): Color[] {
@@ -83,7 +84,12 @@ export function toLocal(o: CaNguaOnlineState): CaNguaState {
   };
   if (o.lastRoll) s.lastRoll = { color: o.lastRoll.c, value: o.lastRoll.v, passed: !!o.lastRoll.p };
   if (o.last)
-    s.last = { horse: o.last.h, from: o.last.f, to: o.last.t, ...(o.last.k !== undefined ? { kick: o.last.k } : {}) };
+    s.last = {
+      horse: o.last.h,
+      from: o.last.f,
+      to: o.last.t,
+      ...(o.last.k !== undefined ? { kick: o.last.k } : {}),
+    };
   return s;
 }
 
