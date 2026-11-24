@@ -224,7 +224,7 @@ export const en: Record<MessageKey, string> = {
   ntSuggest: '"{w}" is a real word',
   ntSuggestThanks: 'Thank you! We will look at adding this word.',
   ntSuggestFail: 'Could not send it, please try later.',
-  gameCaNgua: 'Horse Race (Cờ cá ngựa)',
+  gameCaNgua: 'Horse Race (Cờ Cá Ngựa)',
   gameCaNguaDesc: 'Roll the die, race your horses home',
   cnIntro:
     'Online for 2–4 players: make a room and send the code to the family. When everyone is in, the host taps Start.',
@@ -255,9 +255,9 @@ export const en: Record<MessageKey, string> = {
   cnHelp5:
     'At your gate, a roll of n climbs to step n; on step k only a roll of k+1 climbs on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
   cnStory1:
-    'Cờ cá ngựa comes from Pachisi, played in India for centuries; Mughal emperors are said to have played it on courtyard boards with people as the pieces.',
+    'Cờ Cá Ngựa comes from Pachisi, played in India for centuries; Mughal emperors are said to have played it on courtyard boards with people as the pieces.',
   cnStory2:
-    'In England it became Ludo (late 19th century) with a single die, and printed boards travelled the world. In Vietnam it is called cờ cá ngựa – "betting on horses".',
+    'In England it became Ludo (late 19th century) with a single die, and printed boards travelled the world. In Vietnam it is called Cờ Cá Ngựa – "betting on horses".',
   cnStory3:
     'A paper or plastic board with four colours of horses was in almost every home, a favourite at Tết when the whole family gathers: luck, plus a bit of planning to knock out a horse.',
 };
