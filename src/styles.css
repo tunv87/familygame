@@ -1498,37 +1498,6 @@ input {
   box-shadow: 0 0 0 4px var(--oaq-mine);
 }
 
-.oaq-cell.sown {
-  animation: oaq-drop 0.5s both;
-}
-
-.oaq-cell.caught {
-  animation: oaq-caught 0.9s 0.4s both;
-}
-
-@keyframes oaq-drop {
-  0% {
-    background: var(--oaq-cell);
-  }
-  40% {
-    background: #fde68a;
-  }
-  100% {
-    background: var(--oaq-cell);
-  }
-}
-
-@keyframes oaq-caught {
-  0%,
-  100% {
-    background: var(--oaq-cell);
-  }
-  30% {
-    background: #fca5a5;
-    transform: scale(1.06);
-  }
-}
-
 .oaq-stones {
   display: flex;
   flex-wrap: wrap;
@@ -1844,5 +1813,111 @@ input {
 
   .screen.game .nt-text small {
     font-size: 0.8em;
+  }
+}
+
+/* ô ăn quan: replaying a move step by step */
+.oaq-cell.fx-drop {
+  animation: oaq-pop 0.26s ease-out;
+  background: #fde68a;
+}
+
+.oaq-cell.fx-pick {
+  animation: oaq-pop 0.4s ease-out;
+  box-shadow: 0 0 0 4px #f59e0b;
+}
+
+.oaq-cell.fx-take {
+  animation: oaq-take 0.7s ease-out;
+  background: #fca5a5;
+  box-shadow: 0 0 0 4px var(--bad);
+}
+
+.oaq-cell.has-hand {
+  z-index: 2;
+}
+
+@keyframes oaq-pop {
+  0% {
+    transform: scale(1);
+  }
+  45% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes oaq-take {
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.15);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.oaq-hand {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: var(--surface);
+  border: 2px solid #f59e0b;
+  color: var(--text);
+  font-size: 0.8em;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.oaq-plus {
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #b91c1c;
+  font-weight: 900;
+  font-size: 1.1em;
+  pointer-events: none;
+  animation: oaq-float 0.7s ease-out forwards;
+}
+
+@keyframes oaq-float {
+  from {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -24px);
+  }
+}
+
+.oaq-arrows {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.7em;
+  letter-spacing: 0.6em;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .oaq-cell.fx-drop,
+  .oaq-cell.fx-pick,
+  .oaq-cell.fx-take,
+  .oaq-plus {
+    animation: none;
   }
 }

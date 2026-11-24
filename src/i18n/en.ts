@@ -220,4 +220,5 @@ export const en: Record<MessageKey, string> = {
     'It relies on something special about Vietnamese: every syllable is a word on its own, and a great many words are made of two syllables. Japan has a similar game called "shiritori", and English speakers play "word chain".',
   ntStory3:
     'The dictionary in this game comes from Wiktionary (CC BY-SA licence) and shows the English meaning of every word, so children in Vietnam and abroad can learn new words as they play.',
+  oaqSowing: 'Sowing… tap the board to skip',
 };

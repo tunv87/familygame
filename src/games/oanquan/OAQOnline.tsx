@@ -6,10 +6,11 @@ import { OnlineResult } from '../../online/OnlineResult';
 import { PlayerChip } from '../../online/PlayerChip';
 import { transactState, winsOf } from '../../online/room';
 import type { OnlineGameProps } from '../../online/RoomScreen';
-import type { Move } from './logic';
+import { applyMove, type Move, type OAQState } from './logic';
 import { OAQBoard } from './OAQBoard';
 import { DirButtons, oaqFeedback, useOAQSelection } from './OAQLocal';
 import { applyOAQOnline, toLocal, turnUidOf, type OAQOnlineState } from './online';
+import { useSowing } from './useSowing';
 
 const log = createLogger('oanquan-online');
 
@@ -21,26 +22,33 @@ export function OAQOnline(props: OnlineGameProps) {
   const [pending, setPending] = useState(false);
   const mySide = o.uid1 === uid ? 1 : 2;
   const myTurn = !o.winner && turnUidOf(o) === uid && !props.oppGone;
-  const { selected, playable, tap } = useOAQSelection(state, myTurn && !pending);
+  const sowing = useSowing();
+  const busy = sowing.animating;
+  const shownScore = sowing.frame?.score ?? state.score;
+  const { selected, playable, tap } = useOAQSelection(state, myTurn && !pending && !busy);
 
-  // Sound + message for every new move (mine or the opponent's).
-  const prevPlies = useRef(o.plies);
+  // Every new move (mine or the opponent's) is replayed from the previous position on both
+  // devices (the rules are deterministic), then its sound and message follow.
+  const prev = useRef<{ plies: number; state: OAQState }>({ plies: o.plies, state });
   const [message, setMessage] = useState('');
   useEffect(() => {
-    if (o.plies <= prevPlies.current) {
-      prevPlies.current = o.plies;
-      return;
-    }
-    prevPlies.current = o.plies;
+    const before = prev.current;
+    prev.current = { plies: o.plies, state };
+    if (o.plies !== before.plies + 1) return; // first view, a new round, or a skipped update
     if (!o.gained && turnUidOf(o) === uid) sfx.opponent();
     const nextName = (turnUidOf(o) === uid ? me?.name : opp?.name) ?? '';
-    setMessage(
-      oaqFeedback(
-        { gained: o.gained ?? 0, tookQuan: !!o.tookQuan, reseeded: !!o.reseeded },
-        t,
-        nextName,
-      ),
-    );
+    const announce = () =>
+      setMessage(
+        oaqFeedback(
+          { gained: o.gained ?? 0, tookQuan: !!o.tookQuan, reseeded: !!o.reseeded },
+          t,
+          nextName,
+        ),
+      );
+    setMessage('');
+    const r = o.last ? applyMove(before.state, o.last) : null;
+    if (r) sowing.play(before.state, r.steps, before.state.turn, announce);
+    else announce();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [o.plies]);
 
@@ -58,21 +66,23 @@ export function OAQOnline(props: OnlineGameProps) {
     }
   };
 
-  const status = o.winner
-    ? ''
-    : myTurn
-      ? selected !== null
-        ? t('oaqPickDir')
-        : t('oaqYourTurn')
-      : t('caroWaitTurn', { name: opp?.name ?? '' });
+  const status = busy
+    ? t('oaqSowing')
+    : o.winner
+      ? ''
+      : myTurn
+        ? selected !== null
+          ? t('oaqPickDir')
+          : t('oaqYourTurn')
+        : t('caroWaitTurn', { name: opp?.name ?? '' });
 
   return (
     <>
       <div className="players">
-        <PlayerChip player={me} score={state.score[mySide - 1]} active={myTurn} testId="me" />
+        <PlayerChip player={me} score={shownScore[mySide - 1]} active={myTurn} testId="me" />
         <PlayerChip
           player={opp}
-          score={state.score[mySide === 1 ? 1 : 0]}
+          score={shownScore[mySide === 1 ? 1 : 0]}
           active={!o.winner && !myTurn}
           testId="opp"
         />
@@ -88,20 +98,20 @@ export function OAQOnline(props: OnlineGameProps) {
         bottom={mySide}
         selected={selected}
         playable={myTurn ? playable : []}
-        path={o.path ?? []}
-        captured={o.captured ?? []}
-        disabled={!myTurn || pending}
+        frame={sowing.frame}
+        disabled={!myTurn || pending || busy}
         onCell={tap}
+        onSkip={sowing.skip}
       />
       <DirButtons
-        selected={myTurn ? selected : null}
+        selected={myTurn && !busy ? selected : null}
         bottom={mySide}
         onMove={(m) => void play(m)}
       />
       <div className="muted center" style={{ fontSize: 14 }}>
         🏆 {winsOf(room, uid)} – {winsOf(room, oppUid)}
       </div>
-      {o.winner && <OnlineResult {...props} winner={o.winner} />}
+      {o.winner && !busy && <OnlineResult {...props} winner={o.winner} />}
     </>
   );
 }

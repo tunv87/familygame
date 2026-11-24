@@ -21,6 +21,12 @@ test('[UX-20][AU-09] pick a field, then a direction; stones are sown and capture
   await evidence(page, 'oanquan', 'D2', 'UX-20-select');
   // 5 stones from field 1 to the right: 2..6, pick up 7 → 8..11, 0; 1 empty → capture field 2 (6)
   await page.getByTestId('dir-right').click();
+  // the move is replayed stone by stone: the hand shows how many stones are left to sow
+  await expect(page.getByTestId('oaq-hand'), '[UX-20] no hand while sowing').toBeVisible();
+  await expect(page.getByTestId('status')).toContainText('Đang rải');
+  await evidence(page, 'oanquan', 'D2', 'UX-20-sowing');
+  await page.getByTestId('cell-8').dispatchEvent('pointerdown'); // tap the board: skip
+  await expect(page.getByTestId('oaq-hand'), '[UX-20] skip did not end the replay').toHaveCount(0);
   await expect(page.getByTestId('me-score'), '[UX-20] capture not scored').toHaveText('6');
   await expect(page.getByTestId('count-2')).toHaveText('0');
   await expect(page.getByTestId('count-6'), '[UX-20] quan cell value').toHaveText('11');
@@ -42,7 +48,7 @@ test('[UX-21] vs computer: it answers, undo goes back to my turn, leaving asks f
   await page.getByTestId('dir-left').click();
   await expect(page.getByTestId('status'), '[UX-21] computer did not answer').toContainText(
     'Đến lượt bạn',
-    { timeout: 8000 },
+    { timeout: 30_000 },
   );
   await page.getByRole('button', { name: /Đi lại/ }).click();
   await expect(page.getByTestId('count-3'), '[UX-21] undo did not restore my field').toHaveText(
@@ -83,14 +89,22 @@ test('[UX-22] online Ô ăn quan: each player sees their own fields at the botto
   );
   await a.page.getByTestId('cell-1').dispatchEvent('pointerdown');
   await a.page.getByTestId('dir-right').click();
-  await expect(b.page.getByTestId('count-2'), '[UX-22] move not synced').toHaveText('0');
+  await expect(
+    b.page.getByTestId('oaq-hand'),
+    '[UX-22] move not replayed for the guest',
+  ).toBeVisible();
+  await expect(b.page.getByTestId('count-2'), '[UX-22] move not synced').toHaveText('0', {
+    timeout: 15_000,
+  });
   await expect(b.page.getByTestId('status'), '[UX-22] guest not on turn').toContainText(
     'Đến lượt bạn',
+    { timeout: 15_000 },
   );
   await b.page.getByTestId('cell-9').dispatchEvent('pointerdown');
   await b.page.getByTestId('dir-left').click();
   await expect(a.page.getByTestId('status'), '[UX-22] host not back on turn').toContainText(
     'Đến lượt bạn',
+    { timeout: 15_000 },
   );
   await evidence(b.page, 'oanquan', 'D2', 'UX-22-online');
   expect([...a.errors, ...b.errors], '[UX-22] errors').toEqual([]);

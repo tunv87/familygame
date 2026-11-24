@@ -55,8 +55,17 @@ export interface OAQState {
   last?: Move;
 }
 
+/** One step of a move, for replaying it on screen. */
+export type Step =
+  | { t: 'pick'; cell: number; n: number }
+  | { t: 'drop'; cell: number }
+  | { t: 'take'; cell: number; value: number; quan: boolean }
+  | { t: 'reseed'; side: Side };
+
 export interface MoveResult {
   state: OAQState;
+  /** the move step by step: pick up, drop one stone per cell, capture */
+  steps: Step[];
   /** cells where a stone was dropped, in order (for animation) */
   path: number[];
   /** cells captured, in order */
@@ -125,8 +134,10 @@ export function applyMove(s: OAQState, m: Move): MoveResult | null {
   let gained = 0;
   let tookQuan = false;
 
+  const steps: Step[] = [];
   let hand = board[m.from];
   board[m.from] = 0;
+  steps.push({ t: 'pick', cell: m.from, n: hand });
   let pos = m.from;
   for (let laps = 0; laps < MAX_LAPS; laps++) {
     while (hand > 0) {
@@ -134,12 +145,14 @@ export function applyMove(s: OAQState, m: Move): MoveResult | null {
       board[pos]++;
       hand--;
       path.push(pos);
+      steps.push({ t: 'drop', cell: pos });
     }
     const n1 = next(pos, m.dir);
     if (isQuan(n1)) break; // never pick up from a quan cell
     if (board[n1] > 0) {
       hand = board[n1];
       board[n1] = 0;
+      steps.push({ t: 'pick', cell: n1, n: hand });
       pos = n1;
       continue;
     }
@@ -150,13 +163,16 @@ export function applyMove(s: OAQState, m: Move): MoveResult | null {
       const v = valueOf({ board, quan }, target);
       if (v === 0) break;
       gained += v;
+      let big = false;
       if (isQuan(target)) {
         const q = target === 0 ? 0 : 1;
         if (quan[q]) {
           quan[q] = false;
           tookQuan = true;
+          big = true;
         }
       }
+      steps.push({ t: 'take', cell: target, value: v, quan: big });
       board[target] = 0;
       captured.push(target);
       gap = next(target, m.dir);
@@ -184,7 +200,8 @@ export function applyMove(s: OAQState, m: Move): MoveResult | null {
       for (const i of FIELDS[t]) state.board[i] = 1;
       state.score[t - 1] -= FIELDS[t].length;
       reseeded = true;
+      steps.push({ t: 'reseed', side: t });
     }
   }
-  return { state, path, captured, gained, tookQuan, reseeded };
+  return { state, steps, path, captured, gained, tookQuan, reseeded };
 }

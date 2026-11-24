@@ -221,6 +221,7 @@ export const vi = {
     'Trò chơi dựa vào một nét đặc biệt của tiếng Việt: mỗi tiếng là một âm tiết, và rất nhiều từ được ghép từ hai tiếng. Người Nhật có trò "shiritori", người nói tiếng Anh có "word chain" – nối theo chữ cái hoặc âm cuối.',
   ntStory3:
     'Từ điển trong game dựa trên Wiktionary (giấy phép CC BY-SA) và có nghĩa tiếng Anh, để các bạn nhỏ ở trong và ngoài nước vừa chơi vừa học thêm từ mới.',
+  oaqSowing: 'Đang rải sỏi… chạm bàn để xem nhanh',
 } as const;
 
 export type MessageKey = keyof typeof vi;

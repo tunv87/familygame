@@ -173,9 +173,11 @@ async function scene(
       await page.goto('/#/oanquan/play?mode=local');
       await page.getByTestId('cell-1').dispatchEvent('pointerdown');
       await page.getByTestId('dir-right').click();
+      await page.getByTestId('cell-0').dispatchEvent('pointerdown'); // skip the replay
       await page.getByTestId('cell-9').dispatchEvent('pointerdown');
       await page.getByTestId('dir-left').click();
-      await page.waitForTimeout(1500);
+      await page.getByTestId('cell-0').dispatchEvent('pointerdown');
+      await page.waitForTimeout(800);
       await page.getByTestId('cell-4').dispatchEvent('pointerdown');
       break;
     case 'coganh':

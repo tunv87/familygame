@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v2.9** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.0** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -44,7 +44,7 @@ Phiên bản: **v2.9** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | UX-17 | P1      | Cờ gánh: bị Mở                                                                                         | Có cảnh báo, quân phải đi được chọn sẵn, chỉ còn nước gánh bắt buộc, quân khác bị khoá                                                                                               |
 | UX-18 | P1      | Cờ gánh với máy                                                                                        | Máy trả lời; Đi lại quay về lượt mình; thoát giữa ván hỏi trước                                                                                                                      |
 | UX-19 | P1      | Cờ gánh online                                                                                         | Nước đi, Mở, gánh hiện ở cả 2 máy; chủ phòng cầm Đen đi trước                                                                                                                        |
-| UX-20 | P1      | Ô ăn quan: chọn ô rồi chọn hướng                                                                       | Ô đối phương bị từ chối; rải, bốc tiếp, ăn đúng luật; điểm và lượt cập nhật                                                                                                          |
+| UX-20 | P1      | Ô ăn quan: chọn ô rồi chọn hướng                                                                       | Ô đối phương bị từ chối; nước đi được diễn từng bước (bàn tay ✋ kèm số sỏi đang cầm, "Đang rải sỏi…"), chạm bàn để xem nhanh; rải, bốc tiếp, ăn đúng luật; điểm và lượt cập nhật    |
 | UX-21 | P1      | Ô ăn quan với máy                                                                                      | Máy đi lại; Đi lại quay về lượt của mình; thoát giữa ván phải xác nhận                                                                                                               |
 | UX-22 | P1      | Ô ăn quan online                                                                                       | Mỗi người thấy ô của mình ở hàng dưới; nước đi đồng bộ, lượt đổi đúng                                                                                                                |
 | UX-23 | P1      | Màn hình chính và hướng dẫn                                                                            | Game chia nhóm Dân gian / Trí tuệ; mọi game có tab Cách chơi và Câu chuyện                                                                                                           |
@@ -101,6 +101,7 @@ Phiên bản: **v2.9** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | LG-23 | P1      | Từ điển Nối từ                                                | > 15.000 từ 2 tiếng, mỗi từ có nghĩa tiếng Anh; có từ thông dụng của trẻ (con mèo, mèo con…); không có từ thô tục; > 80% từ thông dụng nối tiếp được                               |
 | LG-24 | P1      | Nối từ online                                                 | Đúng lượt, từ được kiểm tra, đồng hồ đặt lại; chỉ người đến lượt được chịu, đối thủ chỉ được xử thắng khi quá giờ + 5 giây; dữ liệu hỏng không crash                               |
 | LG-25 | P1      | Từ cho trẻ em trong Nối từ                                    | > 800 từ chọn tay (không có từ khó như "sĩ phu", "nạn nhân"); máy mức Dễ, Gợi ý, "Có thể nối" dùng từ trẻ em trước; mức Dễ và cùng máy mở ván bằng từ trẻ em có ≥ 3 từ nối tiếp    |
+| LG-26 | P1      | Diễn lại nước đi Ô ăn quan                                    | Diễn lại từng bước (bốc, thả, ăn) ra đúng bàn và điểm cuối cùng qua 50 ván ngẫu nhiên; điểm cộng đúng lúc ăn                                                                       |
 
 ## AU – Âm thanh
 

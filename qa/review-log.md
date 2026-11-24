@@ -117,3 +117,9 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | Case  | Lý do                                                                                                                                                                                                                                                                                                |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | UI-12 | Chủ dự án chơi trên laptop: màn chơi quá nhỏ (Cờ gánh, Ca rô, Tìm số). Nguyên nhân: bố cục một cột của điện thoại + cỡ nút máy tính bảng (80 px) trên màn hình thấp. UI-01…UI-08 chỉ kiểm tra "không tràn, nằm trọn" nên không bắt được lỗi "quá nhỏ". Thêm UI-12 đo tỉ lệ bàn chơi so với màn hình. |
+
+## Review lần 11 – Ô ăn quan diễn từng bước, v2.9 → v3.0
+
+| Case         | Lý do                                                                                                                                                                                                                                                     |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-20, LG-26 | Chủ dự án: hiệu ứng rải sỏi không rõ. Nước đi giờ được diễn từng bước; test kiểm tra bàn tay ✋ hiện khi rải, chạm để xem nhanh, và việc diễn lại khớp tuyệt đối với kết quả của luật. UX-21/UX-22 chờ lâu hơn vì máy và người chơi online đợi diễn xong. |
