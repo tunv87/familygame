@@ -39,7 +39,7 @@ export function CoGanhBoard({
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const measure = () => setSide(Math.floor(Math.min(el.clientWidth, el.clientHeight, 640)));
+    const measure = () => setSide(Math.floor(Math.min(el.clientWidth, el.clientHeight, 1000)));
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);

@@ -101,27 +101,32 @@ export function NumbersBoard({
     onFind(n);
   };
 
-  // Fit the board (fixed cols:rows aspect) into the available space.
+  // Fit the board into the available space. Layouts are portrait (fewer columns than rows);
+  // on a wide screen (computer, tablet held sideways) the board is turned on its side
+  // (x and y swapped) so it fills the screen. Same numbers, same game, just drawn sideways.
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(320);
+  const [box, setBox] = useState({ w: 320, h: 480 });
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const measure = () =>
-      setWidth(Math.floor(Math.min(el.clientWidth, (el.clientHeight * layout.cols) / layout.rows)));
+    const measure = () => setBox({ w: el.clientWidth, h: el.clientHeight });
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [layout.cols, layout.rows]);
-  const cellPx = width / layout.cols;
+  }, []);
+  const sideways = box.w > box.h * 1.15 && layout.rows > layout.cols;
+  const cols = sideways ? layout.rows : layout.cols;
+  const rows = sideways ? layout.cols : layout.rows;
+  const width = Math.floor(Math.min(box.w, (box.h * cols) / rows));
+  const cellPx = width / cols;
 
   return (
     <div className="numbers-wrap" ref={wrapRef}>
       <div
         className="numbers-board"
         data-testid="numbers-board"
-        style={{ width, height: (width * layout.rows) / layout.cols }}
+        style={{ width, height: (width * rows) / cols }}
       >
         {layout.tiles.map((tile) => {
           const who = owner[tile.n];
@@ -133,8 +138,8 @@ export function NumbersBoard({
               className={`num ${cls} ${wrong === tile.n ? 'wrong' : ''}`}
               style={
                 {
-                  left: `${tile.x * 100}%`,
-                  top: `${tile.y * 100}%`,
+                  left: `${(sideways ? tile.y : tile.x) * 100}%`,
+                  top: `${(sideways ? tile.x : tile.y) * 100}%`,
                   // Hit area is as large as the grid allows without overlapping neighbours.
                   width: HIT_SIZE * cellPx,
                   '--rot': `${tile.rotate}deg`,

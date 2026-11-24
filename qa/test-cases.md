@@ -1,24 +1,25 @@
 # Danh mục test case
 
-Phiên bản: **v2.8** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v2.9** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
 
-| Mã     | Ưu tiên | Kiểm tra                                                     | Kết quả mong đợi                                                                        |
-| ------ | ------- | ------------------------------------------------------------ | --------------------------------------------------------------------------------------- |
-| UI-01  | P1      | Mở từng màn hình chính trên D1–D10                           | Không tràn ngang (không có thanh cuộn ngang)                                            |
-| UI-02  | P1      | Nút điều khiển trên D1–D5 (không tính quân cờ/ô số)          | Mọi nút ≥ 44×44 px (Apple HIG 44pt, Material 48dp ≈ 44 px CSS ở mật độ chuẩn)           |
-| UI-02b | P1      | Ô chơi game (ô ca rô 3×3, vùng bấm số mức Dễ/Vừa) trên D1–D5 | ≥ 44 px; mức Khó và bàn 15×15 ≥ 32 px (bàn 15×15 có nút phóng to)                       |
-| UI-03  | P1      | Bàn Tìm số mức Khó trên D1–D10                               | Toàn bộ bàn số nằm trong màn hình, không phải cuộn                                      |
-| UI-04  | P1      | Bàn ca rô 3×3 trên D1–D10                                    | Cả 9 ô nằm trong màn hình                                                               |
-| UI-05  | P2      | Chữ trên D1                                                  | Không chữ nào bị cắt ngoài vùng của nó                                                  |
-| UI-06  | P1      | Hộp thoại (kết quả, thoát, chào mừng) trên D1                | Nút chính nhìn thấy mà không cần cuộn                                                   |
-| UI-07  | P2      | Chụp ảnh mọi màn hình × thiết bị × 2 giao diện               | Lưu evidence để soát bằng mắt                                                           |
-| UI-08  | P2      | iPad xoay ngang (D11 1366×1024)                              | Không tràn, bàn chơi nằm trọn                                                           |
-| UI-09  | P1      | Bàn Cờ gánh trên D1–D5, cả 2 giao diện                       | Nằm gọn trong màn hình, mỗi điểm bấm ≥ 44 px, không tràn ngang                          |
-| UI-10  | P1      | Bàn Ô ăn quan trên D1–D5, cả 2 giao diện                     | Bàn và nút chọn hướng nằm gọn trong màn hình, mỗi ô dân ≥ 44 px, không tràn ngang       |
-| UI-11  | P1      | Nối từ trên D1–D5, cả 2 giao diện                            | Ô nhập, nút Nối, Gợi ý, Chịu, đồng hồ nằm trong màn hình, cao ≥ 44 px, không tràn ngang |
+| Mã     | Ưu tiên | Kiểm tra                                                     | Kết quả mong đợi                                                                                                 |
+| ------ | ------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| UI-01  | P1      | Mở từng màn hình chính trên D1–D10                           | Không tràn ngang (không có thanh cuộn ngang)                                                                     |
+| UI-02  | P1      | Nút điều khiển trên D1–D5 (không tính quân cờ/ô số)          | Mọi nút ≥ 44×44 px (Apple HIG 44pt, Material 48dp ≈ 44 px CSS ở mật độ chuẩn)                                    |
+| UI-02b | P1      | Ô chơi game (ô ca rô 3×3, vùng bấm số mức Dễ/Vừa) trên D1–D5 | ≥ 44 px; mức Khó và bàn 15×15 ≥ 32 px (bàn 15×15 có nút phóng to)                                                |
+| UI-03  | P1      | Bàn Tìm số mức Khó trên D1–D10                               | Toàn bộ bàn số nằm trong màn hình, không phải cuộn                                                               |
+| UI-04  | P1      | Bàn ca rô 3×3 trên D1–D10                                    | Cả 9 ô nằm trong màn hình                                                                                        |
+| UI-05  | P2      | Chữ trên D1                                                  | Không chữ nào bị cắt ngoài vùng của nó                                                                           |
+| UI-06  | P1      | Hộp thoại (kết quả, thoát, chào mừng) trên D1                | Nút chính nhìn thấy mà không cần cuộn                                                                            |
+| UI-07  | P2      | Chụp ảnh mọi màn hình × thiết bị × 2 giao diện               | Lưu evidence để soát bằng mắt                                                                                    |
+| UI-08  | P2      | iPad xoay ngang (D11 1366×1024)                              | Không tràn, bàn chơi nằm trọn                                                                                    |
+| UI-09  | P1      | Bàn Cờ gánh trên D1–D5, cả 2 giao diện                       | Nằm gọn trong màn hình, mỗi điểm bấm ≥ 44 px, không tràn ngang                                                   |
+| UI-10  | P1      | Bàn Ô ăn quan trên D1–D5, cả 2 giao diện                     | Bàn và nút chọn hướng nằm gọn trong màn hình, mỗi ô dân ≥ 44 px, không tràn ngang                                |
+| UI-11  | P1      | Nối từ trên D1–D5, cả 2 giao diện                            | Ô nhập, nút Nối, Gợi ý, Chịu, đồng hồ nằm trong màn hình, cao ≥ 44 px, không tràn ngang                          |
+| UI-12  | P1      | Máy tính và iPad xoay ngang (D8, D9, D11)                    | Bàn Cờ gánh, Ca rô 3×3 và 15×15, Tìm số cao ≥ 75% màn hình; bàn Ô ăn quan rộng ≥ 50%; nằm trọn, không tràn ngang |
 
 ## UX – Trải nghiệm theo chuẩn game
 

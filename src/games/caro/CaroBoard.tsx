@@ -38,7 +38,7 @@ export function CaroBoard({
 
   const fit = Math.floor(Math.min(avail.w, avail.h) / size) - (small ? 12 : 0);
   const cell = small
-    ? Math.min(fit, 200)
+    ? Math.min(fit, 300)
     : zoomed
       ? Math.max(fit, 44)
       : Math.max(fit, MIN_CELL_BIG);

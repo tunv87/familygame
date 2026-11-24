@@ -1753,3 +1753,96 @@ input {
   min-height: calc(var(--tap) * 0.8);
   white-space: nowrap;
 }
+
+/* ---------- computers and tablets held sideways: two columns ----------
+   Left: players, turn, messages and buttons. Right: the board, as tall as the screen.
+   (Phones held sideways, max-height 500px, keep their own compact layout.) */
+@media (min-width: 1000px) and (orientation: landscape) and (min-height: 501px) {
+  .screen.game:not(.tight) {
+    max-width: 1600px;
+    display: grid;
+    grid-template-columns: minmax(300px, 400px) minmax(0, 1fr);
+    grid-template-rows: auto repeat(10, min-content) 1fr;
+    column-gap: 40px;
+    row-gap: 14px;
+    align-content: stretch;
+    padding-left: 32px;
+    padding-right: 32px;
+  }
+
+  .screen.game:not(.tight) > * {
+    grid-column: 1;
+    min-width: 0;
+  }
+
+  .screen.game:not(.tight) > .topbar {
+    grid-column: 1 / -1;
+  }
+
+  .screen.game:not(.tight) > :is(.cg-wrap, .caro-wrap, .oaq-wrap, .nt-chain) {
+    grid-column: 2;
+    grid-row: 2 / -1;
+    min-height: 0;
+    height: 100%;
+  }
+
+  /* the left column stacks the two player chips */
+  .screen.game:not(.tight) > .players:has(> .player) {
+    flex-direction: column;
+  }
+
+  .screen.game:not(.tight) .status-line {
+    text-align: left;
+  }
+
+  /* online rooms put the game inside the room screen */
+  .screen.game:not(.tight) > .nt-screen {
+    display: contents;
+  }
+
+  /* Tìm số keeps its top bar; the board fills the rest (turned sideways when wider) */
+  .screen.game.tight {
+    max-width: 1600px;
+  }
+}
+
+/* computers with a mouse: tablet-size buttons are not needed, text stays large */
+@media (pointer: fine) and (min-width: 1000px) and (orientation: landscape) {
+  :root {
+    --tap: 56px;
+    --font: 22px;
+  }
+
+  :root[data-bigtext='1'] {
+    --tap: 64px;
+    --font: 26px;
+  }
+}
+
+@media (min-width: 1000px) and (orientation: landscape) and (min-height: 501px) {
+  .screen.game .oaq-board {
+    max-width: min(100%, 1200px);
+  }
+
+  .screen.game .oaq-count {
+    font-size: 1.6em;
+  }
+
+  .screen.game .oaq-dot {
+    width: 12px;
+    height: 12px;
+  }
+
+  .screen.game .oaq-big {
+    width: 30px;
+    height: 30px;
+  }
+
+  .screen.game .nt-text b {
+    font-size: 1.4em;
+  }
+
+  .screen.game .nt-text small {
+    font-size: 0.8em;
+  }
+}
