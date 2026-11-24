@@ -259,3 +259,30 @@ describe('[SEC-09] Nối từ word suggestions', () => {
     await admin('DELETE', '');
   });
 });
+
+describe('[SEC-10] Cờ cá ngựa rooms of up to four', () => {
+  const seat = (u: { uid: string; db: Database }, k: 'seat3' | 'seat4', name: string) =>
+    update(ref(u.db, 'rooms/1234'), { [`players/${u.uid}`]: player(name), [k]: u.uid });
+  it('a third and fourth player can join while waiting, one seat each', async () => {
+    const [a, b, c, d, e] = [await user(), await user(), await user(), await user(), await user()];
+    await ok(set(ref(a.db, 'rooms/1234'), { ...room(a.uid), game: 'cangua' }));
+    await denied(seat(c, 'seat3', 'Chi')); // the guest seat comes first
+    await ok(join(b));
+    await denied(seat(b, 'seat3', 'Bình')); // already seated
+    await ok(seat(c, 'seat3', 'Chi'));
+    await denied(seat(d, 'seat3', 'Dũng')); // taken
+    await ok(seat(d, 'seat4', 'Dũng'));
+    await denied(seat(e, 'seat4', 'Em'));
+    await denied(update(ref(e.db, 'rooms/1234'), { [`players/${e.uid}`]: player('Em') }));
+    // leaving frees the seat
+    await ok(update(ref(d.db, 'rooms/1234'), { [`players/${d.uid}`]: null, seat4: null }));
+    await ok(update(ref(a.db, 'rooms/1234'), { status: 'playing' }));
+    await denied(seat(e, 'seat4', 'Em')); // no joining a game that has started
+  });
+  it('other games keep two players', async () => {
+    const [a, b, c] = [await user(), await user(), await user()];
+    await ok(set(ref(a.db, 'rooms/1234'), room(a.uid)));
+    await ok(join(b));
+    await denied(seat(c, 'seat3', 'Chi'));
+  });
+});

@@ -11,7 +11,7 @@
           ".validate": "newData.val() === $code"
         },
         "game": {
-          ".validate": "newData.val() === 'numbers' || newData.val() === 'caro' || newData.val() === 'coganh' || newData.val() === 'oanquan' || newData.val() === 'noitu'"
+          ".validate": "newData.val() === 'numbers' || newData.val() === 'caro' || newData.val() === 'coganh' || newData.val() === 'oanquan' || newData.val() === 'noitu' || newData.val() === 'cangua'"
         },
         "options": {
           ".validate": "newData.hasChildren()"
@@ -47,9 +47,17 @@
           ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid && data.parent().exists()) || (data.val() === auth.uid && !newData.exists()))",
           ".validate": "newData.isString()"
         },
+        "seat3": {
+          ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid && data.parent().exists() && data.parent().child('game').val() === 'cangua' && data.parent().child('status').val() === 'waiting' && data.parent().child('guestUid').exists() && data.parent().child('guestUid').val() !== auth.uid) || (data.val() === auth.uid && !newData.exists()))",
+          ".validate": "newData.isString()"
+        },
+        "seat4": {
+          ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid && data.parent().exists() && data.parent().child('game').val() === 'cangua' && data.parent().child('status').val() === 'waiting' && data.parent().child('seat3').exists() && data.parent().child('seat3').val() !== auth.uid && data.parent().child('guestUid').val() !== auth.uid) || (data.val() === auth.uid && !newData.exists()))",
+          ".validate": "newData.isString()"
+        },
         "players": {
           "$uid": {
-            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (data.parent().parent().child('hostUid').val() === $uid || newData.parent().parent().child('guestUid').val() === $uid || (data.exists() && !newData.exists()))",
+            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (data.parent().parent().child('hostUid').val() === $uid || newData.parent().parent().child('guestUid').val() === $uid || newData.parent().parent().child('seat3').val() === $uid || newData.parent().parent().child('seat4').val() === $uid || (data.exists() && !newData.exists()))",
             ".validate": "!newData.exists() || newData.hasChildren(['name', 'avatar'])",
             "name": {
               ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"

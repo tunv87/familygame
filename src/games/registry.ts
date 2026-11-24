@@ -4,7 +4,7 @@ export type Mode = 'solo' | 'local' | 'online';
 export type GameGroup = 'folk' | 'mind';
 
 export interface GameInfo {
-  id: 'numbers' | 'caro' | 'coganh' | 'oanquan' | 'noitu';
+  id: 'numbers' | 'caro' | 'coganh' | 'oanquan' | 'noitu' | 'cangua';
   emoji: string;
   title: MessageKey;
   desc: MessageKey;
@@ -37,6 +37,15 @@ export const GAMES: GameInfo[] = [
     desc: 'gameCoGanhDesc',
     path: '/coganh',
     modes: ['solo', 'local', 'online'],
+    group: 'folk',
+  },
+  {
+    id: 'cangua',
+    emoji: '🐴',
+    title: 'gameCaNgua',
+    desc: 'gameCaNguaDesc',
+    path: '/cangua',
+    modes: ['online'],
     group: 'folk',
   },
   {

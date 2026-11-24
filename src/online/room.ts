@@ -11,6 +11,7 @@ import {
 } from 'firebase/database';
 import { createLogger } from '../lib/logger';
 import { randomSeed } from '../lib/rng';
+import { initialCaNguaState } from '../games/cangua/online';
 import { initialCaroState } from '../games/caro/online';
 import { initialCoGanhState } from '../games/coganh/online';
 import { initialOAQState } from '../games/oanquan/online';
@@ -19,7 +20,7 @@ import { startWord } from '../games/noitu/logic';
 import { initialNoiTuState } from '../games/noitu/online';
 import { initialState as initialNumbersState, type NumbersLevel } from '../games/numbers/logic';
 import { ensureAuth, getDb, serverNow } from './firebase';
-import { MAX_PLAYERS, ROOM_TTL_MS, type GameId, type Room, type RoomOptions } from './types';
+import { ROOM_TTL_MS, maxPlayers, type GameId, type Room, type RoomOptions } from './types';
 import type { Profile } from '../app/settings';
 
 const log = createLogger('room');
@@ -83,8 +84,16 @@ export async function joinRoom(code: string, profile: Profile) {
   if (!room || Date.now() - room.createdAt > ROOM_TTL_MS) throw new RoomError('notFound');
   const players = room.players ?? {};
   const isHost = room.hostUid === uid;
-  if (!players[uid] && Object.keys(players).length >= MAX_PLAYERS) throw new RoomError('full');
-  if (!isHost && room.guestUid && room.guestUid !== uid) throw new RoomError('full');
+  const member = !!players[uid];
+  if (!member && Object.keys(players).length >= maxPlayers(room.game)) throw new RoomError('full');
+  const seats = ['guestUid', 'seat3', 'seat4'] as const;
+  const mine = seats.find((k) => room[k] === uid);
+  // the seat to claim: the guest seat, then (Cờ cá ngựa, before the game starts) seats 3 and 4
+  const free = isHost || mine ? undefined : seats.find((k) => !room[k]);
+  if (!isHost && !mine) {
+    if (!free || (free !== 'guestUid' && (room.game !== 'cangua' || room.status !== 'waiting')))
+      throw new RoomError('full');
+  }
   const me = {
     name: profile.name,
     avatar: profile.avatar,
@@ -95,7 +104,7 @@ export async function joinRoom(code: string, profile: Profile) {
   try {
     await update(roomRef(code), {
       [`players/${uid}`]: me,
-      ...(isHost || room.guestUid === uid ? {} : { guestUid: uid }),
+      ...(free ? { [free]: uid } : {}),
     });
   } catch (e) {
     // A second, concurrent join from this device (double tap, re-render) loses the
@@ -155,6 +164,7 @@ async function newState(room: Room, round: number) {
   const uids = Object.entries(room.players ?? {})
     .sort((a, b) => a[1].joinedAt - b[1].joinedAt)
     .map(([u]) => u);
+  if (room.game === 'cangua') return initialCaNguaState(uids, randomSeed(), round - 1);
   if (room.game === 'numbers') {
     return initialNumbersState(
       (room.options.level ?? 'easy') as NumbersLevel,
@@ -174,7 +184,7 @@ async function newState(room: Room, round: number) {
   return initialCaroState(room.options.size ?? 3, a, b);
 }
 
-/** Host only: start the first round once both players are present. */
+/** Host only: start the first round once the players are present. */
 export async function startGame(room: Room) {
   log.info('starting game', { code: room.code });
   await update(roomRef(room.code), {
@@ -189,7 +199,7 @@ export async function requestRematch(code: string, uid: string) {
   await set(ref(getDb(), `rooms/${code}/rematch/${uid}`), true);
 }
 
-/** Host only: when both players asked for a rematch, start the next round. */
+/** Host only: when every player asked for a rematch, start the next round. */
 export async function startRematch(room: Room) {
   const round = (room.round ?? 1) + 1;
   log.info('rematch', { code: room.code, round });
@@ -208,6 +218,8 @@ export async function leaveRoom(code: string, uid: string) {
       await update(roomRef(code), {
         [`players/${uid}`]: null,
         ...(room?.guestUid === uid ? { guestUid: null } : {}),
+        ...(room?.seat3 === uid ? { seat3: null } : {}),
+        ...(room?.seat4 === uid ? { seat4: null } : {}),
       });
     log.info('left room', { code });
   } catch (e) {

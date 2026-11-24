@@ -20,6 +20,7 @@ const ROUTES = [
   '/#/coganh/play?mode=local',
   '/#/oanquan/play?mode=local',
   '/#/noitu/play?mode=local',
+  '/#/cangua',
   '/#/numbers',
   '/#/numbers/play?mode=practice&level=easy',
   '/#/join',
