@@ -15,6 +15,7 @@ import {
 import { chooseOAQMove, type OAQLevel } from './ai';
 import { OAQ_HELP, OAQ_STORY } from './help';
 import { OAQBoard, dirFor } from './OAQBoard';
+import { useSowing } from './useSowing';
 import {
   applyMove,
   initialState,
@@ -108,10 +109,7 @@ export function OAQLocal() {
 
   const [round, setRound] = useState(0);
   const [history, setHistory] = useState<OAQState[]>(() => [initialState(1)]);
-  const [last, setLast] = useState<{ path: number[]; captured: number[] }>({
-    path: [],
-    captured: [],
-  });
+  const sowing = useSowing();
   const [score, setScore] = useState<[number, number]>([0, 0]);
   const [message, setMessage] = useState('');
   const [confirmExit, setConfirmExit] = useState(false);
@@ -124,31 +122,33 @@ export function OAQLocal() {
       : [t('caroPlayer1'), t('caroPlayer2')];
   const avatars: [string, string] = mode === 'solo' ? [profile.avatar, '🤖'] : ['🙂', '😎'];
   const aiTurn = mode === 'solo' && !state.winner && state.turn === 2;
-  const { selected, playable, tap } = useOAQSelection(state, !state.winner && !aiTurn);
+  const busy = sowing.animating;
+  const { selected, playable, tap } = useOAQSelection(state, !state.winner && !aiTurn && !busy);
+  const shownScore = sowing.frame?.score ?? state.score;
 
   const play = (m: Move) => {
     const r = applyMove(state, m);
     if (!r) return;
-    if (!r.gained) sfx.tap();
-    setLast({ path: r.path, captured: r.captured });
-    setMessage(oaqFeedback(r, t, names[r.state.turn - 1]));
+    sfx.tap();
+    setMessage('');
     setHistory((h) => [...h, r.state]);
+    // replay the sowing, then announce the capture
+    sowing.play(state, r.steps, state.turn, () =>
+      setMessage(oaqFeedback(r, t, names[r.state.turn - 1])),
+    );
   };
 
   useEffect(() => {
-    if (!aiTurn) return;
-    // wait for the previous sowing animation before answering
-    const id = setTimeout(
-      () => {
-        const m = chooseOAQMove(state, level);
-        log.debug('ai move', { m, level });
-        play(m);
-      },
-      700 + last.path.length * 90,
-    );
+    // answer once the previous sowing has been shown
+    if (!aiTurn || busy) return;
+    const id = setTimeout(() => {
+      const m = chooseOAQMove(state, level);
+      log.debug('ai move', { m, level });
+      play(m);
+    }, 600);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [aiTurn, state]);
+  }, [aiTurn, state, busy]);
 
   useEffect(() => {
     if (!state.winner) return;
@@ -172,7 +172,7 @@ export function OAQLocal() {
       if (mode === 'solo') while (k > 0 && h[k].turn !== 1) k--;
       return h.slice(0, k + 1);
     });
-    setLast({ path: [], captured: [] });
+    sowing.skip();
     setMessage('');
   };
 
@@ -180,7 +180,7 @@ export function OAQLocal() {
     const r = round + 1;
     setHistory([initialState(r % 2 === 0 ? 1 : 2)]);
     setRound(r);
-    setLast({ path: [], captured: [] });
+    sowing.skip();
     setMessage('');
   };
 
@@ -188,15 +188,17 @@ export function OAQLocal() {
     state.plies > 0 && !state.winner ? setConfirmExit(true) : navigate('/oanquan');
   useBackHandler(exit);
 
-  const status = state.winner
-    ? ''
-    : aiTurn
-      ? t('caroThinking')
-      : selected !== null
-        ? t('oaqPickDir')
-        : mode === 'solo'
-          ? t('oaqYourTurn')
-          : t('cgTurn', { name: names[state.turn - 1] });
+  const status = busy
+    ? t('oaqSowing')
+    : state.winner
+      ? ''
+      : aiTurn
+        ? t('caroThinking')
+        : selected !== null
+          ? t('oaqPickDir')
+          : mode === 'solo'
+            ? t('oaqYourTurn')
+            : t('cgTurn', { name: names[state.turn - 1] });
 
   let resultTitle = t('draw');
   let win: boolean | undefined;
@@ -228,7 +230,7 @@ export function OAQLocal() {
             <Avatar emoji={avatars[side - 1]} />
             <span className="name">{names[side - 1]}</span>
             <span className="score" data-testid={side === 1 ? 'me-score' : 'opp-score'}>
-              {state.score[side - 1]}
+              {shownScore[side - 1]}
             </span>
           </div>
         ))}
@@ -244,17 +246,17 @@ export function OAQLocal() {
         bottom={1}
         selected={selected}
         playable={playable}
-        path={last.path}
-        captured={last.captured}
-        disabled={!!state.winner || aiTurn}
+        frame={sowing.frame}
+        disabled={!!state.winner || aiTurn || busy}
         onCell={tap}
+        onSkip={sowing.skip}
       />
       <DirButtons selected={selected} bottom={1} onMove={play} />
       <div className="players">
         <button
           className="btn secondary grow"
           onClick={undo}
-          disabled={history.length < 2 || aiTurn || !!state.winner}
+          disabled={history.length < 2 || aiTurn || busy || !!state.winner}
         >
           ↩️ {t('undo')}
         </button>
@@ -268,7 +270,7 @@ export function OAQLocal() {
           onCancel={() => setConfirmExit(false)}
         />
       )}
-      {state.winner && (
+      {state.winner && !busy && (
         <ResultModal
           title={resultTitle}
           win={win}

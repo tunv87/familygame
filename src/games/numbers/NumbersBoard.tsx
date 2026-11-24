@@ -3,7 +3,6 @@ import { sfx } from '../../lib/sound';
 import { JITTER, type Layout } from './logic';
 
 export const COUNTDOWN = 3;
-const HINT_AFTER_MS = 15_000;
 /** Tap target diameter in grid cells: tiles are ≥ 1 - 2·JITTER apart, so this never overlaps. */
 const HIT_SIZE = 1 - 2 * JITTER;
 
@@ -76,7 +75,6 @@ export function NumbersBoard({
   owner,
   me,
   next,
-  round,
   disabled,
   onFind,
 }: {
@@ -84,17 +82,12 @@ export function NumbersBoard({
   owner: Record<string, string>;
   me: string;
   next: number;
-  round: unknown;
+  /** changes every round (kept for callers; the board itself has no timers) */
+  round?: unknown;
   disabled: boolean;
   onFind: (n: number) => void;
 }) {
   const [wrong, setWrong] = useState<number | null>(null);
-  const [hint, setHint] = useState(false);
-  useEffect(() => {
-    setHint(false);
-    const id = setTimeout(() => setHint(true), HINT_AFTER_MS);
-    return () => clearTimeout(id);
-  }, [next, round]);
 
   const tap = (n: number) => {
     if (disabled || owner[n]) return;
@@ -108,27 +101,32 @@ export function NumbersBoard({
     onFind(n);
   };
 
-  // Fit the board (fixed cols:rows aspect) into the available space.
+  // Fit the board into the available space. Layouts are portrait (fewer columns than rows);
+  // on a wide screen (computer, tablet held sideways) the board is turned on its side
+  // (x and y swapped) so it fills the screen. Same numbers, same game, just drawn sideways.
   const wrapRef = useRef<HTMLDivElement>(null);
-  const [width, setWidth] = useState(320);
+  const [box, setBox] = useState({ w: 320, h: 480 });
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const measure = () =>
-      setWidth(Math.floor(Math.min(el.clientWidth, (el.clientHeight * layout.cols) / layout.rows)));
+    const measure = () => setBox({ w: el.clientWidth, h: el.clientHeight });
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [layout.cols, layout.rows]);
-  const cellPx = width / layout.cols;
+  }, []);
+  const sideways = box.w > box.h * 1.15 && layout.rows > layout.cols;
+  const cols = sideways ? layout.rows : layout.cols;
+  const rows = sideways ? layout.cols : layout.rows;
+  const width = Math.floor(Math.min(box.w, (box.h * cols) / rows));
+  const cellPx = width / cols;
 
   return (
     <div className="numbers-wrap" ref={wrapRef}>
       <div
         className="numbers-board"
         data-testid="numbers-board"
-        style={{ width, height: (width * layout.rows) / layout.cols }}
+        style={{ width, height: (width * rows) / cols }}
       >
         {layout.tiles.map((tile) => {
           const who = owner[tile.n];
@@ -137,11 +135,11 @@ export function NumbersBoard({
             <button
               key={tile.n}
               data-testid={`num-${tile.n}`}
-              className={`num ${cls} ${wrong === tile.n ? 'wrong' : ''} ${hint && tile.n === next ? 'hint' : ''}`}
+              className={`num ${cls} ${wrong === tile.n ? 'wrong' : ''}`}
               style={
                 {
-                  left: `${tile.x * 100}%`,
-                  top: `${tile.y * 100}%`,
+                  left: `${(sideways ? tile.y : tile.x) * 100}%`,
+                  top: `${(sideways ? tile.x : tile.y) * 100}%`,
                   // Hit area is as large as the grid allows without overlapping neighbours.
                   width: HIT_SIZE * cellPx,
                   '--rot': `${tile.rotate}deg`,

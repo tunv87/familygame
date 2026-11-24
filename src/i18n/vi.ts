@@ -126,7 +126,7 @@ export const vi = {
   sound: 'Âm thanh',
   music: 'Nhạc nền',
   vibration: 'Rung',
-  aboutSounds: 'Âm thanh: UI SFX (CC0, romainsimon/uisfx).',
+  aboutSounds: 'Âm thanh: UI SFX (miễn phí bản quyền).',
   bigText: 'Chữ to',
   language: 'Ngôn ngữ',
   theme: 'Giao diện',
@@ -193,7 +193,7 @@ export const vi = {
   numbersStory3: 'Mẹo: đừng dò từng ô. Hãy nhìn bao quát cả bảng và nhớ vị trí những số sắp tới.',
   gameNoiTu: 'Nối từ',
   gameNoiTuDesc: 'Nối chữ tiếng Việt, học thêm nghĩa',
-  aboutWords: 'Từ điển Nối từ: Wiktionary (CC BY-SA 4.0), qua kaikki.org.',
+  aboutWords: 'Từ điển Nối từ: dựa trên Wiktionary (CC BY-SA).',
   ntLoading: 'Đang mở từ điển…',
   ntLoadFailed: 'Chưa tải được từ điển. Hãy kết nối mạng rồi thử lại.',
   ntYourTurn: 'Đến lượt bạn!',
@@ -221,6 +221,10 @@ export const vi = {
     'Trò chơi dựa vào một nét đặc biệt của tiếng Việt: mỗi tiếng là một âm tiết, và rất nhiều từ được ghép từ hai tiếng. Người Nhật có trò "shiritori", người nói tiếng Anh có "word chain" – nối theo chữ cái hoặc âm cuối.',
   ntStory3:
     'Từ điển trong game dựa trên Wiktionary (giấy phép CC BY-SA) và có nghĩa tiếng Anh, để các bạn nhỏ ở trong và ngoài nước vừa chơi vừa học thêm từ mới.',
+  oaqSowing: 'Đang rải sỏi… chạm bàn để xem nhanh',
+  ntSuggest: '"{w}" là từ có thật',
+  ntSuggestThanks: 'Cảm ơn bạn! Từ này sẽ được xem để thêm vào từ điển.',
+  ntSuggestFail: 'Chưa gửi được, thử lại sau nhé.',
 } as const;
 
 export type MessageKey = keyof typeof vi;

@@ -3,6 +3,7 @@ import { useT } from '../../i18n';
 import { sfx } from '../../lib/sound';
 import { Avatar } from '../../ui/components';
 import { check, easiestOption, last, type Dict, type Side } from './logic';
+import { canSuggest, isSuggestable, suggestWord } from './suggest';
 
 export const HINTS = 3;
 
@@ -62,7 +63,7 @@ export function Chain({
             {side !== 0 && <Avatar emoji={avatars[side - 1]} />}
             <span className="nt-text">
               <b>{w}</b>
-              <small lang="en">{dict.gloss(w)}</small>
+              <small lang={dict.viGloss(w) ? 'vi' : 'en'}>{dict.gloss(w)}</small>
             </span>
           </li>
         );
@@ -95,12 +96,17 @@ export function AnswerBox({
   const t = useT();
   const [text, setText] = useState('');
   const [error, setError] = useState('');
+  // a refused word the player may report as real: null, the word, or 'sent' / 'failed'
+  const [unknown, setUnknown] = useState<string | null>(null);
+  const [report, setReport] = useState<'' | 'sent' | 'failed'>('');
   const inputRef = useRef<HTMLInputElement>(null);
   const prev = last(chain[chain.length - 1]);
 
   useEffect(() => {
     setText('');
     setError('');
+    setUnknown(null);
+    setReport('');
     if (enabled) inputRef.current?.focus({ preventScroll: true });
   }, [chain.length, enabled]);
 
@@ -115,6 +121,8 @@ export function AnswerBox({
     }
     sfx.bad();
     const typed = `${prev} ${text.trim().split(/\s+/).slice(-1)[0]}`;
+    setUnknown(v.reason === 'unknown' && canSuggest && isSuggestable(typed) ? typed : null);
+    setReport('');
     setError(
       v.reason === 'empty'
         ? ''
@@ -152,6 +160,8 @@ export function AnswerBox({
           onChange={(e) => {
             setText(e.target.value);
             setError('');
+            setUnknown(null);
+            setReport('');
           }}
           placeholder={t('ntPlaceholder')}
           aria-label={t('ntPlaceholder')}
@@ -169,6 +179,23 @@ export function AnswerBox({
       <div className="nt-error" data-testid="nt-error" role="status">
         {error}
       </div>
+      {unknown && (
+        <div className="nt-report">
+          {report === 'sent' ? (
+            <span data-testid="nt-report-thanks">🙏 {t('ntSuggestThanks')}</span>
+          ) : (
+            <button
+              type="button"
+              className="btn secondary small"
+              data-testid="nt-report"
+              onClick={async () => setReport((await suggestWord(unknown)) ? 'sent' : 'failed')}
+            >
+              🙋 {t('ntSuggest', { w: unknown })}
+            </button>
+          )}
+          {report === 'failed' && <span className="muted">{t('ntSuggestFail')}</span>}
+        </div>
+      )}
       <div className="players">
         <button
           type="button"

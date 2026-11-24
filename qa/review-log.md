@@ -105,3 +105,34 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | LG-25 | Chơi thử thấy máy mức Dễ dùng từ khó ("sĩ phu"). Thử chọn tự động theo độ phổ biến của từng tiếng thì lọt "nạn nhân", "sống thử", "an tử": không dùng được. Chuyển sang danh sách chọn tay (≈ 900 từ theo chủ đề: gia đình, trường lớp, con vật, đồ ăn, thiên nhiên, đồ chơi, Tết…), có nghĩa tiếng Anh cho từ Wiktionary chưa có. |
 
 | CR-06 (run 12) | Lỗi test lần 2, khi chạy song song nặng: vòng Back/Forward lùi quá trang đầu ra `about:blank`, rồi Forward tải lại cả app và Playwright chờ sự kiện "load" không đến trong 90 giây (trang được lấy lại từ bfcache hoặc máy quá tải). Ảnh lúc lỗi: app hiển thị bình thường; chạy riêng 8/8 pass. Người chơi không thể lùi ra khỏi app, nên test được sửa cho đúng kịch bản: bấm nhanh trong app, không chờ từng trang tải xong, rồi kiểm tra không trắng màn hình và không lỗi. |
+
+## Review lần 9 – bỏ gợi ý, v2.7 → v2.8
+
+| Case         | Lý do                                                                                                                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-06, UX-16 | Chủ dự án yêu cầu bỏ gợi ý ở Tìm số (số tiếp theo sáng sau 15 giây) và Cờ gánh (quân đi được, điểm đến). Riêng khi bị Mở, Cờ gánh vẫn tô sáng quân và điểm bắt buộc (chủ dự án chọn). UX-17 giữ nguyên. |
+
+## Review lần 10 – giao diện máy tính, v2.8 → v2.9
+
+| Case  | Lý do                                                                                                                                                                                                                                                                                                |
+| ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UI-12 | Chủ dự án chơi trên laptop: màn chơi quá nhỏ (Cờ gánh, Ca rô, Tìm số). Nguyên nhân: bố cục một cột của điện thoại + cỡ nút máy tính bảng (80 px) trên màn hình thấp. UI-01…UI-08 chỉ kiểm tra "không tràn, nằm trọn" nên không bắt được lỗi "quá nhỏ". Thêm UI-12 đo tỉ lệ bàn chơi so với màn hình. |
+
+## Review lần 11 – Ô ăn quan diễn từng bước, v2.9 → v3.0
+
+| Case         | Lý do                                                                                                                                                                                                                                                     |
+| ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-20, LG-26 | Chủ dự án: hiệu ứng rải sỏi không rõ. Nước đi giờ được diễn từng bước; test kiểm tra bàn tay ✋ hiện khi rải, chạm để xem nhanh, và việc diễn lại khớp tuyệt đối với kết quả của luật. UX-21/UX-22 chờ lâu hơn vì máy và người chơi online đợi diễn xong. |
+
+## Review lần 12 – Nối từ thêm từ, nút "là từ có thật", v3.0 → v3.1
+
+| Case          | Lý do                                                                                                                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LG-27         | Thêm ~9.000 từ từ Wiktionary tiếng Việt (CC BY-SA), lọc bỏ từ cũ, phương ngữ, thông tục và nội dung không hợp trẻ em. Lọc vẫn để lọt vài từ thô ("cầu tõm"), nên các từ này chỉ được chấp nhận khi người chơi gõ; máy và gợi ý không bao giờ dùng. |
+| UX-27, SEC-09 | Nút "là từ có thật" gửi đúng từ (không tên, không mã người chơi trong bản ghi). Rules chỉ cho tạo mới, giới hạn định dạng, không cho đọc. Chính sách quyền riêng tư được cập nhật.                                                                 |
+
+## Review lần 13 – nhạc nền tự phối, v3.1 → v3.2
+
+| Case  | Lý do                                                                                                                                                                                                                                                                         |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AU-10 | Chủ dự án: nhạc nền đơn âm nghe chán. Nhạc mới 4 lớp (giai điệu gảy kiểu đàn tranh/luyến đàn bầu hoặc chuông, hợp âm nền, bè trầm, bộ gõ mõ/lắc/trống), 3 bài. Phần sáng tác tách riêng (musicScore.ts) để test tự động; chất lượng nghe do chủ dự án duyệt qua file thu thử. |

@@ -120,7 +120,7 @@ export const en: Record<MessageKey, string> = {
   sound: 'Sound',
   music: 'Music',
   vibration: 'Vibration',
-  aboutSounds: 'Sounds: UI SFX (CC0, romainsimon/uisfx).',
+  aboutSounds: 'Sounds: UI SFX (free to use).',
   bigText: 'Large text',
   language: 'Language',
   theme: 'Theme',
@@ -191,7 +191,7 @@ export const en: Record<MessageKey, string> = {
     "Tip: don't check square by square. Take in the whole board and remember where the next few numbers are.",
   gameNoiTu: 'Word Chain',
   gameNoiTuDesc: 'Vietnamese word chain – learn as you play',
-  aboutWords: 'Word Chain dictionary: Wiktionary (CC BY-SA 4.0), via kaikki.org.',
+  aboutWords: 'Word Chain dictionary: based on Wiktionary (CC BY-SA).',
   ntLoading: 'Opening the dictionary…',
   ntLoadFailed: 'Could not load the dictionary. Connect to the internet and try again.',
   ntYourTurn: 'Your turn!',
@@ -220,4 +220,8 @@ export const en: Record<MessageKey, string> = {
     'It relies on something special about Vietnamese: every syllable is a word on its own, and a great many words are made of two syllables. Japan has a similar game called "shiritori", and English speakers play "word chain".',
   ntStory3:
     'The dictionary in this game comes from Wiktionary (CC BY-SA licence) and shows the English meaning of every word, so children in Vietnam and abroad can learn new words as they play.',
+  oaqSowing: 'Sowing… tap the board to skip',
+  ntSuggest: '"{w}" is a real word',
+  ntSuggestThanks: 'Thank you! We will look at adding this word.',
+  ntSuggestFail: 'Could not send it, please try later.',
 };

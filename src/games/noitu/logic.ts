@@ -12,13 +12,16 @@
 
 export type Side = 1 | 2;
 export type Tier = 0 | 1 | 2 | 3;
-export type Row = [word: string, gloss: string, tier: Tier];
+/** `viGloss` = 1: the meaning is in Vietnamese (word from the Vietnamese Wiktionary). */
+export type Row = [word: string, gloss: string, tier: Tier, viGloss?: 1];
 
 export interface Dict {
   size: number;
   has(word: string): boolean;
   gloss(word: string): string;
   tier(word: string): Tier;
+  /** the meaning is in Vietnamese; such words are only accepted from players, never offered */
+  viGloss(word: string): boolean;
   /** all words starting with this syllable */
   from(syllable: string): readonly string[];
 }
@@ -49,9 +52,9 @@ export const first = (w: string) => w.split(' ')[0];
 export const last = (w: string) => w.split(' ').slice(-1)[0];
 
 export function makeDict(rows: readonly Row[]): Dict {
-  const info = new Map<string, { gloss: string; tier: Tier }>();
+  const info = new Map<string, { gloss: string; tier: Tier; vi: boolean }>();
   const byFirst = new Map<string, string[]>();
-  for (const [w, gloss, tier] of rows) {
+  for (const [w, gloss, tier, vi] of rows) {
     const word = normalize(w);
     if (word.split(' ').length !== 2) continue;
     const seen = info.get(word);
@@ -60,7 +63,7 @@ export function makeDict(rows: readonly Row[]): Dict {
       if (tier < seen.tier) seen.tier = tier;
       continue;
     }
-    info.set(word, { gloss, tier });
+    info.set(word, { gloss, tier, vi: vi === 1 });
     const f = first(word);
     const list = byFirst.get(f);
     if (list) list.push(word);
@@ -71,6 +74,7 @@ export function makeDict(rows: readonly Row[]): Dict {
     has: (w) => info.has(normalize(w)),
     gloss: (w) => info.get(normalize(w))?.gloss ?? '',
     tier: (w) => info.get(normalize(w))?.tier ?? 3,
+    viGloss: (w) => info.get(normalize(w))?.vi ?? false,
     from: (s) => byFirst.get(normalize(s)) ?? [],
   };
 }
@@ -136,9 +140,14 @@ export function startWord(
   return pool[Math.floor(rand() * pool.length)];
 }
 
+/** Words the game itself may say (hints, computer, openers): not the accept-only ones. */
+export function offerable(dict: Dict, chain: readonly string[]): string[] {
+  return options(dict, chain).filter((w) => !dict.viGloss(w));
+}
+
 /** The easiest word that follows the chain now (children's words first), or ''. */
 export function easiestOption(dict: Dict, chain: readonly string[], rand = Math.random): string {
-  const opts = options(dict, chain);
+  const opts = offerable(dict, chain);
   for (const max of [0, 1, 2, 3]) {
     const pool = opts.filter((w) => dict.tier(w) <= max);
     if (pool.length) return pool[Math.floor(rand() * pool.length)];

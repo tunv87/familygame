@@ -39,7 +39,7 @@ export function CoGanhBoard({
   useLayoutEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const measure = () => setSide(Math.floor(Math.min(el.clientWidth, el.clientHeight, 640)));
+    const measure = () => setSide(Math.floor(Math.min(el.clientWidth, el.clientHeight, 1000)));
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -82,8 +82,9 @@ export function CoGanhBoard({
             'cg-pt',
             c === 1 ? 'black' : c === 2 ? 'white' : 'empty',
             selected === i ? 'selected' : '',
-            target.has(i) ? 'target' : '',
-            canMove.has(i) && !disabled ? 'movable' : '',
+            // no move hints, except when a Mở forces a capture: then show what must move where
+            forced && target.has(i) ? 'target' : '',
+            forced && canMove.has(i) && !disabled ? 'movable' : '',
             forced && (canMove.has(i) || target.has(i)) ? 'forced' : '',
             flip.has(i) ? 'flip' : '',
             last?.to === i ? 'last' : '',
@@ -104,7 +105,7 @@ export function CoGanhBoard({
               }}
             >
               {c !== 0 && <span className="cg-piece" style={{ width: piece, height: piece }} />}
-              {c === 0 && target.has(i) && (
+              {c === 0 && forced && target.has(i) && (
                 <span className="cg-dot" style={{ width: piece * 0.42, height: piece * 0.42 }} />
               )}
             </button>

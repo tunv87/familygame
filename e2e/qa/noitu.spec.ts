@@ -12,7 +12,9 @@ async function answerWithHint(page: Page) {
   await page.getByTestId('nt-go').click();
 }
 
-test('[UX-24] same device: hint, tone marks required, refusals, giving up', async ({ browser }) => {
+test('[UX-24][UX-27] same device: hint, tone marks required, refusals, giving up', async ({
+  browser,
+}) => {
   const { page, errors } = await openApp(browser);
   await page.goto('/#/noitu/play?mode=local');
   await page.getByTestId('nt-input').waitFor({ timeout: 15_000 });
@@ -25,6 +27,10 @@ test('[UX-24] same device: hint, tone marks required, refusals, giving up', asyn
   await expect(page.getByTestId('nt-error'), '[UX-24] unknown word not refused').toContainText(
     'chưa có trong từ điển',
   );
+  // [UX-27] the player can say it is a real word: only the word is sent for review
+  await page.getByTestId('nt-report').click();
+  await expect(page.getByTestId('nt-report-thanks'), '[UX-27] report not sent').toBeVisible();
+  await evidence(page, 'noitu', 'D2', 'UX-27-report');
   // the hint word without its tone marks is refused, without giving the word away
   await page.getByTestId('nt-hint').click();
   const hinted = await page.getByTestId('nt-input').inputValue();

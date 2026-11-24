@@ -7,6 +7,11 @@ because it is adapted from:
 - **Wiktionary** Vietnamese entries and their English glosses, © Wiktionary contributors,
   CC BY-SA 4.0 / GFDL, via the kaikki.org extraction (https://kaikki.org/dictionary/Vietnamese/).
   Changes: two-syllable words only, filtered for children, glosses shortened.
+- **Vietnamese Wiktionary** (vi.wiktionary.org) entries and their Vietnamese meanings,
+  © Wiktionary contributors, CC BY-SA 4.0 / GFDL, via the kaikki.org extraction
+  (https://kaikki.org/viwiktionary/). Changes: two-syllable words only; old, dialect, slang
+  and unsuitable entries removed; meanings shortened. These words are only accepted from
+  players, never offered by the game.
 - Word commonness ranks computed from **FrequencyWords** by Hermit Dave
   (https://github.com/hermitdave/FrequencyWords, content CC BY-SA 4.0). Only the ranks are used.
 - About 300 everyday words and a hand-picked list of about 900 words for children, with English
