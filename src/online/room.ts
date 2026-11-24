@@ -232,11 +232,23 @@ export async function leaveRoom(code: string, uid: string) {
 
 /** Run a game-state transaction; returns true if our change was committed. */
 export async function transactState<S>(code: string, fn: (s: S) => S | null): Promise<boolean> {
-  const res = await runTransaction(ref(getDb(), `rooms/${code}/state`), (cur: S | null) => {
-    if (cur === null) return cur; // first pass may be null before cache warms; retried by SDK
-    const next = fn(cur);
-    return next === null ? undefined : next;
-  });
+  const run = () =>
+    runTransaction(ref(getDb(), `rooms/${code}/state`), (cur: S | null) => {
+      if (cur === null) return cur; // first pass may be null before cache warms; retried by SDK
+      const next = fn(cur);
+      return next === null ? undefined : next;
+    });
+  let res;
+  try {
+    res = await run();
+  } catch (e) {
+    // The connection dropped while the move was on its way (bad mobile signal): the SDK
+    // aborts with "disconnect". Send it once more instead of losing the player's move.
+    if (!/disconnect/i.test(String(e))) throw e;
+    log.warn('move interrupted by a disconnect, retrying');
+    await new Promise((r) => setTimeout(r, 500));
+    res = await run();
+  }
   return res.committed && res.snapshot.exists();
 }
 
