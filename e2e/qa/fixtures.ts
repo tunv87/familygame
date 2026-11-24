@@ -32,6 +32,22 @@ export const DEVICES: Device[] = [
   { id: 'D10', name: 'Phone landscape', width: 844, height: 390, mobile: true },
   { id: 'D11', name: 'iPad landscape', width: 1366, height: 1024, mobile: true },
 ];
+/**
+ * Which browser the suite runs in (qa/playwright.browsers.config.ts sets QA_PROJECT):
+ * chromium (default, `npm run qa`), mobile-safari, mobile-chrome, firefox-smoke, edge-smoke,
+ * safari-desktop-smoke.
+ */
+export const QA_PROJECT = process.env.QA_PROJECT ?? 'chromium';
+
+// Real browser identities, so the app sees what a phone would send.
+const UA = {
+  iphone:
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1',
+  ipad: 'Mozilla/5.0 (iPad; CPU OS 18_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.1 Mobile/15E148 Safari/604.1',
+  android:
+    'Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Mobile Safari/537.36',
+};
+
 export const PHONES = DEVICES.filter((d) => ['D1', 'D2', 'D3', 'D4', 'D5'].includes(d.id));
 export const deviceById = (id: string) => DEVICES.find((d) => d.id === id)!;
 
@@ -54,11 +70,24 @@ export interface App {
 
 export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App> {
   const d = o.device ?? deviceById('D2');
+  const engine = browser.browserType().name();
+  // Firefox has no mobile emulation; iPhones and iPads get Safari's identity in WebKit,
+  // phones get Android Chrome's in Chromium (desktop sizes keep the browser's own).
+  const mobile = d.mobile && engine !== 'firefox';
+  const ipad = d.id === 'D6' || d.id === 'D7' || d.id === 'D11';
+  const userAgent = !mobile
+    ? undefined
+    : engine === 'webkit'
+      ? ipad
+        ? UA.ipad
+        : UA.iphone
+      : UA.android;
   const ctx = await browser.newContext({
     viewport: { width: d.width, height: d.height },
     deviceScaleFactor: 1,
-    isMobile: d.mobile,
-    hasTouch: d.mobile,
+    isMobile: mobile,
+    hasTouch: mobile,
+    userAgent,
     locale: o.lang === 'en' ? 'en-US' : 'vi-VN',
     baseURL: BASE,
     storageState: { cookies: [], origins: [] },
@@ -82,8 +111,16 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
   const page = await ctx.newPage();
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  // remember which address failed, to name it in the "Failed to load resource" error below
+  let lastFailed = '';
+  page.on('requestfailed', (r) => {
+    lastFailed = `${r.url().slice(0, 100)} ${r.failure()?.errorText ?? ''}`;
+  });
   page.on('console', (m) => {
-    if (m.type() === 'error') errors.push(`console.error: ${m.text()}`);
+    if (m.type() === 'error')
+      errors.push(
+        `console.error: ${m.text()}${/Failed to load resource/.test(m.text()) && lastFailed ? ` (${lastFailed})` : ''}`,
+      );
     // Firebase reports rejected writes as warnings; for the app they are failures
     else if (/permission_denied/i.test(m.text())) errors.push(`denied: ${m.text()}`);
   });
@@ -92,7 +129,8 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
 
 /** Saves a compressed screenshot as evidence: qa/evidence/screens/<theme>/<device>/<name>.jpg */
 export async function evidence(page: Page, theme: string, device: string, name: string) {
-  const path = join(EVIDENCE, 'screens', theme, device, `${name}.jpg`);
+  const dir = QA_PROJECT === 'chromium' ? 'screens' : `screens-${QA_PROJECT}`;
+  const path = join(EVIDENCE, dir, theme, device, `${name}.jpg`);
   mkdirSync(dirname(path), { recursive: true });
   await page.screenshot({ path, type: 'jpeg', quality: 60 });
 }

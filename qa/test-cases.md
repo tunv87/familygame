@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.2** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.3** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -133,3 +133,17 @@ Phiên bản: **v3.2** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | SEC-07 | P2      | Dữ liệu phòng chỉ gồm thông tin cần cho game (mã phòng 4 số có thể bị dò) | Rules từ chối mọi trường lạ (email, số điện thoại…); rủi ro dò mã được ghi nhận và chấp nhận vì phòng chỉ chứa biệt danh + nước đi, hết hạn sau 24 giờ |
 | SEC-08 | P1      | Loại game trong rules                                                     | Chấp nhận `coganh`, `oanquan`, `noitu`, từ chối game lạ                                                                                                |
 | SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                       |
+
+## BR – Trình duyệt
+
+Chạy trong Chrome (máy tính, mỗi lần `npm run qa`) và trên CI (`.github/workflows/browsers.yml`) ở Firefox, Edge, Safari máy tính (smoke), Safari iPhone/iPad và Chrome Android (đầy đủ nhóm UI, UX và các game).
+
+| Mã    | Ưu tiên | Kiểm tra                          | Kết quả mong đợi                                                      |
+| ----- | ------- | --------------------------------- | --------------------------------------------------------------------- |
+| BR-01 | P1      | Mở mọi màn hình                   | Không lỗi, không trắng, không tràn ngang                              |
+| BR-02 | P1      | Font tiếng Việt                   | Chữ dùng Nunito; trình duyệt tải được chữ có dấu (Ô, ă, ỗ, ữ, ặ)      |
+| BR-03 | P1      | Một nước đi mỗi game              | Ca rô, Cờ gánh, Ô ăn quan (cả xem nhanh), Tìm số đều chơi được        |
+| BR-04 | P1      | Gõ tiếng Việt có dấu trong Nối từ | Gõ từng phím, từ được nhận đúng                                       |
+| BR-05 | P2      | Âm thanh                          | Sau lần chạm đầu, tiếng đếm ngược phát                                |
+| BR-06 | P1      | Kích thước bàn chơi               | Máy tính: cao > 75% màn hình; điện thoại: rộng > 85%                  |
+| BR-07 | P1      | Phòng online 2 người              | Tạo, vào phòng, nước đi đồng bộ, không lỗi và không tải tài nguyên lạ |

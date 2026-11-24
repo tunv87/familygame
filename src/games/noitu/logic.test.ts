@@ -153,6 +153,14 @@ describe("[LG-25] Nối từ children's words", () => {
       expect(['con gà', 'con chó']).toContain(easiestOption(kd, ['gà con', 'con mèo', 'mèo con']));
     }
     expect(easiestOption(kd, ['x mướp'])).toBe('');
+    // a hint avoids dead ends when it can: "con người" cannot be continued, "con mèo" can
+    const dd = makeDict([
+      ['gà con', 'chick', 0],
+      ['con người', 'human', 0],
+      ['con mèo', 'cat', 1],
+      ['mèo con', 'kitten', 1],
+    ]);
+    for (let i = 0; i < 20; i++) expect(easiestOption(dd, ['gà con'], Math.random)).toBe('con mèo');
   });
   it("children's games open with a children's word that is easy to continue", () => {
     // "gà con" → con mèo, con gà, con chó (3 children's words)
