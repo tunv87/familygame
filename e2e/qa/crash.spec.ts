@@ -301,3 +301,30 @@ test('[CR-12] joining by link with a saved name has no rejected writes', async (
   ).toHaveCount(0);
   expect([...a.errors, ...b.errors], '[CR-12] errors / rejected writes').toEqual([]);
 });
+
+test('[CR-16] if the app itself cannot load: one automatic reload, then a clear message', async ({
+  browser,
+}) => {
+  const { page } = await openApp(browser);
+  let blocked = 0;
+  // the app module fails to download (e.g. a new version replaced it, or the network dropped)
+  await page.route(/\/src\/app\/App\.tsx/, (r) => {
+    blocked++;
+    return r.abort();
+  });
+  await page.goto('/');
+  await expect(
+    page.getByTestId('load-error'),
+    '[CR-16] blank screen instead of a message',
+  ).toBeVisible({
+    timeout: 15_000,
+  });
+  expect(blocked, '[CR-16] no automatic reload first').toBeGreaterThanOrEqual(2);
+  await expect(page.getByRole('button', { name: /Tải lại/ })).toBeVisible();
+  // once it can load again, "Reload" brings the app back
+  await page.unroute(/\/src\/app\/App\.tsx/);
+  await page.getByRole('button', { name: /Tải lại/ }).click();
+  await expect(page.getByTestId('game-caro'), '[CR-16] reload did not recover').toBeVisible({
+    timeout: 15_000,
+  });
+});

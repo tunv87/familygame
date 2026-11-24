@@ -63,11 +63,23 @@ function safeStringify(v: unknown): string {
   }
 }
 
+let leaving = false;
+/**
+ * True once the page is being reloaded or closed. Safari and Firefox then fail any module
+ * still loading ("Importing a module script failed"); those are not app errors.
+ */
+export const isLeaving = () => leaving;
+
 /** Capture uncaught errors so they show up on the /debug page (useful on iPhone without devtools). */
 export function installGlobalErrorLogging() {
   const log = createLogger('global');
-  window.addEventListener('error', (e) =>
-    log.error(e.message, { src: e.filename, line: e.lineno }),
-  );
-  window.addEventListener('unhandledrejection', (e) => log.error('Unhandled rejection', e.reason));
+  window.addEventListener('pagehide', () => (leaving = true));
+  window.addEventListener('beforeunload', () => (leaving = true));
+  window.addEventListener('pageshow', () => (leaving = false));
+  window.addEventListener('error', (e) => {
+    if (!leaving) log.error(e.message, { src: e.filename, line: e.lineno });
+  });
+  window.addEventListener('unhandledrejection', (e) => {
+    if (!leaving) log.error('Unhandled rejection', e.reason);
+  });
 }

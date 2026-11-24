@@ -1,6 +1,6 @@
 /** Loads the word list only when Nối từ is opened (it is the biggest asset of the app). */
 import { useEffect, useState } from 'react';
-import { createLogger } from '../../lib/logger';
+import { createLogger, isLeaving } from '../../lib/logger';
 import { makeDict, type Dict, type Row } from './logic';
 
 const log = createLogger('noitu-dict');
@@ -37,7 +37,7 @@ export function useDict(): Loaded | null | 'error' {
     loadDict().then(
       (x) => live && setD(x),
       (e) => {
-        log.error('dictionary failed', String(e));
+        if (!isLeaving()) log.error('dictionary failed', String(e));
         if (live) setD('error');
       },
     );
