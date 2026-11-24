@@ -1,7 +1,9 @@
 import { initializeApp, type FirebaseApp } from 'firebase/app';
 import {
   connectAuthEmulator,
-  getAuth,
+  browserLocalPersistence,
+  indexedDBLocalPersistence,
+  initializeAuth,
   onAuthStateChanged,
   signInAnonymously,
   type Auth,
@@ -44,7 +46,9 @@ function init() {
           appId: env.VITE_FIREBASE_APP_ID,
         },
   );
-  auth = getAuth(app);
+  // initializeAuth instead of getAuth: getAuth also installs the Google sign-in popup helper,
+  // which loads a script from apis.google.com on phones. We only sign in anonymously (B16).
+  auth = initializeAuth(app, { persistence: [indexedDBLocalPersistence, browserLocalPersistence] });
   db = getDatabase(app);
   if (useEmulator) {
     connectAuthEmulator(auth, `http://${emuHost}:9099`, { disableWarnings: true });

@@ -145,13 +145,18 @@ export function offerable(dict: Dict, chain: readonly string[]): string[] {
   return options(dict, chain).filter((w) => !dict.viGloss(w));
 }
 
-/** The easiest word that follows the chain now (children's words first), or ''. */
+/**
+ * The easiest word that follows the chain now, or '': children's words first, and words that
+ * can themselves be continued before dead ends (a hint should not make the next player lose).
+ */
 export function easiestOption(dict: Dict, chain: readonly string[], rand = Math.random): string {
   const opts = offerable(dict, chain);
-  for (const max of [0, 1, 2, 3]) {
-    const pool = opts.filter((w) => dict.tier(w) <= max);
-    if (pool.length) return pool[Math.floor(rand() * pool.length)];
-  }
+  const open = opts.filter((w) => offerable(dict, [...chain, w]).length > 0);
+  for (const pool0 of [open, opts])
+    for (const max of [0, 1, 2, 3]) {
+      const pool = pool0.filter((w) => dict.tier(w) <= max);
+      if (pool.length) return pool[Math.floor(rand() * pool.length)];
+    }
   return '';
 }
 
