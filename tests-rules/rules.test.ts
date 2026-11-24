@@ -8,8 +8,10 @@ import {
   connectDatabaseEmulator,
   get,
   getDatabase,
+  push,
   ref,
   remove,
+  serverTimestamp,
   set,
   update,
   type Database,
@@ -227,5 +229,33 @@ describe('[SEC-08] game types', () => {
     );
     await admin('DELETE', '');
     await denied(set(ref(alice.db, 'rooms/1234'), { ...room(alice.uid), game: 'chess' }));
+  });
+});
+
+describe('[SEC-09] Nối từ word suggestions', () => {
+  it('a signed-in player can send a two-syllable word, nothing else, and nobody can read them', async () => {
+    const alice = await user();
+    const s = push(ref(alice.db, 'suggestions'));
+    await ok(set(s, { word: 'mèo mun', at: serverTimestamp() }));
+    // cannot change or delete a suggestion once sent
+    await denied(set(s, { word: 'mèo con', at: serverTimestamp() }));
+    await denied(remove(s));
+    // only the word and the time; a word of two syllables, at most 30 characters
+    await denied(set(push(ref(alice.db, 'suggestions')), { word: 'mèo', at: serverTimestamp() }));
+    await denied(set(push(ref(alice.db, 'suggestions')), { word: 'a b c', at: serverTimestamp() }));
+    await denied(
+      set(push(ref(alice.db, 'suggestions')), {
+        word: 'mèo mun',
+        at: serverTimestamp(),
+        name: 'Alice',
+      }),
+    );
+    await denied(set(push(ref(alice.db, 'suggestions')), { word: 'mèo mun', at: 1 }));
+    // nobody can read them from the app (the owner reads them in the Firebase console)
+    await denied(get(ref(alice.db, 'suggestions')));
+    // signed-out clients cannot send any
+    const anon = await anonymousDb();
+    await denied(set(push(ref(anon, 'suggestions')), { word: 'mèo mun', at: serverTimestamp() }));
+    await admin('DELETE', '');
   });
 });

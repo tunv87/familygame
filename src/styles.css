@@ -1921,3 +1921,19 @@ input {
     animation: none;
   }
 }
+
+.nt-report {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.85em;
+  text-align: center;
+}
+
+.btn.small {
+  min-height: 44px;
+  padding: 6px 14px;
+  font-size: 0.85em;
+}

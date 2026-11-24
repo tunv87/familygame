@@ -8,6 +8,7 @@ import {
   lose,
   makeDict,
   normalize,
+  offerable,
   options,
   plain,
   play,
@@ -159,13 +160,37 @@ describe("[LG-25] Nối từ children's words", () => {
   });
 });
 
+describe('[LG-27] Nối từ accept-only words', () => {
+  const vd = makeDict([
+    ['học sinh', 'pupil', 1],
+    ['sinh viên', 'student', 1],
+    ['sinh nhai', 'Kiếm sống', 3, 1],
+  ]);
+  it('words with only a Vietnamese meaning are accepted from players', () => {
+    expect(check(vd, ['học sinh'], 'nhai')).toEqual({ ok: true, word: 'sinh nhai' });
+    expect(vd.viGloss('sinh nhai')).toBe(true);
+    expect(vd.viGloss('sinh viên')).toBe(false);
+  });
+  it('but the game never offers them: not as hints, not from the computer', () => {
+    for (let i = 0; i < 20; i++) {
+      expect(easiestOption(vd, ['học sinh'], Math.random)).toBe('sinh viên');
+      for (const lv of ['easy', 'medium', 'hard'] as const)
+        expect(chooseNoiTuWord(vd, initialState('học sinh'), lv, Math.random)).not.toBe(
+          'sinh nhai',
+        );
+    }
+    expect(offerable(vd, ['học sinh', 'sinh viên'])).toEqual([]);
+  });
+});
+
 describe('[LG-23] Nối từ word list', () => {
   const rows = (JSON.parse(readFileSync('src/games/noitu/words.json', 'utf8')) as { w: Row[] }).w;
   const real = makeDict(rows);
   it('is big enough, two syllables, with an English gloss each', () => {
-    expect(real.size).toBeGreaterThan(15000);
-    for (const [w, g, t] of rows) {
+    expect(real.size).toBeGreaterThan(25000);
+    for (const [w, g, t, vi] of rows) {
       expect(w.split(' ')).toHaveLength(2);
+      if (vi) expect(t, `${w}: Vietnamese-meaning words are accept-only (tier 3)`).toBe(3);
       expect(g.length).toBeGreaterThan(0);
       expect([0, 1, 2, 3]).toContain(t);
     }

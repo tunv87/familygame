@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.0** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.1** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -51,6 +51,7 @@ Phiên bản: **v3.0** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | UX-24 | P1      | Nối từ cùng máy                                                                                        | Có từ mở đầu; gợi ý điền từ; gõ thiếu dấu bị nhắc "Gõ có dấu"; từ lạ, từ đã dùng bị báo; chịu thua hiện lý do và từ có thể nối                                                       |
 | UX-25 | P1      | Nối từ với máy                                                                                         | Máy trả lời; hết giờ thì thua và cộng điểm cho máy                                                                                                                                   |
 | UX-26 | P1      | Nối từ online                                                                                          | Từ hiện ở cả 2 máy (từ của mình bên phải); đổi lượt; chịu thua kết thúc ván ở cả 2 máy                                                                                               |
+| UX-27 | P2      | Nối từ: báo "là từ có thật"                                                                            | Từ bị báo chưa có trong từ điển hiện nút gửi; bấm thì gửi đi và cảm ơn                                                                                                               |
 
 ## CR – Chống crash
 
@@ -102,6 +103,7 @@ Phiên bản: **v3.0** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | LG-24 | P1      | Nối từ online                                                 | Đúng lượt, từ được kiểm tra, đồng hồ đặt lại; chỉ người đến lượt được chịu, đối thủ chỉ được xử thắng khi quá giờ + 5 giây; dữ liệu hỏng không crash                               |
 | LG-25 | P1      | Từ cho trẻ em trong Nối từ                                    | > 800 từ chọn tay (không có từ khó như "sĩ phu", "nạn nhân"); máy mức Dễ, Gợi ý, "Có thể nối" dùng từ trẻ em trước; mức Dễ và cùng máy mở ván bằng từ trẻ em có ≥ 3 từ nối tiếp    |
 | LG-26 | P1      | Diễn lại nước đi Ô ăn quan                                    | Diễn lại từng bước (bốc, thả, ăn) ra đúng bàn và điểm cuối cùng qua 50 ván ngẫu nhiên; điểm cộng đúng lúc ăn                                                                       |
+| LG-27 | P1      | Từ chỉ có nghĩa tiếng Việt (Wiktionary tiếng Việt)            | Người chơi gõ thì được chấp nhận; máy, gợi ý, từ mở đầu không bao giờ dùng; từ điển > 25.000 từ                                                                                    |
 
 ## AU – Âm thanh
 
@@ -129,3 +131,4 @@ Phiên bản: **v3.0** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 | SEC-06 | P1      | Người trong phòng không sửa được thông tin người kia                      | Rules chặn                                                                                                                                             |
 | SEC-07 | P2      | Dữ liệu phòng chỉ gồm thông tin cần cho game (mã phòng 4 số có thể bị dò) | Rules từ chối mọi trường lạ (email, số điện thoại…); rủi ro dò mã được ghi nhận và chấp nhận vì phòng chỉ chứa biệt danh + nước đi, hết hạn sau 24 giờ |
 | SEC-08 | P1      | Loại game trong rules                                                     | Chấp nhận `coganh`, `oanquan`, `noitu`, từ chối game lạ                                                                                                |
+| SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                       |

@@ -221,4 +221,7 @@ export const en: Record<MessageKey, string> = {
   ntStory3:
     'The dictionary in this game comes from Wiktionary (CC BY-SA licence) and shows the English meaning of every word, so children in Vietnam and abroad can learn new words as they play.',
   oaqSowing: 'Sowing… tap the board to skip',
+  ntSuggest: '"{w}" is a real word',
+  ntSuggestThanks: 'Thank you! We will look at adding this word.',
+  ntSuggestFail: 'Could not send it, please try later.',
 };

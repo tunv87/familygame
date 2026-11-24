@@ -72,6 +72,21 @@
           ".validate": false
         }
       }
+    },
+    "suggestions": {
+      "$id": {
+        ".write": "auth != null && !data.exists()",
+        ".validate": "newData.hasChildren(['word', 'at'])",
+        "word": {
+          ".validate": "newData.isString() && newData.val().length <= 30 && newData.val().matches(/^[^ ]+ [^ ]+$/)"
+        },
+        "at": {
+          ".validate": "newData.val() === now"
+        },
+        "$other": {
+          ".validate": false
+        }
+      }
     }
   }
 }

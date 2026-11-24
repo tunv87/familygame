@@ -222,6 +222,9 @@ export const vi = {
   ntStory3:
     'Từ điển trong game dựa trên Wiktionary (giấy phép CC BY-SA) và có nghĩa tiếng Anh, để các bạn nhỏ ở trong và ngoài nước vừa chơi vừa học thêm từ mới.',
   oaqSowing: 'Đang rải sỏi… chạm bàn để xem nhanh',
+  ntSuggest: '"{w}" là từ có thật',
+  ntSuggestThanks: 'Cảm ơn bạn! Từ này sẽ được xem để thêm vào từ điển.',
+  ntSuggestFail: 'Chưa gửi được, thử lại sau nhé.',
 } as const;
 
 export type MessageKey = keyof typeof vi;

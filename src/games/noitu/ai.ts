@@ -5,7 +5,7 @@
  *  - hard:   knows the whole dictionary and prefers words that leave you few answers
  * Returns null when it cannot find a word (it gives up and you win).
  */
-import { last, options, type Dict, type NoiTuState } from './logic';
+import { last, offerable, type Dict, type NoiTuState } from './logic';
 
 export type NoiTuLevel = 'easy' | 'medium' | 'hard';
 
@@ -22,7 +22,7 @@ export function chooseNoiTuWord(
   level: NoiTuLevel,
   rand: () => number = Math.random,
 ): string | null {
-  const all = options(dict, s.chain);
+  const all = offerable(dict, s.chain);
   const kids = level === 'easy' ? all.filter((w) => dict.tier(w) === 0) : [];
   if (kids.length) return kids[Math.floor(rand() * kids.length)];
   const known = all.filter((w) =>
@@ -37,7 +37,9 @@ export function chooseNoiTuWord(
   // hard: leave the opponent as few common answers as possible
   const used = new Set([...s.chain]);
   const replies = (w: string) =>
-    dict.from(last(w)).filter((x) => x !== w && !used.has(x) && dict.tier(x) <= 2).length;
+    dict
+      .from(last(w))
+      .filter((x) => x !== w && !used.has(x) && dict.tier(x) <= 2 && !dict.viGloss(x)).length;
   let best: string[] = [];
   let bestN = Infinity;
   for (const w of known) {

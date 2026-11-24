@@ -123,3 +123,10 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | Case         | Lý do                                                                                                                                                                                                                                                     |
 | ------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | UX-20, LG-26 | Chủ dự án: hiệu ứng rải sỏi không rõ. Nước đi giờ được diễn từng bước; test kiểm tra bàn tay ✋ hiện khi rải, chạm để xem nhanh, và việc diễn lại khớp tuyệt đối với kết quả của luật. UX-21/UX-22 chờ lâu hơn vì máy và người chơi online đợi diễn xong. |
+
+## Review lần 12 – Nối từ thêm từ, nút "là từ có thật", v3.0 → v3.1
+
+| Case          | Lý do                                                                                                                                                                                                                                              |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LG-27         | Thêm ~9.000 từ từ Wiktionary tiếng Việt (CC BY-SA), lọc bỏ từ cũ, phương ngữ, thông tục và nội dung không hợp trẻ em. Lọc vẫn để lọt vài từ thô ("cầu tõm"), nên các từ này chỉ được chấp nhận khi người chơi gõ; máy và gợi ý không bao giờ dùng. |
+| UX-27, SEC-09 | Nút "là từ có thật" gửi đúng từ (không tên, không mã người chơi trong bản ghi). Rules chỉ cho tạo mới, giới hạn định dạng, không cho đọc. Chính sách quyền riêng tư được cập nhật.                                                                 |

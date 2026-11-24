@@ -5,7 +5,7 @@ import { framesOf } from './useSowing';
 describe('[LG-26] Ô ăn quan move replay', () => {
   it('replaying the steps ends on the same board and score as the move itself', () => {
     let seed = 9;
-    const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+    const rand = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
     let checked = 0;
     for (let g = 0; g < 50; g++) {
       let s = initialState();
