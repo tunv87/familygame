@@ -7,7 +7,7 @@ export default defineConfig({
   timeout: 600_000,
   workers: 1,
   reporter: 'list',
-  use: { baseURL: 'http://127.0.0.1:5175/' },
+  use: { baseURL: 'http://127.0.0.1:5175/', actionTimeout: 30_000 },
   webServer: {
     command: 'vite --port 5175 --strictPort --host 127.0.0.1',
     url: 'http://127.0.0.1:5175/',

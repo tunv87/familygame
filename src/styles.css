@@ -1748,7 +1748,7 @@ input {
     grid-column: 1 / -1;
   }
 
-  .screen.game:not(.tight) > :is(.cg-wrap, .caro-wrap, .oaq-wrap, .nt-chain) {
+  .screen.game:not(.tight) > :is(.cg-wrap, .caro-wrap, .oaq-wrap, .nt-chain, .cn-wrap) {
     grid-column: 2;
     grid-row: 2 / -1;
     min-height: 0;
@@ -1936,4 +1936,135 @@ input {
   min-height: 44px;
   padding: 6px 14px;
   font-size: 0.85em;
+}
+
+/* ---------- Cờ cá ngựa ---------- */
+.cn-wrap {
+  flex: 1;
+  min-height: 260px;
+  container-type: size;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cn-board {
+  width: min(100cqw, 100cqh);
+  height: min(100cqw, 100cqh);
+  background: var(--cg-board, #f6e7c8);
+  border-radius: 14px;
+  border: 3px solid var(--border);
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.cn-cell {
+  stroke: rgba(0, 0, 0, 0.25);
+  stroke-width: 0.04;
+}
+
+.cn-step {
+  font-size: 0.48px;
+  font-weight: 900;
+  text-anchor: middle;
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.cn-horse {
+  transition: transform 0.35s ease-in-out;
+}
+
+.cn-horse.can {
+  cursor: pointer;
+}
+
+.cn-horse-face {
+  font-size: 0.55px;
+  text-anchor: middle;
+  fill: #fff;
+  pointer-events: none;
+}
+
+.cn-glow {
+  fill: rgba(255, 214, 0, 0.55);
+  stroke: #ffb703;
+  stroke-width: 0.08;
+  animation: cn-pulse 0.9s ease-in-out infinite alternate;
+}
+
+@keyframes cn-pulse {
+  from {
+    opacity: 0.45;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.cn-last {
+  opacity: 0.5;
+}
+
+.cn-players {
+  flex-wrap: wrap;
+}
+
+.cn-players > .player {
+  flex: 1 1 40%;
+}
+
+.cn-controls {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.cn-die {
+  width: var(--tap, 48px);
+  height: var(--tap, 48px);
+  flex: none;
+}
+
+.cn-die-bg {
+  fill: #fff;
+  stroke: var(--border);
+  stroke-width: 0.12;
+}
+
+.cn-pip {
+  fill: #222;
+}
+
+.cn-die.rolling {
+  animation: cn-shake 0.15s linear infinite;
+}
+
+@keyframes cn-shake {
+  0% {
+    transform: rotate(-12deg);
+  }
+  50% {
+    transform: rotate(12deg);
+  }
+  100% {
+    transform: rotate(-12deg);
+  }
+}
+
+.lobby-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cn-horse,
+  .cn-glow,
+  .cn-die.rolling {
+    transition: none;
+    animation: none;
+  }
 }

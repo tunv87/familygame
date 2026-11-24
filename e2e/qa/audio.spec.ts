@@ -39,18 +39,21 @@ test('[AU-03] results: win, draw and new record each have their sound', async ({
   await page.goto('/#/caro/play?mode=local&size=3');
   for (const i of [0, 3, 1, 4, 2]) await page.getByTestId(`cell-${i}`).click();
   await expect(page.getByTestId('result-title')).toBeVisible();
-  expect(await played(page), '[AU-03] win').toContain('win');
+  // the sound plays in an effect after the dialog is drawn: give it a moment
+  await expect.poll(() => played(page), { message: '[AU-03] win' }).toContain('win');
   await page.getByTestId('play-again').click();
   // X O X / X O O / O X X → draw (player 2 starts this round)
   for (const i of [0, 1, 2, 4, 3, 5, 7, 6, 8]) await page.getByTestId(`cell-${i}`).click();
   await expect(page.getByTestId('result-title')).toHaveText(/Hoà/);
-  expect(await played(page), '[AU-03] draw').toContain('draw');
+  // the sound plays in an effect after the dialog is drawn: give it a moment
+  await expect.poll(() => played(page), { message: '[AU-03] draw' }).toContain('draw');
   await page.goto('/#/numbers/play?mode=practice&level=easy');
   await page.reload();
   await waitCountdown(page);
   for (let n = 1; n <= 30; n++) await page.getByTestId(`num-${n}`).click();
   await expect(page.getByTestId('result-title')).toHaveText('Kỷ lục mới! 🏆');
-  expect(await played(page), '[AU-03] record').toContain('record');
+  // the sound plays in an effect after the dialog is drawn: give it a moment
+  await expect.poll(() => played(page), { message: '[AU-03] record' }).toContain('record');
 });
 
 test('[AU-04] small feedback is silent: taps, right/wrong numbers and moves make no sound', async ({

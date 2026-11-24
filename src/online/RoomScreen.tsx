@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { CaNguaOnline } from '../games/cangua/CaNguaOnline';
 import { CaroOnline } from '../games/caro/CaroOnline';
 import { CoGanhOnline } from '../games/coganh/CoGanhOnline';
 import { NoiTuOnline } from '../games/noitu/NoiTuOnline';
@@ -13,7 +14,7 @@ import { shareInvite } from '../lib/native';
 import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
 import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
-import type { Room, RoomPlayer } from './types';
+import { maxPlayers, type Room, type RoomPlayer } from './types';
 
 const log = createLogger('roomscreen');
 
@@ -84,21 +85,23 @@ export function RoomScreen() {
     if (room && uid && !isMember && !leaving.current) navigate(`/join/${code}`, { replace: true });
   }, [room, uid, isMember, code, navigate]);
 
-  // Host starts the game once both players are in, and starts rematches.
+  // Host starts the game once both players are in (Cờ cá ngựa: when the host taps Start),
+  // and starts rematches.
+  const multi = room?.game === 'cangua';
   useEffect(() => {
     if (!room || !isHost) return;
     const count = Object.keys(players).length;
-    if (room.status === 'waiting' && count === 2) {
+    if (room.status === 'waiting' && count === 2 && !multi) {
       startGame(room).catch((e) => log.error('start failed', e));
-    } else if (room.status === 'playing' && count === 2) {
+    } else if (room.status === 'playing' && count >= 2) {
       const r = room.rematch ?? {};
       if (Object.keys(players).every((u) => r[u]))
         startRematch(room).catch((e) => log.error('rematch failed', e));
     }
-  }, [room, isHost, players]);
+  }, [room, isHost, players, multi]);
 
   // Sound cue when the friend arrives.
-  const oppCount = oppEntry ? 1 : 0;
+  const oppCount = Object.keys(players).length - 1;
   useEffect(() => {
     if (oppCount) sfx.good();
   }, [oppCount]);
@@ -120,7 +123,9 @@ export function RoomScreen() {
             ? t('gameOAQ')
             : room?.game === 'noitu'
               ? t('gameNoiTu')
-              : t('gameCaro');
+              : room?.game === 'cangua'
+                ? t('gameCaNgua')
+                : t('gameCaro');
     const text = t('shareText', { game, code });
     if (await shareInvite({ title: t('appName'), text, url })) return;
     try {
@@ -142,7 +147,9 @@ export function RoomScreen() {
             ? t('gameOAQ')
             : room?.game === 'noitu'
               ? t('gameNoiTu')
-              : t('online');
+              : room?.game === 'cangua'
+                ? t('gameCaNgua')
+                : t('online');
 
   // Android back button: same as the exit button (asks mid-game). Set below once known.
   const backRef = useRef<() => void>(() => void leave());
@@ -184,11 +191,17 @@ export function RoomScreen() {
           <button className="btn" onClick={share} data-testid="share">
             📤 {copied ? t('copied') : t('share')}
           </button>
-          <div className="status-line">⏳ {t('waitingOpponent')}</div>
-          <div className="players" style={{ width: '100%' }}>
-            <PlayerChip player={me} />
-            <PlayerChip player={oppEntry?.[1]} />
-          </div>
+          {multi ? (
+            <MultiLobby room={room} uid={uid} isHost={isHost} />
+          ) : (
+            <>
+              <div className="status-line">⏳ {t('waitingOpponent')}</div>
+              <div className="players" style={{ width: '100%' }}>
+                <PlayerChip player={me} />
+                <PlayerChip player={oppEntry?.[1]} />
+              </div>
+            </>
+          )}
         </div>
       </main>
     );
@@ -229,8 +242,10 @@ export function RoomScreen() {
           📶 {t('offlineSelf')}
         </div>
       )}
-      {!oppEntry && opp && <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>}
-      {oppEntry && !oppEntry[1].online && (
+      {!multi && !oppEntry && opp && (
+        <div className="banner">👋 {t('opponentLeft', { name: opp.name })}</div>
+      )}
+      {!multi && oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
       )}
       {room.game === 'numbers' ? (
@@ -241,6 +256,8 @@ export function RoomScreen() {
         <OAQOnline {...props} />
       ) : room.game === 'noitu' ? (
         <NoiTuOnline {...props} />
+      ) : room.game === 'cangua' ? (
+        <CaNguaOnline {...props} />
       ) : (
         <CaroOnline {...props} />
       )}
@@ -252,5 +269,46 @@ export function RoomScreen() {
         />
       )}
     </main>
+  );
+}
+
+/** Waiting room for games of 2–4 players: who is in, and a Start button for the host. */
+function MultiLobby({ room, uid, isHost }: { room: Room; uid: string; isHost: boolean }) {
+  const t = useT();
+  const [starting, setStarting] = useState(false);
+  const list = Object.entries(room.players ?? {}).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
+  const max = maxPlayers(room.game);
+  const start = () => {
+    setStarting(true);
+    startGame(room).catch((e) => {
+      log.error('start failed', e);
+      setStarting(false);
+    });
+  };
+  return (
+    <>
+      <div className="status-line">
+        ⏳ {list.length < 2 ? t('waitingOpponent') : isHost ? t('cnCanStart') : t('cnWaitHost')}
+      </div>
+      <div className="lobby-grid" data-testid="lobby-players">
+        {Array.from({ length: max }, (_, i) => (
+          <PlayerChip
+            key={list[i]?.[0] ?? `empty-${i}`}
+            player={list[i]?.[1]}
+            active={list[i]?.[0] === uid}
+          />
+        ))}
+      </div>
+      {isHost && (
+        <button
+          className="btn"
+          disabled={list.length < 2 || starting}
+          onClick={start}
+          data-testid="start-game"
+        >
+          ▶️ {t('cnStart', { n: list.length })}
+        </button>
+      )}
+    </>
   );
 }

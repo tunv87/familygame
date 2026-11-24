@@ -224,4 +224,40 @@ export const en: Record<MessageKey, string> = {
   ntSuggest: '"{w}" is a real word',
   ntSuggestThanks: 'Thank you! We will look at adding this word.',
   ntSuggestFail: 'Could not send it, please try later.',
+  gameCaNgua: 'Horse Race (Cờ Cá Ngựa)',
+  gameCaNguaDesc: 'Roll the die, race your horses home',
+  cnIntro:
+    'Online for 2–4 players: make a room and send the code to the family. When everyone is in, the host taps Start.',
+  cnStart: 'Start ({n} players)',
+  cnCanStart: 'Enough players! Wait for more or start now.',
+  cnWaitHost: 'Waiting for the host to start…',
+  cnRoll: 'Roll',
+  cnRolling: 'Rolling…',
+  cnYourRoll: 'Your turn: roll the die',
+  cnPickHorse: 'You rolled {n}: tap a glowing horse',
+  cnRolled: '{name} rolled {n}',
+  cnNoMove: '{name} rolled {n} and cannot move',
+  cnAgain: 'A 6 – roll again!',
+  cnKick: '{name} sent {other}’s horse back to its stable!',
+  cnYouAre: 'You play {color}',
+  cnMoveHorse: 'Move the {color} horse',
+  cnColor0: 'red',
+  cnColor1: 'blue',
+  cnColor2: 'green',
+  cnColor3: 'yellow',
+  cnHelp1:
+    'Everyone has 4 horses in their stable. Take turns rolling the die; a 6 or a 1 brings a horse out onto your start cell.',
+  cnHelp2:
+    'A horse moves exactly the number rolled, clockwise round the board. A 6 gives you another roll.',
+  cnHelp3:
+    'You cannot jump over other horses, land on your own colour, or go past the gate of your home.',
+  cnHelp4: 'Land exactly on a horse of another colour to send it back to its stable!',
+  cnHelp5:
+    'At your gate, a roll of n climbs to step n; on step k only a roll of k+1 climbs on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
+  cnStory1:
+    'Cờ Cá Ngựa comes from Pachisi, played in India for centuries; Mughal emperors are said to have played it on courtyard boards with people as the pieces.',
+  cnStory2:
+    'In England it became Ludo (late 19th century) with a single die, and printed boards travelled the world. In Vietnam it is called Cờ Cá Ngựa – "betting on horses".',
+  cnStory3:
+    'A paper or plastic board with four colours of horses was in almost every home, a favourite at Tết when the whole family gathers: luck, plus a bit of planning to knock out a horse.',
 };

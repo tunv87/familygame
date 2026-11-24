@@ -179,3 +179,16 @@ export async function joinAs(page: Page, code: string, name: string) {
     await page.getByTestId('save-profile').click();
   }
 }
+
+/**
+ * Ô ăn quan: tap a field until it is selected. A tap sent before the game screen is ready (or
+ * during a replay) is ignored, as a real finger tap would be; a person simply taps again.
+ */
+export async function pickField(page: Page, cell: number) {
+  const c = page.getByTestId(`cell-${cell}`);
+  await expect(async () => {
+    if (!/\bselected\b/.test((await c.getAttribute('class')) ?? ''))
+      await c.dispatchEvent('pointerdown');
+    await expect(c).toHaveClass(/\bselected\b/, { timeout: 700 });
+  }).toPass({ timeout: 20_000 });
+}

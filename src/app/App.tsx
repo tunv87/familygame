@@ -6,6 +6,7 @@ import { CoGanhLocal } from '../games/coganh/CoGanhLocal';
 import { CoGanhSetup } from '../games/coganh/CoGanhSetup';
 import { NoiTuLocal } from '../games/noitu/NoiTuLocal';
 import { NoiTuSetup } from '../games/noitu/NoiTuSetup';
+import { CaNguaSetup } from '../games/cangua/CaNguaSetup';
 import { OAQLocal } from '../games/oanquan/OAQLocal';
 import { OAQSetup } from '../games/oanquan/OAQSetup';
 import { NumbersSetup } from '../games/numbers/NumbersSetup';
@@ -91,6 +92,7 @@ export function App() {
         <Route path="/coganh" element={<CoGanhSetup />} />
         <Route path="/coganh/play" element={<CoGanhLocal />} />
         <Route path="/oanquan" element={<OAQSetup />} />
+        <Route path="/cangua" element={<CaNguaSetup />} />
         <Route path="/oanquan/play" element={<OAQLocal />} />
         <Route path="/noitu" element={<NoiTuSetup />} />
         <Route path="/noitu/play" element={<NoiTuLocal />} />

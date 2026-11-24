@@ -7,7 +7,7 @@
  *   fastlane/metadata/android/<vi|en-US>/images/phoneScreenshots/<n>.png
  *   fastlane/metadata/android/<vi|en-US>/images/featureGraphic.png, icon.png
  */
-import { test, type Browser, type Page } from '@playwright/test';
+import { expect, test, type Browser, type Page } from '@playwright/test';
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import captions from './captions.json' with { type: 'json' };
@@ -59,6 +59,22 @@ async function appPage(browser: Browser, device: Device, lang: Lang, theme: Them
     [lang, theme, name] as const,
   );
   return ctx.newPage();
+}
+
+/**
+ * Ô ăn quan: tap a field until it is picked (the direction buttons turn on). A tap that lands
+ * while the page is still starting, or during the sowing replay, does not pick it.
+ */
+async function oaqPick(page: Page, i: number) {
+  const dir = page.getByTestId('dir-right');
+  // the previous move's replay must be over: its end resets the choice
+  await page.getByTestId('cell-0').dispatchEvent('pointerdown'); // skips a running replay
+  await expect(page.getByTestId('oaq-hand')).toHaveCount(0);
+  await page.waitForTimeout(300);
+  await expect(async () => {
+    if (await dir.isDisabled()) await page.getByTestId(`cell-${i}`).dispatchEvent('pointerdown');
+    await expect(dir).toBeEnabled({ timeout: 700 });
+  }).toPass({ timeout: 15_000 });
 }
 
 /** Hide dialogs/confetti so the board itself is visible (e.g. a winning line). */
@@ -171,14 +187,11 @@ async function scene(
     case 'oanquan':
       // one move each, then the player picks a field: the direction buttons light up
       await page.goto('/#/oanquan/play?mode=local');
-      await page.getByTestId('cell-1').dispatchEvent('pointerdown');
+      await oaqPick(page, 1);
       await page.getByTestId('dir-right').click();
-      await page.getByTestId('cell-0').dispatchEvent('pointerdown'); // skip the replay
-      await page.getByTestId('cell-9').dispatchEvent('pointerdown');
+      await oaqPick(page, 9);
       await page.getByTestId('dir-left').click();
-      await page.getByTestId('cell-0').dispatchEvent('pointerdown');
-      await page.waitForTimeout(800);
-      await page.getByTestId('cell-4').dispatchEvent('pointerdown');
+      await oaqPick(page, 4);
       break;
     case 'coganh':
       // Black "opens" a gap, White is forced to Gánh and takes two pieces
