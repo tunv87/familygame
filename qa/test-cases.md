@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.1** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.2** (Nối từ: từ cho trẻ em; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -107,17 +107,18 @@ Phiên bản: **v3.1** (Nối từ: từ cho trẻ em; xem `review-log.md`). M�
 
 ## AU – Âm thanh
 
-| Mã    | Ưu tiên | Kiểm tra                                      | Kết quả mong đợi                                                        |
-| ----- | ------- | --------------------------------------------- | ----------------------------------------------------------------------- |
-| AU-01 | P1      | File âm thanh cho mọi sự kiện, cả 2 giao diện | Có đủ, đúng MP3, mỗi file < 50 KB, có giấy phép CC0, được cache offline |
-| AU-02 | P1      | Đếm ngược 3-2-1                               | 3 tiếng "tick" và 1 tiếng "go"                                          |
-| AU-03 | P1      | Kết thúc ván: thắng, hoà, kỷ lục mới          | Mỗi kết quả có âm riêng                                                 |
-| AU-04 | P1      | Bấm nút, bấm đúng/sai số, máy đi              | Không có âm (chỉ rung)                                                  |
-| AU-05 | P1      | Tắt "Âm thanh"                                | Không phát âm nào                                                       |
-| AU-06 | P1      | Nhạc nền                                      | Mặc định tắt; bật thì phát; giữ lựa chọn sau khi tải lại; tắt thì dừng  |
-| AU-07 | P2      | Đổi giao diện                                 | Tải bộ âm của giao diện mới                                             |
-| AU-08 | P1      | Cờ gánh: bị Mở, gánh                          | Có âm "forced" và "ganh"                                                |
-| AU-09 | P2      | Ô ăn quan: ăn sỏi                             | Có âm "ganh" (ăn quan: "ganhBig")                                       |
+| Mã    | Ưu tiên | Kiểm tra                                      | Kết quả mong đợi                                                                                                              |
+| ----- | ------- | --------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| AU-01 | P1      | File âm thanh cho mọi sự kiện, cả 2 giao diện | Có đủ, đúng MP3, mỗi file < 50 KB, có giấy phép CC0, được cache offline                                                       |
+| AU-02 | P1      | Đếm ngược 3-2-1                               | 3 tiếng "tick" và 1 tiếng "go"                                                                                                |
+| AU-03 | P1      | Kết thúc ván: thắng, hoà, kỷ lục mới          | Mỗi kết quả có âm riêng                                                                                                       |
+| AU-04 | P1      | Bấm nút, bấm đúng/sai số, máy đi              | Không có âm (chỉ rung)                                                                                                        |
+| AU-05 | P1      | Tắt "Âm thanh"                                | Không phát âm nào                                                                                                             |
+| AU-06 | P1      | Nhạc nền                                      | Mặc định tắt; bật thì phát; giữ lựa chọn sau khi tải lại; tắt thì dừng                                                        |
+| AU-07 | P2      | Đổi giao diện                                 | Tải bộ âm của giao diện mới                                                                                                   |
+| AU-08 | P1      | Cờ gánh: bị Mở, gánh                          | Có âm "forced" và "ganh"                                                                                                      |
+| AU-09 | P2      | Ô ăn quan: ăn sỏi                             | Có âm "ganh" (ăn quan: "ganhBig")                                                                                             |
+| AU-10 | P2      | Nhạc nền tự phối                              | 3 bài khác nhịp; mỗi ô nhịp sáng tác lại từ mô-típ, luôn trong thang âm, không lặp y hệt; giao diện Dễ thương ưu tiên bài vui |
 
 ## SEC – Bảo mật
 

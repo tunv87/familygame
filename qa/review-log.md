@@ -130,3 +130,9 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | LG-27         | Thêm ~9.000 từ từ Wiktionary tiếng Việt (CC BY-SA), lọc bỏ từ cũ, phương ngữ, thông tục và nội dung không hợp trẻ em. Lọc vẫn để lọt vài từ thô ("cầu tõm"), nên các từ này chỉ được chấp nhận khi người chơi gõ; máy và gợi ý không bao giờ dùng. |
 | UX-27, SEC-09 | Nút "là từ có thật" gửi đúng từ (không tên, không mã người chơi trong bản ghi). Rules chỉ cho tạo mới, giới hạn định dạng, không cho đọc. Chính sách quyền riêng tư được cập nhật.                                                                 |
+
+## Review lần 13 – nhạc nền tự phối, v3.1 → v3.2
+
+| Case  | Lý do                                                                                                                                                                                                                                                                         |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| AU-10 | Chủ dự án: nhạc nền đơn âm nghe chán. Nhạc mới 4 lớp (giai điệu gảy kiểu đàn tranh/luyến đàn bầu hoặc chuông, hợp âm nền, bè trầm, bộ gõ mõ/lắc/trống), 3 bài. Phần sáng tác tách riêng (musicScore.ts) để test tự động; chất lượng nghe do chủ dự án duyệt qua file thu thử. |
