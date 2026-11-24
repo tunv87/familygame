@@ -1,5 +1,6 @@
-import { Suspense, lazy, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { GameLoadBoundary, Loading, lazyGame, prefetchGames } from './lazyGames';
 import { createLogger } from '../lib/logger';
 import { JoinScreen } from '../online/JoinScreen';
 import { RoomScreen } from '../online/RoomScreen';
@@ -11,44 +12,66 @@ import { getSettings, useSettings } from './settings';
 import { sfx } from '../lib/sound';
 import { startMusic, stopMusic } from '../lib/music';
 import { THEMES } from './theme';
-import { loadGamesConfig } from './gameConfig';
+import { gameStatus, getGamesConfig, loadGamesConfig } from './gameConfig';
 import { GameGate } from '../ui/GameGate';
 import { translate } from '../i18n';
 import { hideSplash, setStatusBarTheme } from '../lib/native';
 
 // Each game is its own download, fetched when it is opened (a hidden game is never loaded).
-const CaroLocal = lazy(() =>
-  import('../games/caro/CaroLocal').then((m) => ({ default: m.CaroLocal })),
+const CaroLocal = lazyGame(
+  'caro',
+  () => import('../games/caro/CaroLocal'),
+  (m) => m.CaroLocal,
 );
-const CaroSetup = lazy(() =>
-  import('../games/caro/CaroSetup').then((m) => ({ default: m.CaroSetup })),
+const CaroSetup = lazyGame(
+  'caro',
+  () => import('../games/caro/CaroSetup'),
+  (m) => m.CaroSetup,
 );
-const CoGanhLocal = lazy(() =>
-  import('../games/coganh/CoGanhLocal').then((m) => ({ default: m.CoGanhLocal })),
+const CoGanhLocal = lazyGame(
+  'coganh',
+  () => import('../games/coganh/CoGanhLocal'),
+  (m) => m.CoGanhLocal,
 );
-const CoGanhSetup = lazy(() =>
-  import('../games/coganh/CoGanhSetup').then((m) => ({ default: m.CoGanhSetup })),
+const CoGanhSetup = lazyGame(
+  'coganh',
+  () => import('../games/coganh/CoGanhSetup'),
+  (m) => m.CoGanhSetup,
 );
-const NoiTuLocal = lazy(() =>
-  import('../games/noitu/NoiTuLocal').then((m) => ({ default: m.NoiTuLocal })),
+const NoiTuLocal = lazyGame(
+  'noitu',
+  () => import('../games/noitu/NoiTuLocal'),
+  (m) => m.NoiTuLocal,
 );
-const NoiTuSetup = lazy(() =>
-  import('../games/noitu/NoiTuSetup').then((m) => ({ default: m.NoiTuSetup })),
+const NoiTuSetup = lazyGame(
+  'noitu',
+  () => import('../games/noitu/NoiTuSetup'),
+  (m) => m.NoiTuSetup,
 );
-const CaNguaSetup = lazy(() =>
-  import('../games/cangua/CaNguaSetup').then((m) => ({ default: m.CaNguaSetup })),
+const CaNguaSetup = lazyGame(
+  'cangua',
+  () => import('../games/cangua/CaNguaSetup'),
+  (m) => m.CaNguaSetup,
 );
-const OAQLocal = lazy(() =>
-  import('../games/oanquan/OAQLocal').then((m) => ({ default: m.OAQLocal })),
+const OAQLocal = lazyGame(
+  'oanquan',
+  () => import('../games/oanquan/OAQLocal'),
+  (m) => m.OAQLocal,
 );
-const OAQSetup = lazy(() =>
-  import('../games/oanquan/OAQSetup').then((m) => ({ default: m.OAQSetup })),
+const OAQSetup = lazyGame(
+  'oanquan',
+  () => import('../games/oanquan/OAQSetup'),
+  (m) => m.OAQSetup,
 );
-const NumbersSetup = lazy(() =>
-  import('../games/numbers/NumbersSetup').then((m) => ({ default: m.NumbersSetup })),
+const NumbersSetup = lazyGame(
+  'numbers',
+  () => import('../games/numbers/NumbersSetup'),
+  (m) => m.NumbersSetup,
 );
-const NumbersSolo = lazy(() =>
-  import('../games/numbers/NumbersSolo').then((m) => ({ default: m.NumbersSolo })),
+const NumbersSolo = lazyGame(
+  'numbers',
+  () => import('../games/numbers/NumbersSolo'),
+  (m) => m.NumbersSolo,
 );
 
 const log = createLogger('nav');
@@ -94,8 +117,10 @@ function useAudioLifecycle() {
   }, [theme]);
 }
 
-function Loading() {
-  return <main className="screen" aria-busy="true" />;
+/** Catches a game that cannot be downloaded; a new page starts with a fresh try. */
+function Boundary({ children }: { children: React.ReactNode }) {
+  const loc = useLocation();
+  return <GameLoadBoundary resetKey={loc.pathname + loc.search}>{children}</GameLoadBoundary>;
 }
 
 export function App() {
@@ -112,110 +137,120 @@ export function App() {
   }, [bigText, lang, theme]);
   useEffect(hideSplash, []);
   useEffect(loadGamesConfig, []);
+  // fetch the playable games in the background, so they open at once and offline
+  useEffect(() => {
+    const id = setTimeout(
+      () => prefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden'),
+      800,
+    );
+    return () => clearTimeout(id);
+  }, []);
   useAudioLifecycle();
   return (
     <HashRouter>
       <RouteLogger />
-      <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={<Hub />} />
-          <Route
-            path="/caro"
-            element={
-              <GameGate game="caro">
-                <CaroSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/caro/play"
-            element={
-              <GameGate game="caro" play>
-                <CaroLocal />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/coganh"
-            element={
-              <GameGate game="coganh">
-                <CoGanhSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/coganh/play"
-            element={
-              <GameGate game="coganh" play>
-                <CoGanhLocal />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/oanquan"
-            element={
-              <GameGate game="oanquan">
-                <OAQSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/cangua"
-            element={
-              <GameGate game="cangua">
-                <CaNguaSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/oanquan/play"
-            element={
-              <GameGate game="oanquan" play>
-                <OAQLocal />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/noitu"
-            element={
-              <GameGate game="noitu">
-                <NoiTuSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/noitu/play"
-            element={
-              <GameGate game="noitu" play>
-                <NoiTuLocal />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/numbers"
-            element={
-              <GameGate game="numbers">
-                <NumbersSetup />
-              </GameGate>
-            }
-          />
-          <Route
-            path="/numbers/play"
-            element={
-              <GameGate game="numbers" play>
-                <NumbersSolo />
-              </GameGate>
-            }
-          />
-          <Route path="/join" element={<JoinScreen />} />
-          <Route path="/join/:code" element={<JoinScreen />} />
-          <Route path="/room/:code" element={<RoomScreen />} />
-          <Route path="/settings" element={<SettingsScreen />} />
-          <Route path="/debug" element={<DebugScreen />} />
-          <Route path="/about" element={<AboutScreen />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </Suspense>
+      <Boundary>
+        <Suspense fallback={<Loading />}>
+          <Routes>
+            <Route path="/" element={<Hub />} />
+            <Route
+              path="/caro"
+              element={
+                <GameGate game="caro">
+                  <CaroSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/caro/play"
+              element={
+                <GameGate game="caro" play>
+                  <CaroLocal />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/coganh"
+              element={
+                <GameGate game="coganh">
+                  <CoGanhSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/coganh/play"
+              element={
+                <GameGate game="coganh" play>
+                  <CoGanhLocal />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/oanquan"
+              element={
+                <GameGate game="oanquan">
+                  <OAQSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/cangua"
+              element={
+                <GameGate game="cangua">
+                  <CaNguaSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/oanquan/play"
+              element={
+                <GameGate game="oanquan" play>
+                  <OAQLocal />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/noitu"
+              element={
+                <GameGate game="noitu">
+                  <NoiTuSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/noitu/play"
+              element={
+                <GameGate game="noitu" play>
+                  <NoiTuLocal />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/numbers"
+              element={
+                <GameGate game="numbers">
+                  <NumbersSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/numbers/play"
+              element={
+                <GameGate game="numbers" play>
+                  <NumbersSolo />
+                </GameGate>
+              }
+            />
+            <Route path="/join" element={<JoinScreen />} />
+            <Route path="/join/:code" element={<JoinScreen />} />
+            <Route path="/room/:code" element={<RoomScreen />} />
+            <Route path="/settings" element={<SettingsScreen />} />
+            <Route path="/debug" element={<DebugScreen />} />
+            <Route path="/about" element={<AboutScreen />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
+      </Boundary>
     </HashRouter>
   );
 }

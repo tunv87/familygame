@@ -76,6 +76,9 @@ export function loadGamesConfig() {
     });
 }
 
+/** the current config, outside React */
+export const getGamesConfig = () => config;
+
 export function gameStatus(c: GamesConfig, game: GameId): Availability {
   return c[game]?.status ?? 'on';
 }

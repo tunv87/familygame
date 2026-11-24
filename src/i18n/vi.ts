@@ -270,6 +270,8 @@ export const vi = {
   watchers: '{n} người đang xem',
   roomEnded: 'Trận đã kết thúc: người chơi đã rời phòng.',
   turnOf: 'Lượt của {name}',
+  gameLoadError: 'Không mở được trò chơi. Kiểm tra mạng rồi tải lại nhé.',
+  reload: 'Tải lại',
 } as const;
 
 export type MessageKey = keyof typeof vi;

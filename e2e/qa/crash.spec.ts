@@ -334,3 +334,29 @@ test('[CR-16] if the app itself cannot load: one automatic reload, then a clear 
     timeout: 15_000,
   });
 });
+
+test('[CR-17] a game that cannot be downloaded shows a message, not a blank screen', async ({
+  browser,
+}) => {
+  const { page, errors } = await openApp(browser);
+  // the Ô ăn quan screens cannot be fetched (offline before they were saved, or replaced by a
+  // new version)
+  await page.route(/\/games\/oanquan\/OAQ(Setup|Local)/, (r) => r.abort());
+  await page.goto('/#/oanquan');
+  await expect(page.getByTestId('game-load-error'), '[CR-17] no message').toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByRole('button', { name: /Tải lại/ })).toBeVisible();
+  // the rest of the app still works
+  await page.unroute(/\/games\/oanquan\/OAQ(Setup|Local)/);
+  await page.goto('/#/caro');
+  await expect(page.getByTestId('mode-local'), '[CR-17] app broken afterwards').toBeVisible();
+  // expected: the failed download, and React reporting the error the boundary caught
+  const unexpected = errors.filter(
+    (e) =>
+      !/ERR_FAILED|Failed to fetch dynamically|error occurred in one of your React components/.test(
+        e,
+      ),
+  );
+  expect(unexpected, '[CR-17] errors').toEqual([]);
+});

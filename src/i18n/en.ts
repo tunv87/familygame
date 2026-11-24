@@ -269,4 +269,6 @@ export const en: Record<MessageKey, string> = {
   watchers: '{n} watching',
   roomEnded: 'The game is over: the players have left the room.',
   turnOf: "{name}'s turn",
+  gameLoadError: 'The game could not be opened. Check your connection and reload.',
+  reload: 'Reload',
 };
