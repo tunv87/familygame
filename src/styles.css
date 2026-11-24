@@ -539,10 +539,6 @@ input {
   animation: shake 0.35s;
 }
 
-.num.hint {
-  outline: 4px dashed var(--primary);
-}
-
 @keyframes shake {
   25% {
     transform: translate(-58%, -50%) rotate(var(--rot));
@@ -824,14 +820,6 @@ input {
   background: var(--p2);
   color: white;
   opacity: 0.55;
-}
-
-.num.hint {
-  outline: none;
-}
-
-.num.hint .num-face {
-  outline: 4px dashed var(--primary);
 }
 
 .exit-btn {

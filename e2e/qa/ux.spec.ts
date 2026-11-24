@@ -124,16 +124,15 @@ test('[UX-05][UX-12] end of a round shows the result, play again and home; repla
   await expect(page.getByTestId('countdown'), '[UX-12] no countdown on replay').toBeVisible();
 });
 
-test('[UX-06] the next number is hinted after 15 s without progress', async ({ browser }) => {
+test('[UX-06] no hint: the next number is never highlighted for you', async ({ browser }) => {
   const { page } = await openApp(browser);
   await page.clock.install();
   await page.goto('/#/numbers/play?mode=practice&level=easy');
   await page.clock.runFor(3000);
   await waitCountdown(page);
-  await expect(page.getByTestId('num-1')).not.toHaveClass(/hint/);
-  await page.clock.runFor(16_000);
-  await expect(page.getByTestId('num-1'), '[UX-06] no hint after 16 s').toHaveClass(/hint/);
-  await evidence(page, 'ux', 'D2', 'UX-06-hint');
+  await page.clock.runFor(30_000);
+  await expect(page.locator('.num.hint'), '[UX-06] a number is hinted').toHaveCount(0);
+  await evidence(page, 'ux', 'D2', 'UX-06-no-hint');
 });
 
 test('[UX-07] undo vs computer removes both moves', async ({ browser }) => {

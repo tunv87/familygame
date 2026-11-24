@@ -105,3 +105,9 @@ Run 02: 52/52 case PASS. Trước khi kết luận, review thêm: soát ảnh ev
 | LG-25 | Chơi thử thấy máy mức Dễ dùng từ khó ("sĩ phu"). Thử chọn tự động theo độ phổ biến của từng tiếng thì lọt "nạn nhân", "sống thử", "an tử": không dùng được. Chuyển sang danh sách chọn tay (≈ 900 từ theo chủ đề: gia đình, trường lớp, con vật, đồ ăn, thiên nhiên, đồ chơi, Tết…), có nghĩa tiếng Anh cho từ Wiktionary chưa có. |
 
 | CR-06 (run 12) | Lỗi test lần 2, khi chạy song song nặng: vòng Back/Forward lùi quá trang đầu ra `about:blank`, rồi Forward tải lại cả app và Playwright chờ sự kiện "load" không đến trong 90 giây (trang được lấy lại từ bfcache hoặc máy quá tải). Ảnh lúc lỗi: app hiển thị bình thường; chạy riêng 8/8 pass. Người chơi không thể lùi ra khỏi app, nên test được sửa cho đúng kịch bản: bấm nhanh trong app, không chờ từng trang tải xong, rồi kiểm tra không trắng màn hình và không lỗi. |
+
+## Review lần 9 – bỏ gợi ý, v2.7 → v2.8
+
+| Case         | Lý do                                                                                                                                                                                                   |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| UX-06, UX-16 | Chủ dự án yêu cầu bỏ gợi ý ở Tìm số (số tiếp theo sáng sau 15 giây) và Cờ gánh (quân đi được, điểm đến). Riêng khi bị Mở, Cờ gánh vẫn tô sáng quân và điểm bắt buộc (chủ dự án chọn). UX-17 giữ nguyên. |

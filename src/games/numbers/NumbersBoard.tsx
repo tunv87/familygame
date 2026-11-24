@@ -3,7 +3,6 @@ import { sfx } from '../../lib/sound';
 import { JITTER, type Layout } from './logic';
 
 export const COUNTDOWN = 3;
-const HINT_AFTER_MS = 15_000;
 /** Tap target diameter in grid cells: tiles are ≥ 1 - 2·JITTER apart, so this never overlaps. */
 const HIT_SIZE = 1 - 2 * JITTER;
 
@@ -76,7 +75,6 @@ export function NumbersBoard({
   owner,
   me,
   next,
-  round,
   disabled,
   onFind,
 }: {
@@ -84,17 +82,12 @@ export function NumbersBoard({
   owner: Record<string, string>;
   me: string;
   next: number;
-  round: unknown;
+  /** changes every round (kept for callers; the board itself has no timers) */
+  round?: unknown;
   disabled: boolean;
   onFind: (n: number) => void;
 }) {
   const [wrong, setWrong] = useState<number | null>(null);
-  const [hint, setHint] = useState(false);
-  useEffect(() => {
-    setHint(false);
-    const id = setTimeout(() => setHint(true), HINT_AFTER_MS);
-    return () => clearTimeout(id);
-  }, [next, round]);
 
   const tap = (n: number) => {
     if (disabled || owner[n]) return;
@@ -137,7 +130,7 @@ export function NumbersBoard({
             <button
               key={tile.n}
               data-testid={`num-${tile.n}`}
-              className={`num ${cls} ${wrong === tile.n ? 'wrong' : ''} ${hint && tile.n === next ? 'hint' : ''}`}
+              className={`num ${cls} ${wrong === tile.n ? 'wrong' : ''}`}
               style={
                 {
                   left: `${tile.x * 100}%`,

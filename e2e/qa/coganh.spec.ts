@@ -9,13 +9,15 @@ const played = (page: import('@playwright/test').Page) =>
 const OPEN = { from: 2, to: 7 };
 const FORCED = { from: 14, to: 8 };
 
-test("[UX-16] tapping a piece shows where it can go; the opponent's pieces are refused", async ({
+test("[UX-16] no move hints: tap a piece, then where it goes; the opponent's pieces are refused", async ({
   browser,
 }) => {
   const { page, errors } = await openApp(browser);
   await page.goto('/#/coganh/play?mode=local');
+  await expect(page.locator('.cg-pt.movable'), '[UX-16] movable pieces are hinted').toHaveCount(0);
   await page.getByTestId('pt-10').click(); // Black (0,2)
-  await expect(page.locator('.cg-pt.target'), '[UX-16] targets of (0,2)').toHaveCount(3);
+  await expect(page.getByTestId('pt-10')).toHaveClass(/selected/);
+  await expect(page.locator('.cg-pt.target'), '[UX-16] targets are hinted').toHaveCount(0);
   await page.getByTestId('pt-0').click(); // another Black piece: the selection moves to it
   await expect(page.getByTestId('pt-0'), '[UX-16] selection did not move').toHaveClass(/selected/);
   await expect(page.locator('.cg-pt.selected'), '[UX-16] two pieces selected').toHaveCount(1);
