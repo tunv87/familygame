@@ -169,28 +169,33 @@ export const vi = {
   oaqHelp5:
     'Hết sỏi trong ô của mình thì lấy 5 viên đã ăn rải lại. Ăn hết 2 quan là hết ván: ai nhiều điểm hơn thì thắng.',
   oaqStory1:
-    'Ô ăn quan là trò chơi dân gian của trẻ em Việt Nam, nhất là ở miền Bắc. Ngày xưa các bạn nhỏ vẽ bàn bằng phấn hay than trên sân gạch, nền đất, rồi dùng sỏi, hạt nhãn, hạt vải làm quân.',
+    'Ngày xưa chưa có điện thoại hay máy tính, các bạn nhỏ chỉ cần một viên phấn và một nắm sỏi là có ngay trò chơi! Kẻ bàn lên sân gạch, nhặt sỏi, hạt nhãn làm quân… thế là chơi say sưa cả buổi chiều.',
   oaqStory2:
-    'Tên gọi rất dễ hiểu: "ô" là những ô vuông, "quan" là ông quan – viên sỏi to ở hai đầu bàn. Dân thì nhiều mà nhỏ, quan thì một mà to: ăn được quan là được nhiều điểm nhất. Hết quan, người chơi hô "hết quan, tàn dân, thu quân, bán ruộng" rồi đếm sỏi.',
+    'Trên bàn có "dân" và có "quan". Dân là những viên sỏi nhỏ, nhiều ơi là nhiều. Quan là viên sỏi to ngồi ở hai đầu bàn: ăn được một ông quan là được tận 10 điểm!',
   oaqStory3:
-    'Ô ăn quan thuộc họ trò chơi "gieo hạt" (mancala) có từ hàng nghìn năm, được chơi ở châu Phi, Trung Đông và châu Á. Trò chơi giúp bé tập đếm, biết tính trước, và là dịp để ông bà kể chuyện ngày xưa.',
+    'Bí mật nhỏ: trẻ em ở châu Phi, Ả Rập và nhiều nơi khác cũng chơi trò rải sỏi giống hệt, từ hàng nghìn năm trước. Mỗi lần rải sỏi là một lần em tập đếm và tính trước đấy!',
+  oaqStoryTitle: 'Những viên sỏi biết "ăn"',
   cgStory1:
-    'Cờ gánh là trò chơi dân gian lâu đời, phổ biến ở miền Trung Việt Nam. Bàn cờ chỉ là 25 điểm kẻ trên đất, quân cờ là sỏi, mảnh sành hay vỏ ốc, nên ai cũng chơi được ngay ngoài sân.',
+    'Em đã thấy các bà, các mẹ gánh hàng ra chợ chưa? Một chiếc đòn gánh trên vai, hai đầu là hai chiếc thúng. Cờ gánh ra đời từ chính hình ảnh ấy!',
   cgStory2:
-    'Tên "gánh" lấy từ hình ảnh chiếc đòn gánh: quân của bạn đứng giữa, hai quân đối phương ở hai bên như hai đầu quang gánh – và bị "gánh" về phe bạn. Quân bị ăn đổi phe chứ không mất đi, nên ván cờ có thể lật ngược rất nhanh.',
+    'Khi quân của em chen vào giữa hai quân đối thủ, hai quân đó bị "gánh" và đổi sang phe em. Quân bị bắt không biến mất mà chỉ đổi màu, nên chỉ một nước đi thông minh là cả ván cờ lật ngược!',
   cgStory3:
-    'Cờ gánh dạy người chơi quan sát và nhìn trước: một nước đi sơ hở có thể "mở" đường cho đối phương. Ông bà, cha mẹ có thể dạy con cháu chỉ trong vài phút.',
+    'Ngày xưa ở miền Trung, các bạn nhỏ kẻ bàn cờ lên mặt đất, lấy sỏi và vỏ ốc làm quân. Hãy rủ ông bà chơi cùng: biết đâu ông bà vẫn còn nhớ vài "chiêu" bí mật!',
+  cgStoryTitle: 'Chiếc đòn gánh kỳ diệu',
   caroStory1:
-    'Cờ ca-rô có tên từ chữ "carreau" trong tiếng Pháp, nghĩa là ô vuông: bao thế hệ học sinh Việt Nam kẻ bàn cờ ngay trên giấy ô li của vở, chơi trong giờ ra chơi.',
+    'Hỏi thử bố mẹ xem: hồi đi học, bố mẹ có hay chơi cờ ca-rô trong giờ ra chơi không? Chỉ cần một trang giấy ô li và một cây bút là có ngay một trận đấu!',
   caroStory2:
-    'Bàn lớn 5 quân thẳng hàng giống trò Gomoku của Nhật Bản, vốn chơi trên bàn cờ vây. Bàn nhỏ 3×3 (tic-tac-toe) là trò rất cổ, có ở nhiều nước trên thế giới.',
+    'Tên "ca-rô" đến từ tiếng Pháp, nghĩa là "ô vuông". Bàn nhỏ 3×3 là trò rất cổ mà trẻ em khắp thế giới đều biết. Bàn lớn thì phải xếp đủ 5 quân, giống trò Gomoku của Nhật Bản.',
   caroStory3:
-    'Mẹo nhỏ: luôn để ý hàng 2–3 quân của đối phương và chặn sớm. Ở bàn lớn, tạo được hai hàng cùng lúc thì đối phương khó chặn kịp.',
+    'Bí kíp của nhà vô địch: luôn để mắt tới hàng quân của đối thủ và chặn thật sớm. Nếu em tạo được hai hàng cùng lúc, đối thủ chỉ chặn được một thôi!',
+  caroStoryTitle: 'Trận đấu trên trang vở',
   numbersStory1:
-    'Trò tìm số lấy cảm hứng từ "bảng Schulte" mà các nhà tâm lý học dùng để luyện sự tập trung: tìm thật nhanh các số theo thứ tự trên một bảng xáo trộn.',
+    'Các con số đang trốn khắp nơi trên bảng! Nhiệm vụ của em là tìm ra chúng theo thứ tự 1, 2, 3… thật nhanh, nhanh hơn cả bạn bè và ông bà.',
   numbersStory2:
-    'Ở Việt Nam, học sinh hay viết các số lung tung lên giấy rồi thi xem ai khoanh được số tiếp theo nhanh hơn. Trò này giúp mắt quét nhanh, nhận biết số, rất hợp để ông bà chơi cùng cháu.',
-  numbersStory3: 'Mẹo: đừng dò từng ô. Hãy nhìn bao quát cả bảng và nhớ vị trí những số sắp tới.',
+    'Trò này giống "bảng Schulte" mà các nhà khoa học dùng để luyện sự tập trung. Học sinh Việt Nam cũng hay viết số lung tung ra giấy rồi thi xem ai khoanh số tiếp theo nhanh hơn.',
+  numbersStory3:
+    'Bí kíp thám tử: đừng dò từng ô một. Hãy nhìn bao quát cả bảng và nhớ chỗ của những số sắp tới. Chơi càng nhiều, mắt em càng tinh!',
+  numbersStoryTitle: 'Đôi mắt thám tử',
   gameNoiTu: 'Nối từ',
   gameNoiTuDesc: 'Nối chữ tiếng Việt, học thêm nghĩa',
   aboutWords: 'Từ điển Nối từ: dựa trên Wiktionary (CC BY-SA).',
@@ -216,11 +221,12 @@ export const vi = {
   ntHelp3: 'Hết giờ, chịu thua, hoặc không nối được là thua. Từ đã dùng thì không được dùng lại.',
   ntHelp4: 'Mỗi ván có 3 lần gợi ý. Dưới mỗi từ có nghĩa tiếng Anh để học thêm.',
   ntStory1:
-    'Nối từ (hay nối chữ) là trò chơi chữ quen thuộc của người Việt, từ giờ ra chơi đến những buổi sinh hoạt tập thể và giờ đây trên mạng xã hội.',
+    'Hãy tưởng tượng mỗi từ là một toa tàu: "con mèo" nối với "mèo con", "mèo con" nối với "con cá"… Đoàn tàu chữ cứ thế dài mãi, ai không nối được là thua!',
   ntStory2:
-    'Trò chơi dựa vào một nét đặc biệt của tiếng Việt: mỗi tiếng là một âm tiết, và rất nhiều từ được ghép từ hai tiếng. Người Nhật có trò "shiritori", người nói tiếng Anh có "word chain" – nối theo chữ cái hoặc âm cuối.',
+    'Trò này rất hợp với tiếng Việt: mỗi tiếng đứng riêng được, và rất nhiều từ ghép từ hai tiếng. Các bạn Nhật Bản có trò "shiritori", các bạn nói tiếng Anh có "word chain".',
   ntStory3:
-    'Từ điển trong game dựa trên Wiktionary (giấy phép CC BY-SA) và có nghĩa tiếng Anh, để các bạn nhỏ ở trong và ngoài nước vừa chơi vừa học thêm từ mới.',
+    'Mỗi từ trong game đều có nghĩa tiếng Anh, nên em vừa chơi vừa học thêm từ mới. Chơi cùng cả nhà, xem ai là "vua từ vựng" nhé!',
+  ntStoryTitle: 'Đoàn tàu chữ',
   oaqSowing: 'Đang rải sỏi… chạm bàn để xem nhanh',
   ntSuggest: '"{w}" là từ có thật',
   ntSuggestThanks: 'Cảm ơn bạn! Từ này sẽ được xem để thêm vào từ điển.',
@@ -256,11 +262,12 @@ export const vi = {
   cnHelp5:
     'Đến cửa chuồng, đổ n thì lên bậc n; đang ở bậc k phải đổ đúng k+1 mới lên tiếp. Ai đưa đủ 4 ngựa lên bậc 3, 4, 5, 6 trước thì thắng.',
   cnStory1:
-    'Cờ cá ngựa bắt nguồn từ trò Pachisi của Ấn Độ, có từ hàng trăm năm trước; tương truyền các vua Mughal từng chơi trên sân lát gạch với người thật làm quân cờ.',
+    'Ngày xửa ngày xưa ở Ấn Độ, người ta chơi một trò tên là Pachisi. Chuyện kể rằng có những vị vua chơi trên sân gạch khổng lồ, dùng người thật làm quân cờ!',
   cnStory2:
-    'Người Anh làm gọn thành trò Ludo (cuối thế kỷ 19) với một con xí ngầu, rồi trò chơi theo bàn cờ in sẵn đi khắp thế giới, đến Việt Nam và được gọi là cờ cá ngựa: "cá" là đặt cược, như xem đua ngựa.',
+    'Trò chơi sang nước Anh và có tên mới là Ludo, rồi đi khắp thế giới. Đến Việt Nam, nó thành cờ cá ngựa, với bốn đàn ngựa đỏ, xanh, lục, vàng chạy đua về đích.',
   cnStory3:
-    'Bàn cờ giấy hay nhựa với bốn màu ngựa từng có mặt ở hầu hết các nhà, là trò quen thuộc ngày Tết khi cả nhà quây quần, vừa may rủi vừa phải tính đường đá ngựa.',
+    'Ngày Tết, cả nhà quây quần bên bàn cờ, ai cũng hồi hộp chờ xí ngầu ra số 6. Đá ngựa bạn về chuồng thì vui lắm, nhưng cẩn thận nhé: ngựa của em cũng có thể bị đá đấy!',
+  cnStoryTitle: 'Cuộc đua của những chú ngựa',
   playCount: '{n} lượt chơi',
   playCountTotal: 'Đã có {n} lượt chơi',
   gameOff: 'Đang bảo trì',

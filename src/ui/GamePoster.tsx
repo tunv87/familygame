@@ -6,6 +6,16 @@ import { useT, type MessageKey } from '../i18n';
 import type { GameId } from '../online/types';
 import { PlayCount } from './PlayCount';
 
+/** The first emoji of "⚫⚪" or "↔️↕️", so each step has one icon. */
+function firstEmoji(s: string) {
+  try {
+    const seg = new Intl.Segmenter(undefined, { granularity: 'grapheme' });
+    return seg.segment(s)[Symbol.iterator]().next().value?.segment ?? s;
+  } catch {
+    return s;
+  }
+}
+
 const CHIPS: [ModeKey, string, MessageKey][] = [
   ['solo', '🤖', 'chipSolo'],
   ['local', '👫', 'chipLocal'],
@@ -67,8 +77,11 @@ export function GamePoster({
         <PlayCount game={game} />
         {story?.length ? (
           <div className="poster-story desk-only">
-            <h3>🏮 {t('posterStory')}</h3>
-            <p>{t(story[0])}</p>
+            <div className="poster-kicker">🏮 {t('posterStory')}</div>
+            <h3>{t(story[0].replace(/Story1$/, 'StoryTitle') as MessageKey)}</h3>
+            {story.map((k) => (
+              <p key={k}>{t(k)}</p>
+            ))}
           </div>
         ) : null}
         {children}
@@ -80,7 +93,7 @@ export function GamePoster({
             {rules.map(([emoji, key]) => (
               <li key={key}>
                 <span className="poster-rule-icon" aria-hidden>
-                  {emoji}
+                  {firstEmoji(emoji)}
                 </span>
                 <span>{t(key)}</span>
               </li>
