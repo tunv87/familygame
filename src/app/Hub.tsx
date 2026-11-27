@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { GAMES, GROUPS } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
+import { ModeChips } from '../ui/GamePoster';
 import { PlayCount } from '../ui/PlayCount';
 import { gameStatus, getGamesConfig, useGamesConfig } from './gameConfig';
 import { usePrefetchGames } from './lazyGames';
@@ -26,7 +27,7 @@ export function Hub() {
     if (taps.current.length >= 5) navigate('/debug');
   };
   return (
-    <main className="screen">
+    <main className="screen hub">
       <TopBar
         noBack
         left={
@@ -72,7 +73,10 @@ export function Hub() {
                   hint={t(g.desc)}
                   off={gameStatus(config, g.id) === 'off' ? t('gameOff') : undefined}
                   onClick={() => navigate(g.path)}
-                />
+                  game={g.id}
+                >
+                  <ModeChips game={g.id} />
+                </Card>
               ))}
             </div>
           </section>
@@ -80,14 +84,26 @@ export function Hub() {
       })}
       {welcome && <Welcome onDone={() => setWelcome(false)} />}
       <div className="grow" />
-      <PlayCount />
-      <Card
-        emoji="🔑"
-        title={t('joinRoom')}
-        hint={t('joinRoomHint')}
-        onClick={() => navigate('/join')}
-        testId="hub-join"
-      />
+      {/* phones: play count and "join a room" at the bottom; computers: a welcome banner on top */}
+      <div className="hub-hero">
+        <div className="hub-intro desk-only">
+          <h2>{t('hubHeroTitle')}</h2>
+          <p>
+            {t('hubHeroText', {
+              n: GAMES.filter((g) => gameStatus(config, g.id) !== 'hidden').length,
+            })}
+          </p>
+        </div>
+        <PlayCount />
+        <Card
+          emoji="🔑"
+          title={t('joinRoom')}
+          hint={t('joinRoomHint')}
+          onClick={() => navigate('/join')}
+          testId="hub-join"
+          className="hub-join"
+        />
+      </div>
     </main>
   );
 }

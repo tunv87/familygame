@@ -166,29 +166,33 @@ export const en: Record<MessageKey, string> = {
   oaqHelp5:
     'If all your squares are empty, put back 5 captured stones. When both mandarins are taken the game ends: most points wins.',
   oaqStory1:
-    "Ô Ăn Quan is a Vietnamese children's folk game, especially loved in the North. Children drew the board with chalk or charcoal on a brick yard or the ground and played with pebbles or longan and lychee seeds.",
+    'Long ago there were no phones or computers – children only needed a piece of chalk and a handful of pebbles! They drew the board on the yard, used stones or longan seeds as pieces… and played all afternoon.',
   oaqStory2:
-    'The name says it all: "ô" means squares and "quan" means mandarin – the big stone at each end. Villagers are many but small; the mandarin is one but big, so capturing it scores the most. When both are gone, players call out "no mandarins, no villagers, gather the stones" and count.',
+    'The board has "villagers" and "mandarins". Villagers are the little stones – lots and lots of them. A mandarin is the big stone at each end: capture one and you win a whole 10 points!',
   oaqStory3:
-    'Ô Ăn Quan belongs to the mancala ("sowing") family of games, played for thousands of years across Africa, the Middle East and Asia. It teaches counting and thinking ahead – and gives grandparents a chance to tell stories of the old days.',
+    'A little secret: children in Africa, Arabia and many other places play almost the same sowing game, and have done for thousands of years. Every time you sow, you practise counting and thinking ahead!',
+  oaqStoryTitle: 'The stones that "eat"',
   cgStory1:
-    'Cờ Gánh is an old folk game from Central Vietnam. The board is just 25 points scratched on the ground and the pieces are pebbles, pottery shards or shells, so anyone can play in the yard.',
+    'Have you seen people carry goods to market on a pole over one shoulder, with a basket at each end? That picture is where Cờ Gánh comes from!',
   cgStory2:
-    '"Gánh" is the carrying pole Vietnamese people balance on one shoulder: your piece stands in the middle and the two enemy pieces on either side are like its two baskets – they are "carried" over to your side. Captured pieces change sides instead of leaving the board, so games can turn around fast.',
+    'When your piece steps in between two enemy pieces, they are "carried" over to your side. Captured pieces never disappear – they just change colour – so one clever move can turn the whole game around!',
   cgStory3:
-    'Cờ Gánh teaches you to watch closely and think ahead: one careless move can "open" the way for your opponent. Grandparents can teach it to grandchildren in a few minutes.',
+    'Long ago in Central Vietnam, children scratched the board on the ground and played with pebbles and shells. Ask your grandparents to play: they may still know a few secret tricks!',
+  cgStoryTitle: 'The magic carrying pole',
   caroStory1:
-    'In Vietnam this game is called "cờ ca-rô", from the French word "carreau" (square): generations of pupils drew the board on the squared paper of their notebooks and played at break time.',
+    'Ask your parents: did they play this game at break time when they were at school? All you need is a page of squared paper and a pen!',
   caroStory2:
-    'Five in a row on the big board is like Japanese Gomoku, traditionally played on a Go board. The small 3×3 game (tic-tac-toe) is very old and is played all over the world.',
+    'Its Vietnamese name, "ca-rô", comes from the French word for "square". The small 3×3 game is very old and children all over the world know it. On the big board you need 5 in a row, like Japanese Gomoku.',
   caroStory3:
-    "Tip: always watch for two or three of your opponent's pieces in a row and block early. On the big board, make two lines at once – your opponent can only block one.",
+    "The champion's secret: always watch your opponent's lines and block them early. If you make two lines at once, your opponent can only block one!",
+  caroStoryTitle: 'The battle in the notebook',
   numbersStory1:
-    'Find the Number is inspired by the "Schulte table", which psychologists use to train attention: find the numbers in order, as fast as you can, on a shuffled grid.',
+    'The numbers are hiding all over the board! Your mission: find them in order – 1, 2, 3… – faster than your friends and grandparents.',
   numbersStory2:
-    'Vietnamese pupils play a paper version: scribble numbers all over a page, then race to circle the next one. It trains quick eyes and number sense – perfect for grandparents and grandchildren.',
+    'This game is like the "Schulte table" scientists use to train attention. Vietnamese pupils also scribble numbers all over a page and race to circle the next one.',
   numbersStory3:
-    "Tip: don't check square by square. Take in the whole board and remember where the next few numbers are.",
+    "A detective's tip: don't check square by square. Look at the whole board and remember where the next numbers are. The more you play, the sharper your eyes get!",
+  numbersStoryTitle: 'Detective eyes',
   gameNoiTu: 'Word Chain',
   gameNoiTuDesc: 'Vietnamese word chain – learn as you play',
   aboutWords: 'Word Chain dictionary: based on Wiktionary (CC BY-SA).',
@@ -215,11 +219,12 @@ export const en: Record<MessageKey, string> = {
   ntHelp4:
     'You get 3 hints per game. Every word shows its English meaning, so you learn as you play.',
   ntStory1:
-    'Nối từ ("joining words") is a favourite Vietnamese word game, played at school break time, at youth camps and now on social media.',
+    'Imagine every word is a train carriage: "con mèo" joins "mèo con", "mèo con" joins "con cá"… The word train keeps growing, and whoever cannot add a carriage loses!',
   ntStory2:
-    'It relies on something special about Vietnamese: every syllable is a word on its own, and a great many words are made of two syllables. Japan has a similar game called "shiritori", and English speakers play "word chain".',
+    'This game suits Vietnamese perfectly: every syllable can stand alone, and lots of words are made of two. Children in Japan play "shiritori", and English speakers play "word chain".',
   ntStory3:
-    'The dictionary in this game comes from Wiktionary (CC BY-SA licence) and shows the English meaning of every word, so children in Vietnam and abroad can learn new words as they play.',
+    'Every word in the game has its English meaning, so you learn new words as you play. Play with the whole family and see who becomes the word champion!',
+  ntStoryTitle: 'The word train',
   oaqSowing: 'Sowing… tap the board to skip',
   ntSuggest: '"{w}" is a real word',
   ntSuggestThanks: 'Thank you! We will look at adding this word.',
@@ -255,14 +260,22 @@ export const en: Record<MessageKey, string> = {
   cnHelp5:
     'At your gate, a roll of n climbs to step n; on step k only a roll of k+1 climbs on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
   cnStory1:
-    'Cờ Cá Ngựa comes from Pachisi, played in India for centuries; Mughal emperors are said to have played it on courtyard boards with people as the pieces.',
+    'Once upon a time in India, people played a game called Pachisi. Legend says some emperors played it on a giant courtyard board, with real people as the pieces!',
   cnStory2:
-    'In England it became Ludo (late 19th century) with a single die, and printed boards travelled the world. In Vietnam it is called Cờ Cá Ngựa – "betting on horses".',
+    'The game travelled to England, got a new name – Ludo – and went all around the world. In Vietnam it became Cờ Cá Ngựa, with four teams of red, blue, green and yellow horses racing home.',
   cnStory3:
-    'A paper or plastic board with four colours of horses was in almost every home, a favourite at Tết when the whole family gathers: luck, plus a bit of planning to knock out a horse.',
+    'At Tết the whole family gathers round the board, everyone holding their breath for a 6. Knocking a horse back to its stable is great fun – but watch out: yours can be knocked back too!',
+  cnStoryTitle: 'The great horse race',
   playCount: '{n} games played',
   playCountTotal: '{n} games played so far',
   gameOff: 'Under maintenance',
+  hubHeroTitle: 'Play together, near or far',
+  hubHeroText:
+    '{n} folk and brain games: play the computer, two on one device, or online with family.',
+  chipSolo: 'vs computer',
+  chipLocal: 'Same device',
+  chipOnline: 'Online',
+  posterStory: 'The story',
   gameUnavailable: 'This game is closed for now. Try another one!',
   onlineOff: 'New rooms for this game are closed for now.',
   spectating: 'You are watching – you cannot take part in this game',

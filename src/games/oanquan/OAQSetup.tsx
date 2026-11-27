@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModeCard } from '../../ui/GameGate';
-import { PlayCount } from '../../ui/PlayCount';
+import { GamePoster } from '../../ui/GamePoster';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
@@ -34,7 +34,7 @@ export function OAQSetup() {
         onBack={back}
         right={<HelpButton steps={OAQ_HELP} story={OAQ_STORY} />}
       />
-      <PlayCount game="oanquan" />
+      <GamePoster game="oanquan" story={OAQ_STORY} rules={OAQ_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

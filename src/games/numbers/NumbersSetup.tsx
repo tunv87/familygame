@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModeCard } from '../../ui/GameGate';
-import { PlayCount } from '../../ui/PlayCount';
+import { GamePoster } from '../../ui/GamePoster';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
@@ -42,7 +42,7 @@ export function NumbersSetup() {
         onBack={back}
         right={<HelpButton steps={NUMBERS_HELP} story={NUMBERS_STORY} />}
       />
-      <PlayCount game="numbers" />
+      <GamePoster game="numbers" story={NUMBERS_STORY} rules={NUMBERS_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
