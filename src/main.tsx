@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createLogger, installGlobalErrorLogging, isLeaving } from './lib/logger';
-import { restoreStorage, setupKeys, setupNative } from './lib/native';
+import { isNative, restoreStorage, setupKeys, setupNative } from './lib/native';
 import { setupPwa } from './lib/pwa';
 // Self-hosted rounded font with full Vietnamese coverage, so diacritics render the
 // same on every device (system fonts on some Windows/Android setups lack them).
@@ -20,6 +20,15 @@ async function main() {
   await setupNative();
   setupPwa();
   createLogger('app').info('start', { version: __APP_VERSION__, built: __BUILD_TIME__ });
+  // Two clearly separate looks: the iOS / Android app always keeps the phone and tablet layout;
+  // only the website adds the computer layout (wide screens, mouse and keyboard).
+  document.documentElement.dataset.shell = isNative ? 'app' : 'web';
+  const desktopCss = isNative
+    ? Promise.resolve()
+    : import('./styles/desktop.css').then(
+        () => undefined,
+        (e) => createLogger('app').warn('computer layout not loaded', String(e)),
+      );
   let App: typeof import('./app/App').App;
   try {
     ({ App } = await import('./app/App'));
@@ -41,6 +50,7 @@ async function main() {
     showLoadError();
     return;
   }
+  await desktopCss;
   try {
     sessionStorage.removeItem('fg:reloaded-after-load-error');
   } catch {
