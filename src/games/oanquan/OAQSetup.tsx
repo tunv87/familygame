@@ -34,7 +34,7 @@ export function OAQSetup() {
         onBack={back}
         right={<HelpButton steps={OAQ_HELP} story={OAQ_STORY} />}
       />
-      <GamePoster game="oanquan" story={OAQ_STORY} />
+      <GamePoster game="oanquan" story={OAQ_STORY} rules={OAQ_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

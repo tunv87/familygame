@@ -2328,8 +2328,6 @@ input {
     grid-column: 1;
     grid-row: 2 / -1;
     align-self: start;
-    position: sticky;
-    top: 20px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -2343,8 +2341,8 @@ input {
   .poster-art {
     display: grid;
     place-items: center;
-    height: 190px;
-    font-size: 6em;
+    height: 150px;
+    font-size: 5em;
     background:
       radial-gradient(circle at 85% 15%, rgba(255, 255, 255, 0.6) 0 50px, transparent 51px),
       radial-gradient(circle at 8% 105%, rgba(255, 255, 255, 0.45) 0 70px, transparent 71px),
@@ -2394,6 +2392,55 @@ input {
 
   .poster-story p {
     margin: 0;
+  }
+
+  .poster-story:has(+ .poster-rules) {
+    margin-bottom: 0;
+  }
+
+  .poster-rules {
+    margin: 16px 26px 24px;
+    padding-top: 16px;
+    border-top: 2px dashed var(--border);
+    font-size: 0.72em;
+    line-height: 1.5;
+    color: #374151;
+  }
+
+  .poster-rules h3 {
+    margin: 0 0 10px;
+    font-size: 1.15em;
+    color: var(--text);
+  }
+
+  .poster-rules ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .poster-rules li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .poster-rule-icon {
+    flex: none;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 1em;
+    letter-spacing: -0.2em;
+    text-indent: -0.2em;
+    white-space: nowrap;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--g1, #fff1c9), var(--g2, #ffd98f));
   }
 
   .screen:has(> .poster) .section-title {

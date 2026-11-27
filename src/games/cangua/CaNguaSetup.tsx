@@ -17,7 +17,7 @@ export function CaNguaSetup() {
         onBack={() => navigate('/')}
         right={<HelpButton steps={CN_HELP} story={CN_STORY} />}
       />
-      <GamePoster game="cangua" story={CN_STORY} />
+      <GamePoster game="cangua" story={CN_STORY} rules={CN_HELP} />
       <div className="stack">
         <div className="muted center" data-testid="cn-intro">
           🐴 {t('cnIntro')}

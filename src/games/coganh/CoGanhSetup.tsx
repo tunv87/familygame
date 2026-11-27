@@ -34,7 +34,7 @@ export function CoGanhSetup() {
         onBack={back}
         right={<HelpButton steps={COGANH_HELP} story={COGANH_STORY} />}
       />
-      <GamePoster game="coganh" story={COGANH_STORY} />
+      <GamePoster game="coganh" story={COGANH_STORY} rules={COGANH_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

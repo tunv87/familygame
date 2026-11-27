@@ -34,7 +34,7 @@ export function NoiTuSetup() {
         onBack={back}
         right={<HelpButton steps={NOITU_HELP} story={NOITU_STORY} />}
       />
-      <GamePoster game="noitu" story={NOITU_STORY} />
+      <GamePoster game="noitu" story={NOITU_STORY} rules={NOITU_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

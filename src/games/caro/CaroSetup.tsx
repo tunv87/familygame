@@ -41,7 +41,7 @@ export function CaroSetup() {
         onBack={back}
         right={<HelpButton steps={CARO_HELP} story={CARO_STORY} />}
       />
-      <GamePoster game="caro" story={CARO_STORY} />
+      <GamePoster game="caro" story={CARO_STORY} rules={CARO_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>

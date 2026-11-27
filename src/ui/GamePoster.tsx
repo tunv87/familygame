@@ -40,10 +40,13 @@ export function ModeChips({ game }: { game: GameId }) {
 export function GamePoster({
   game,
   story,
+  rules,
   children,
 }: {
   game: GameId;
   story?: MessageKey[];
+  /** the "how to play" steps, as in the help dialog */
+  rules?: [string, MessageKey][];
   children?: ReactNode;
 }) {
   const t = useT();
@@ -65,6 +68,21 @@ export function GamePoster({
         <div className="poster-story desk-only">
           <h3>🏮 {t('posterStory')}</h3>
           <p>{t(story[0])}</p>
+        </div>
+      ) : null}
+      {rules?.length ? (
+        <div className="poster-rules desk-only" data-testid="poster-rules">
+          <h3>📖 {t('helpRules')}</h3>
+          <ol>
+            {rules.map(([emoji, key]) => (
+              <li key={key}>
+                <span className="poster-rule-icon" aria-hidden>
+                  {emoji}
+                </span>
+                <span>{t(key)}</span>
+              </li>
+            ))}
+          </ol>
         </div>
       ) : null}
       {children}

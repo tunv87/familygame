@@ -42,7 +42,7 @@ export function NumbersSetup() {
         onBack={back}
         right={<HelpButton steps={NUMBERS_HELP} story={NUMBERS_STORY} />}
       />
-      <GamePoster game="numbers" story={NUMBERS_STORY} />
+      <GamePoster game="numbers" story={NUMBERS_STORY} rules={NUMBERS_HELP} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
