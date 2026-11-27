@@ -15,6 +15,9 @@ const SCREENS: [string, string, string, 'h' | 'w', number][] = [
 for (const d of DESKTOPS) {
   test(`[UI-12] boards fill the screen on ${d.id} ${d.name}`, async ({ browser }) => {
     const { page, ctx } = await openApp(browser, { device: d });
+    await page.goto('/');
+    // the website has the computer layout; the iOS / Android app never loads it
+    expect(await page.evaluate(() => document.documentElement.dataset.shell)).toBe('web');
     for (const [name, route, id, side, min] of SCREENS) {
       await page.goto(route);
       const board = page.getByTestId(id);
