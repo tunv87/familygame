@@ -10,7 +10,7 @@
  * database rules make it read-only).
  */
 import { useSyncExternalStore } from 'react';
-import { createLogger } from '../lib/logger';
+import { createLogger, isLeaving } from '../lib/logger';
 import { load, save } from '../lib/storage';
 import { isOnlineConfigured, restUrl } from '../online/firebase';
 import type { GameId } from '../online/types';
@@ -64,6 +64,16 @@ export function loadGamesConfig() {
   if (loaded || !isOnlineConfigured) return;
   if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
   loaded = true;
+  // not during the first render, and not for a page reloaded at once (Safari reports a request
+  // cut off that way as an error); the saved copy is in use meanwhile
+  setTimeout(readConfig, 300);
+}
+
+function readConfig() {
+  if (isLeaving()) {
+    loaded = false;
+    return;
+  }
   fetch(restUrl('config/games'))
     .then((r) => (r.ok ? r.json() : Promise.reject(new Error(`read ${r.status}`))))
     .then((v: unknown) => {

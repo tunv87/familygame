@@ -118,7 +118,11 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
     if (r.isNavigationRequest()) lastNavigation = Date.now();
   });
   page.on('pageerror', (e) => {
-    if (/Importing a module script failed/.test(e.message) && Date.now() - lastNavigation < 3000)
+    // also "… due to access control checks": Safari's message for a request cut off that way
+    if (
+      /Importing a module script failed|due to access control checks/.test(e.message) &&
+      Date.now() - lastNavigation < 3000
+    )
       return;
     errors.push(`pageerror: ${e.message}`);
   });
