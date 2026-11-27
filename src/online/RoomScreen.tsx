@@ -1,11 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CaNguaOnline } from '../games/cangua/CaNguaOnline';
-import { CaroOnline } from '../games/caro/CaroOnline';
-import { CoGanhOnline } from '../games/coganh/CoGanhOnline';
-import { NoiTuOnline } from '../games/noitu/NoiTuOnline';
-import { OAQOnline } from '../games/oanquan/OAQOnline';
-import { NumbersOnline } from '../games/numbers/NumbersOnline';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
 import { sfx } from '../lib/sound';
@@ -15,6 +9,26 @@ import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
 import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
 import { maxPlayers, type Room, type RoomPlayer } from './types';
+
+// each game's online screen is loaded when a room of that game opens
+const CaNguaOnline = lazy(() =>
+  import('../games/cangua/CaNguaOnline').then((m) => ({ default: m.CaNguaOnline })),
+);
+const CaroOnline = lazy(() =>
+  import('../games/caro/CaroOnline').then((m) => ({ default: m.CaroOnline })),
+);
+const CoGanhOnline = lazy(() =>
+  import('../games/coganh/CoGanhOnline').then((m) => ({ default: m.CoGanhOnline })),
+);
+const NoiTuOnline = lazy(() =>
+  import('../games/noitu/NoiTuOnline').then((m) => ({ default: m.NoiTuOnline })),
+);
+const OAQOnline = lazy(() =>
+  import('../games/oanquan/OAQOnline').then((m) => ({ default: m.OAQOnline })),
+);
+const NumbersOnline = lazy(() =>
+  import('../games/numbers/NumbersOnline').then((m) => ({ default: m.NumbersOnline })),
+);
 
 const log = createLogger('roomscreen');
 
@@ -29,6 +43,11 @@ export interface OnlineGameProps {
   onLeave: () => void;
   /** leave via the exit button: asks for confirmation mid-game */
   onExit: () => void;
+  /**
+   * a spectator: sees the game from the host's side (uid is the host's) and cannot act;
+   * the game screens lock every input and speak about turns neutrally
+   */
+  spectate?: boolean;
 }
 
 export function RoomScreen() {
@@ -75,8 +94,19 @@ export function RoomScreen() {
   }, [code]);
 
   const players = useMemo(() => room?.players ?? {}, [room]);
-  const isMember = !!uid && !!players[uid];
-  const oppEntry = Object.entries(players).find(([u]) => u !== uid);
+  const spectators = room?.spectators ?? {};
+  const isPlayer = !!uid && !!players[uid];
+  const isSpectator = !!uid && !isPlayer && !!spectators[uid];
+  const isMember = isPlayer || isSpectator;
+  // spectators watch from the host's side (or the first player still here)
+  const viewUid = isSpectator
+    ? players[room!.hostUid]
+      ? room!.hostUid
+      : (Object.entries(players).sort((a, b) => a[1].joinedAt - b[1].joinedAt)[0]?.[0] ?? '')
+    : (uid ?? '');
+  const wasIn = useRef(false);
+  if (isMember) wasIn.current = true;
+  const oppEntry = Object.entries(players).find(([u]) => u !== viewUid);
   if (oppEntry) lastOpp.current = { uid: oppEntry[0], player: oppEntry[1] };
   const isHost = !!room && room.hostUid === uid;
 
@@ -155,6 +185,23 @@ export function RoomScreen() {
   const backRef = useRef<() => void>(() => void leave());
   useBackHandler(() => (confirmExit ? setConfirmExit(false) : backRef.current()));
 
+  if (room === null && wasIn.current && !leaving.current) {
+    // every player left: the room is gone (spectators and players who lost the connection)
+    return (
+      <main className="screen">
+        <TopBar title={title} onBack={() => navigate('/')} />
+        <div className="center grow">
+          <div className="banner" data-testid="room-ended">
+            🏁 {t('roomEnded')}
+          </div>
+          <button className="btn" onClick={() => navigate('/')}>
+            🏠 {t('home')}
+          </button>
+        </div>
+      </main>
+    );
+  }
+
   if (error || room === null) {
     return (
       <main className="screen">
@@ -177,7 +224,17 @@ export function RoomScreen() {
     );
   }
 
-  const me = players[uid];
+  const me = players[viewUid];
+  const watchers = Object.keys(spectators).length;
+  const watchLine = isSpectator ? (
+    <div className="banner spectate-banner" data-testid="spectating">
+      👀 {t('spectating')}
+    </div>
+  ) : watchers > 0 ? (
+    <div className="watchers" data-testid="watchers">
+      👀 {t('watchers', { n: watchers })}
+    </div>
+  ) : null;
 
   if (room.status === 'waiting' || !room.state) {
     return (
@@ -191,6 +248,7 @@ export function RoomScreen() {
           <button className="btn" onClick={share} data-testid="share">
             📤 {copied ? t('copied') : t('share')}
           </button>
+          {watchLine}
           {multi ? (
             <MultiLobby room={room} uid={uid} isHost={isHost} />
           ) : (
@@ -211,11 +269,12 @@ export function RoomScreen() {
   const oppUid = oppEntry?.[0] ?? lastOpp.current?.uid ?? '';
   const st = room.state as { done?: boolean; winner?: string };
   const finished = !!(st.done || st.winner);
-  const requestExit = () => (finished || !oppEntry ? leave() : setConfirmExit(true));
+  const requestExit = () => (finished || !oppEntry || isSpectator ? leave() : setConfirmExit(true));
   backRef.current = requestExit;
   const props: OnlineGameProps = {
     room,
-    uid,
+    uid: viewUid,
+    spectate: isSpectator,
     oppUid,
     me,
     opp,
@@ -237,6 +296,7 @@ export function RoomScreen() {
           }
         />
       )}
+      {watchLine}
       {connection === 'offline' && (
         <div className="banner" data-testid="offline">
           📶 {t('offlineSelf')}
@@ -248,19 +308,21 @@ export function RoomScreen() {
       {!multi && oppEntry && !oppEntry[1].online && (
         <div className="banner">📶 {t('waitingReconnect', { name: oppEntry[1].name })}</div>
       )}
-      {room.game === 'numbers' ? (
-        <NumbersOnline {...props} />
-      ) : room.game === 'coganh' ? (
-        <CoGanhOnline {...props} />
-      ) : room.game === 'oanquan' ? (
-        <OAQOnline {...props} />
-      ) : room.game === 'noitu' ? (
-        <NoiTuOnline {...props} />
-      ) : room.game === 'cangua' ? (
-        <CaNguaOnline {...props} />
-      ) : (
-        <CaroOnline {...props} />
-      )}
+      <Suspense fallback={null}>
+        {room.game === 'numbers' ? (
+          <NumbersOnline {...props} />
+        ) : room.game === 'coganh' ? (
+          <CoGanhOnline {...props} />
+        ) : room.game === 'oanquan' ? (
+          <OAQOnline {...props} />
+        ) : room.game === 'noitu' ? (
+          <NoiTuOnline {...props} />
+        ) : room.game === 'cangua' ? (
+          <CaNguaOnline {...props} />
+        ) : (
+          <CaroOnline {...props} />
+        )}
+      </Suspense>
       {confirmExit && (
         <ExitConfirm
           hint={t('exitOnlineHint')}

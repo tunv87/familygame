@@ -63,6 +63,7 @@ export function Card({
   onClick,
   className = '',
   testId,
+  off,
 }: {
   emoji: string;
   title: string;
@@ -70,12 +71,17 @@ export function Card({
   onClick: () => void;
   className?: string;
   testId?: string;
+  /** turned off by the owner: shown greyed out with a short note, cannot be opened */
+  off?: string;
 }) {
   return (
     <button
-      className={`card ${className}`}
+      className={`card ${className} ${off ? 'off' : ''}`}
       data-testid={testId}
+      disabled={!!off}
+      aria-disabled={!!off}
       onClick={() => {
+        if (off) return;
         sfx.unlock();
         sfx.tap();
         onClick();
@@ -86,7 +92,13 @@ export function Card({
       </span>
       <span>
         <div className="title">{title}</div>
-        {hint ? <div className="hint">{hint}</div> : null}
+        {off ? (
+          <div className="hint off-note" data-testid={testId ? `${testId}-off` : undefined}>
+            🔧 {off}
+          </div>
+        ) : hint ? (
+          <div className="hint">{hint}</div>
+        ) : null}
       </span>
     </button>
   );

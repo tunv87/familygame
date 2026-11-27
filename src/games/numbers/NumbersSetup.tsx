@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ModeCard } from '../../ui/GameGate';
 import { PlayCount } from '../../ui/PlayCount';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
@@ -45,21 +46,27 @@ export function NumbersSetup() {
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
-          <Card
+          <ModeCard
+            game="numbers"
+            mode="solo"
             emoji="🤖"
             title={t('modeSolo')}
             hint={t('numbersBotHint')}
             onClick={() => setMode('bot')}
             testId="mode-bot"
           />
-          <Card
+          <ModeCard
+            game="numbers"
+            mode="practice"
             emoji="⏱️"
             title={t('modePractice')}
             hint={t('modePracticeHint')}
             onClick={() => setMode('practice')}
             testId="mode-practice"
           />
-          <Card
+          <ModeCard
+            game="numbers"
+            mode="online"
             emoji="🌏"
             title={t('modeOnline')}
             hint={t('modeOnlineHint')}

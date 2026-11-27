@@ -2077,3 +2077,22 @@ input {
   color: var(--muted);
   margin: -4px 0 2px;
 }
+
+/* ---------- games and modes turned off by the owner ---------- */
+.card.off {
+  opacity: 0.55;
+  filter: grayscale(0.7);
+  cursor: not-allowed;
+}
+
+.card .off-note {
+  font-weight: 800;
+}
+
+/* ---------- spectators ---------- */
+.watchers {
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--muted);
+}

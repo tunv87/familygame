@@ -31,7 +31,8 @@ export function CaNguaOnline(props: OnlineGameProps) {
   const seats = seatsOf(o);
   const nameOf = (c: Color) => players[seats[c]]?.name ?? t(`cnColor${c}` as MessageKey);
   const mine = colorOfUid(o, uid);
-  const myTurn = !o.winner && turnUidOf(o) === uid;
+  const watching = !!props.spectate;
+  const myTurn = !o.winner && turnUidOf(o) === uid && !watching;
   const [pending, setPending] = useState(false);
 
   // a short roll animation each time someone rolls
@@ -85,7 +86,7 @@ export function CaNguaOnline(props: OnlineGameProps) {
   const firstHere = s.colors.find((c) => players[seats[c]]);
   const goneKey = gone.join();
   useEffect(() => {
-    if (!o.winner && gone.length && firstHere === mine)
+    if (!watching && !o.winner && gone.length && firstHere === mine)
       void act({ t: 'drop', uid: seats[gone[0]] });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [goneKey, firstHere, mine, o.winner]);
@@ -100,11 +101,13 @@ export function CaNguaOnline(props: OnlineGameProps) {
     ? ''
     : rolling
       ? t('cnRolling')
-      : myTurn
-        ? s.roll === null
-          ? t('cnYourRoll')
-          : t('cnPickHorse', { n: s.roll })
-        : t('caroWaitTurn', { name: nameOf(s.turn) });
+      : watching
+        ? t('turnOf', { name: nameOf(s.turn) })
+        : myTurn
+          ? s.roll === null
+            ? t('cnYourRoll')
+            : t('cnPickHorse', { n: s.roll })
+          : t('caroWaitTurn', { name: nameOf(s.turn) });
 
   const winnerPlayer = o.winner ? players[o.winner] : undefined;
   return (
@@ -148,7 +151,7 @@ export function CaNguaOnline(props: OnlineGameProps) {
           🎲 {t('cnRoll')}
         </button>
       </div>
-      {mine !== null && (
+      {mine !== null && !watching && (
         <div className="muted center" style={{ fontSize: 14 }}>
           {t('cnYouAre', { color: t(`cnColor${mine}` as MessageKey) })}
         </div>

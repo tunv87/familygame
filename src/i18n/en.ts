@@ -262,4 +262,13 @@ export const en: Record<MessageKey, string> = {
     'A paper or plastic board with four colours of horses was in almost every home, a favourite at Tết when the whole family gathers: luck, plus a bit of planning to knock out a horse.',
   playCount: '{n} games played',
   playCountTotal: '{n} games played so far',
+  gameOff: 'Under maintenance',
+  gameUnavailable: 'This game is closed for now. Try another one!',
+  onlineOff: 'New rooms for this game are closed for now.',
+  spectating: 'You are watching – you cannot take part in this game',
+  watchers: '{n} watching',
+  roomEnded: 'The game is over: the players have left the room.',
+  turnOf: "{name}'s turn",
+  gameLoadError: 'The game could not be opened. Check your connection and reload.',
+  reload: 'Reload',
 };

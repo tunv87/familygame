@@ -42,7 +42,9 @@ function Game(props: OnlineGameProps & { loaded: Loaded }) {
   const [pending, setPending] = useState(false);
   const [hints, setHints] = useState(HINTS);
   const mySide = o.uid1 === uid ? 1 : 2;
-  const myTurn = !o.winner && turnUidOf(o) === uid && !props.oppGone;
+  const hostTurn = !o.winner && turnUidOf(o) === uid;
+  const myTurn = hostTurn && !props.oppGone && !props.spectate;
+  const watching = !!props.spectate;
 
   // fresh hints each round
   const round = room.round;
@@ -69,12 +71,12 @@ function Game(props: OnlineGameProps & { loaded: Loaded }) {
 
   const left = useCountdown(o.winner ? null : o.deadline, serverNow, () => {
     // my own clock ran out: I lose. The opponent's clock: claim only after the grace time.
-    if (turnUidOf(o) === uid)
+    if (turnUidOf(o) === uid && !watching)
       void tx((cur) => applyNoiTuLose(cur, uid, 'timeout', serverNow()), 'timeout');
   });
   // the opponent's app is gone or frozen: claim the win once the grace time has passed
   useEffect(() => {
-    if (o.winner || turnUidOf(o) === uid) return;
+    if (o.winner || turnUidOf(o) === uid || watching) return;
     const wait = o.deadline + GRACE_MS + 500 - serverNow();
     const id = setTimeout(
       () => void tx((cur) => applyNoiTuLose(cur, uid, 'timeout', serverNow()), 'claim'),
@@ -93,18 +95,20 @@ function Game(props: OnlineGameProps & { loaded: Loaded }) {
 
   const status = o.winner
     ? ''
-    : myTurn
-      ? t('ntYourTurn')
-      : t('caroWaitTurn', { name: opp?.name ?? '' });
+    : watching
+      ? t('turnOf', { name: (hostTurn ? me?.name : opp?.name) ?? '' })
+      : myTurn
+        ? t('ntYourTurn')
+        : t('caroWaitTurn', { name: opp?.name ?? '' });
 
   return (
     <div className="nt-screen grow" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div className="players">
-        <PlayerChip player={me} score={winsOf(room, uid)} active={myTurn} testId="me" />
+        <PlayerChip player={me} score={winsOf(room, uid)} active={hostTurn} testId="me" />
         <PlayerChip
           player={opp}
           score={winsOf(room, oppUid)}
-          active={!o.winner && !myTurn}
+          active={!o.winner && !hostTurn}
           testId="opp"
         />
       </div>

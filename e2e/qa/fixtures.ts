@@ -110,7 +110,22 @@ export async function openApp(browser: Browser, o: AppOptions = {}): Promise<App
   if (o.initScript) await ctx.addInitScript(o.initScript);
   const page = await ctx.newPage();
   const errors: string[] = [];
-  page.on('pageerror', (e) => errors.push(`pageerror: ${e.message}`));
+  // Safari reports a download cut off by a page change (reload, new link) as "Importing a module
+  // script failed" (B18): not an app error when it happens right around a navigation. A game
+  // that really cannot be downloaded is checked by CR-17 (on-screen message).
+  let lastNavigation = 0;
+  page.on('request', (r) => {
+    if (r.isNavigationRequest()) lastNavigation = Date.now();
+  });
+  page.on('pageerror', (e) => {
+    // also "… due to access control checks": Safari's message for a request cut off that way
+    if (
+      /Importing a module script failed|due to access control checks/.test(e.message) &&
+      Date.now() - lastNavigation < 3000
+    )
+      return;
+    errors.push(`pageerror: ${e.message}`);
+  });
   // remember which address failed, to name it in the "Failed to load resource" error below
   let lastFailed = '';
   page.on('requestfailed', (r) => {

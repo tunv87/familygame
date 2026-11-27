@@ -55,6 +55,27 @@
           ".write": "auth != null && ((!data.exists() && newData.val() === auth.uid && data.parent().exists() && data.parent().child('game').val() === 'cangua' && data.parent().child('status').val() === 'waiting' && data.parent().child('seat3').exists() && data.parent().child('seat3').val() !== auth.uid && data.parent().child('guestUid').val() !== auth.uid) || (data.val() === auth.uid && !newData.exists()))",
           ".validate": "newData.isString()"
         },
+        "spectators": {
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (!newData.exists() || !data.parent().parent().child('players').child($uid).exists())",
+            ".validate": "!newData.exists() || newData.hasChildren(['name', 'avatar'])",
+            "name": {
+              ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 20"
+            },
+            "avatar": {
+              ".validate": "newData.isString() && newData.val().length <= 16"
+            },
+            "online": {
+              ".validate": "newData.isBoolean()"
+            },
+            "joinedAt": {
+              ".validate": "newData.isNumber()"
+            },
+            "$other": {
+              ".validate": false
+            }
+          }
+        },
         "players": {
           "$uid": {
             ".write": "auth != null && auth.uid === $uid && data.parent().parent().exists() && (data.parent().parent().child('hostUid').val() === $uid || newData.parent().parent().child('guestUid').val() === $uid || newData.parent().parent().child('seat3').val() === $uid || newData.parent().parent().child('seat4').val() === $uid || (data.exists() && !newData.exists()))",
@@ -80,6 +101,9 @@
           ".validate": false
         }
       }
+    },
+    "config": {
+      ".read": true
     },
     "stats": {
       "plays": {

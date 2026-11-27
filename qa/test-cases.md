@@ -1,6 +1,6 @@
 # Danh mục test case
 
-Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
+Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). Mỗi case có mã; tên test trong code bắt đầu bằng đúng mã này (vd `[UI-01]`) để kết quả tự ghép lại vào bảng.
 Ưu tiên: P1 = bắt buộc pass trước khi lên store, P2 = nên pass.
 
 ## UI – Giao diện trên nhiều màn hình (D1–D10)
@@ -54,6 +54,8 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | UX-27 | P2      | Nối từ: báo "là từ có thật"                                                                            | Từ bị báo chưa có trong từ điển hiện nút gửi; bấm thì gửi đi và cảm ơn                                                                                                               |
 | UX-28 | P1      | Cờ cá ngựa online 3 người                                                                              | Chủ phòng chỉ bắt đầu được khi có ≥2 người; 3 máy cùng đổ/đi, bàn cờ giống nhau; một người thoát thì ngựa của họ rời bàn, ván chơi tiếp                                              |
 | UX-29 | P2      | Bộ đếm lượt chơi                                                                                       | Trang chủ hiện tổng lượt chơi mọi game, trang mỗi game hiện số của game đó; bắt đầu ván / ván mới +1; mất mạng thì ẩn, không lỗi                                                     |
+| UX-30 | P1      | Admin bật/tắt/ẩn game và từng chế độ                                                                   | Game off: hiện mờ "Đang bảo trì", không mở được; hidden: không có ở trang chủ, link báo tạm chưa mở; chế độ off/hidden tương tự; mất mạng giữ cấu hình cũ                            |
+| UX-31 | P1      | Người xem trong phòng online                                                                           | Hết ghế hoặc ván đã bắt đầu → vào xem: thấy nước đi, "Lượt của…", không bấm được, không có Chơi lại; người chơi thấy số người xem; Thoát ngay; phòng đóng thì báo trận đã kết thúc   |
 
 ## CR – Chống crash
 
@@ -75,6 +77,7 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | CR-14 | P1      | Link Ô ăn quan sai tham số                                                       | Không crash, dùng mặc định                                                                                                  |
 | CR-15 | P1      | Link Nối từ sai tham số                                                          | Không crash, dùng mặc định                                                                                                  |
 | CR-16 | P1      | Phần chính của app không tải được (vừa có bản mới, mất mạng)                     | Tự tải lại 1 lần; vẫn lỗi thì hiện thông báo và nút "Tải lại" (không màn hình trắng); tải lại được thì app hiện bình thường |
+| CR-17 | P1      | Không tải được một game (mất mạng trước khi lưu, có bản mới thay thế)            | Thử lại một lần, rồi báo "Không mở được trò chơi" kèm nút Tải lại; không màn trắng; phần còn lại của app vẫn chạy           |
 
 ## LG – Logic
 
@@ -110,6 +113,7 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 | LG-28 | P1      | Luật Cờ cá ngựa                                               | Ra quân bằng 6 hoặc 1; không nhảy qua ngựa; không đứng lên ngựa cùng màu; đá ngựa khác màu; không quá cửa chuồng; lên bậc đúng số; 6 được đổ tiếp; 4 ngựa bậc 3–6 thì thắng        |
 | LG-29 | P1      | Cờ cá ngựa online                                             | 2 người ngồi đối diện, 3–4 người lấy màu kế tiếp; xí ngầu tính từ seed (không đổ lại được); chỉ đúng lượt; người rời phòng bị loại, người cuối thắng                               |
 | LG-30 | P2      | Bàn Cờ cá ngựa                                                | Đường đi 52 ô liền nhau, khép kín, không trùng chuồng; cửa chuồng mỗi màu nằm ngay trước bậc 1                                                                                     |
+| LG-31 | P2      | Đọc cấu hình bật/tắt                                          | on/off/hidden cho game và chế độ; giá trị lạ coi là on; game off thì mọi chế độ off                                                                                                |
 
 ## AU – Âm thanh
 
@@ -128,19 +132,21 @@ Phiên bản: **v3.6** (bộ đếm lượt chơi; xem `review-log.md`). Mỗi c
 
 ## SEC – Bảo mật
 
-| Mã     | Ưu tiên | Kiểm tra                                                                  | Kết quả mong đợi                                                                                                                                       |
-| ------ | ------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| SEC-01 | P1      | Firebase rules (9 case đã có)                                             | Pass                                                                                                                                                   |
-| SEC-02 | P1      | Tên người chơi chứa HTML/script                                           | Hiển thị như chữ, không chạy script                                                                                                                    |
-| SEC-03 | P1      | Không có khoá bí mật trong bản build                                      | Chỉ có config web công khai của Firebase                                                                                                               |
-| SEC-04 | P1      | `npm audit` dependency chạy trong app                                     | Không có lỗ hổng High/Critical                                                                                                                         |
-| SEC-05 | P2      | Android không cho HTTP thường (cleartext), iOS không mở ATS tuỳ tiện      | Đúng                                                                                                                                                   |
-| SEC-06 | P1      | Người trong phòng không sửa được thông tin người kia                      | Rules chặn                                                                                                                                             |
-| SEC-07 | P2      | Dữ liệu phòng chỉ gồm thông tin cần cho game (mã phòng 4 số có thể bị dò) | Rules từ chối mọi trường lạ (email, số điện thoại…); rủi ro dò mã được ghi nhận và chấp nhận vì phòng chỉ chứa biệt danh + nước đi, hết hạn sau 24 giờ |
-| SEC-08 | P1      | Loại game trong rules                                                     | Chấp nhận `coganh`, `oanquan`, `noitu`, từ chối game lạ                                                                                                |
-| SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                       |
-| SEC-10 | P1      | Phòng 4 người (Cờ cá ngựa)                                                | Ghế 3, 4 chỉ cho Cờ cá ngựa, chỉ khi đang chờ và ghế 2 đã có người; mỗi người một ghế; game khác vẫn 2 người                                           |
-| SEC-11 | P1      | Bộ đếm lượt chơi                                                          | Ai cũng đọc được; chỉ người đã đăng nhập ẩn danh mới cộng, mỗi lần đúng +1; không giảm, không xoá, không game lạ; không lưu gì về người chơi           |
+| Mã     | Ưu tiên | Kiểm tra                                                                  | Kết quả mong đợi                                                                                                                                                   |
+| ------ | ------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| SEC-01 | P1      | Firebase rules (9 case đã có)                                             | Pass                                                                                                                                                               |
+| SEC-02 | P1      | Tên người chơi chứa HTML/script                                           | Hiển thị như chữ, không chạy script                                                                                                                                |
+| SEC-03 | P1      | Không có khoá bí mật trong bản build                                      | Chỉ có config web công khai của Firebase                                                                                                                           |
+| SEC-04 | P1      | `npm audit` dependency chạy trong app                                     | Không có lỗ hổng High/Critical                                                                                                                                     |
+| SEC-05 | P2      | Android không cho HTTP thường (cleartext), iOS không mở ATS tuỳ tiện      | Đúng                                                                                                                                                               |
+| SEC-06 | P1      | Người trong phòng không sửa được thông tin người kia                      | Rules chặn                                                                                                                                                         |
+| SEC-07 | P2      | Dữ liệu phòng chỉ gồm thông tin cần cho game (mã phòng 4 số có thể bị dò) | Rules từ chối mọi trường lạ (email, số điện thoại…); rủi ro dò mã được ghi nhận và chấp nhận vì phòng chỉ chứa biệt danh + nước đi, hết hạn sau 24 giờ             |
+| SEC-08 | P1      | Loại game trong rules                                                     | Chấp nhận `coganh`, `oanquan`, `noitu`, từ chối game lạ                                                                                                            |
+| SEC-09 | P1      | Đề xuất từ (Nối từ)                                                       | Chỉ người đã đăng nhập ẩn danh gửi được; chỉ có từ 2 tiếng ≤ 30 ký tự và thời điểm; không sửa/xoá được; không ai đọc được từ app                                   |
+| SEC-10 | P1      | Phòng 4 người (Cờ cá ngựa)                                                | Ghế 3, 4 chỉ cho Cờ cá ngựa, chỉ khi đang chờ và ghế 2 đã có người; mỗi người một ghế; game khác vẫn 2 người                                                       |
+| SEC-11 | P1      | Bộ đếm lượt chơi                                                          | Ai cũng đọc được; chỉ người đã đăng nhập ẩn danh mới cộng, mỗi lần đúng +1; không giảm, không xoá, không game lạ; không lưu gì về người chơi                       |
+| SEC-12 | P1      | Cấu hình bật/tắt game                                                     | Ai cũng đọc được; không ai ghi/xoá được từ app (chỉ sửa trong Firebase Console)                                                                                    |
+| SEC-13 | P1      | Người xem                                                                 | Chỉ tự thêm/xoá chính mình; không ghi được ván, trạng thái, kết quả, phiếu chơi lại, ghế người chơi; không xoá được phòng; người chơi không đồng thời là người xem |
 
 ## BR – Trình duyệt
 

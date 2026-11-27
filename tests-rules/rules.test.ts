@@ -304,3 +304,41 @@ describe('[SEC-11] play counter', () => {
     await denied(set(ref(a.db, 'stats/other'), 1));
   });
 });
+
+describe('[SEC-12] game availability config', () => {
+  it('anyone can read it; nobody can change it from the app', async () => {
+    const a = await user();
+    const anon = await anonymousDb();
+    await admin('PUT', 'config/games', { caro: { status: 'off' } });
+    expect((await get(ref(anon, 'config/games'))).val()).toEqual({ caro: { status: 'off' } });
+    await denied(set(ref(a.db, 'config/games/caro/status'), 'on'));
+    await denied(remove(ref(a.db, 'config/games')));
+    await denied(set(ref(anon, 'config/games/noitu'), { status: 'hidden' }));
+  });
+});
+
+describe('[SEC-13] spectators', () => {
+  const watcher = (name = 'Chi') => ({ name, avatar: '🐼', joinedAt: Date.now(), online: true });
+  it('anyone signed in can watch, as themselves only, and cannot play', async () => {
+    const [a, b, c, d] = [await user(), await user(), await user(), await user()];
+    await ok(set(ref(a.db, 'rooms/1234'), room(a.uid)));
+    await ok(join(b));
+    await ok(set(ref(c.db, `rooms/1234/spectators/${c.uid}`), watcher()));
+    await denied(set(ref(c.db, `rooms/1234/spectators/${d.uid}`), watcher('Dũng'))); // not you
+    await denied(set(ref(c.db, `rooms/1234/spectators/${c.uid}/name`), 'x'.repeat(21)));
+    await denied(set(ref(c.db, `rooms/1234/spectators/${c.uid}/admin`), true));
+    // watching gives no say in the game
+    await denied(set(ref(c.db, 'rooms/1234/state'), { x: 1 }));
+    await denied(set(ref(c.db, 'rooms/1234/status'), 'playing'));
+    await denied(set(ref(c.db, 'rooms/1234/results/r1'), c.uid));
+    await denied(set(ref(c.db, `rooms/1234/rematch/${c.uid}`), true));
+    await denied(set(ref(c.db, `rooms/1234/players/${c.uid}`), player('Chi')));
+    await denied(remove(ref(c.db, 'rooms/1234')));
+    await denied(remove(ref(d.db, `rooms/1234/spectators/${c.uid}`))); // someone else's
+    // a player is not also a spectator; leaving works
+    await denied(set(ref(b.db, `rooms/1234/spectators/${b.uid}`), watcher('Bình')));
+    await ok(set(ref(c.db, `rooms/1234/spectators/${c.uid}/online`), false));
+    await ok(remove(ref(c.db, `rooms/1234/spectators/${c.uid}`)));
+    await denied(set(ref(d.db, 'rooms/9999/spectators/' + d.uid), watcher())); // no such room
+  });
+});

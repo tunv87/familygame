@@ -13,7 +13,7 @@
       ],
       [
         "Chơi với bạn (online)",
-        "Khi chơi online, tên, hình đại diện bạn chọn và các nước đi được gửi qua mạng để bạn cùng phòng nhìn thấy. Không cần email hay số điện thoại. Phòng chơi tự xoá khi mọi người đã rời phòng."
+        "Khi chơi online, tên, hình đại diện bạn chọn và các nước đi được gửi qua mạng để bạn cùng phòng nhìn thấy. Không cần email hay số điện thoại. Phòng chơi tự xoá khi mọi người đã rời phòng. Người vào xem một phòng cũng gửi tên và hình đại diện như vậy; người chơi chỉ thấy số người đang xem."
       ],
       [
         "Trẻ em",
@@ -43,7 +43,7 @@
       ],
       [
         "Playing with a friend (online)",
-        "When you play online, the name and picture you chose and your moves are sent over the internet so the other player can see them. No email or phone number is needed. A room is deleted once everyone has left."
+        "When you play online, the name and picture you chose and your moves are sent over the internet so the other player can see them. No email or phone number is needed. A room is deleted once everyone has left. Someone who joins a room to watch sends their name and picture the same way; players only see how many people are watching."
       ],
       [
         "Children",

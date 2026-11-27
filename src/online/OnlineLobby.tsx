@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { modeStatus, useGamesConfig } from '../app/gameConfig';
 import { useT } from '../i18n';
 import { createLogger } from '../lib/logger';
 import { Card, useProfileGate } from '../ui/components';
@@ -15,6 +16,7 @@ export function OnlineLobby({ game, options }: { game: GameId; options: RoomOpti
   const { gate, modal } = useProfileGate();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
+  const onlineOn = modeStatus(useGamesConfig(), game, 'online') === 'on';
 
   if (!isOnlineConfigured) return <div className="banner">{t('onlineNotConfigured')}</div>;
 
@@ -40,6 +42,7 @@ export function OnlineLobby({ game, options }: { game: GameId; options: RoomOpti
         hint={t('createRoomHint')}
         onClick={busy ? () => {} : create}
         testId="create-room"
+        off={onlineOn ? undefined : t('onlineOff')}
       />
       <Card
         emoji="🔑"

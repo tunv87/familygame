@@ -20,7 +20,8 @@ export function CoGanhOnline(props: OnlineGameProps) {
   const state = useMemo(() => toLocal(o), [o]);
   const [pending, setPending] = useState(false);
   const mySide = o.blackUid === uid ? 1 : 2;
-  const myTurn = !o.winner && turnUidOf(o) === uid && !props.oppGone;
+  const hostTurn = !o.winner && turnUidOf(o) === uid;
+  const myTurn = hostTurn && !props.oppGone && !props.spectate;
   const { selected, movable, targets, tap } = useSelection(state, myTurn && !pending);
 
   // Sounds for every new move (mine or the opponent's), and the Mở warning when it is on me.
@@ -63,11 +64,13 @@ export function CoGanhOnline(props: OnlineGameProps) {
   const forcedMine = !!o.forced?.length && myTurn;
   const status = o.winner
     ? ''
-    : forcedMine
-      ? `⚠️ ${t('cgForced')}`
-      : myTurn
-        ? t('cgYourTurn')
-        : t('caroWaitTurn', { name: opp?.name ?? '' });
+    : props.spectate
+      ? t('turnOf', { name: (hostTurn ? me?.name : opp?.name) ?? '' })
+      : forcedMine
+        ? `⚠️ ${t('cgForced')}`
+        : myTurn
+          ? t('cgYourTurn')
+          : t('caroWaitTurn', { name: opp?.name ?? '' });
 
   return (
     <>
@@ -76,14 +79,14 @@ export function CoGanhOnline(props: OnlineGameProps) {
           player={me}
           stone={mySide === 1 ? 'black' : 'white'}
           score={count(state.board, mySide)}
-          active={myTurn}
+          active={hostTurn}
           testId="me"
         />
         <PlayerChip
           player={opp}
           stone={mySide === 1 ? 'white' : 'black'}
           score={count(state.board, mySide === 1 ? 2 : 1)}
-          active={!o.winner && !myTurn}
+          active={!o.winner && !hostTurn}
           testId="opp"
         />
       </div>

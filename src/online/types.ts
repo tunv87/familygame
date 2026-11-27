@@ -33,6 +33,8 @@ export interface Room {
   status: 'waiting' | 'playing';
   round: number;
   players?: Record<string, RoomPlayer>;
+  /** people watching: they see the game but take no part (no seat left, or it had started) */
+  spectators?: Record<string, RoomPlayer>;
   rematch?: Record<string, boolean>;
   /** results[round] = winner uid or 'draw' */
   results?: Record<string, string>;

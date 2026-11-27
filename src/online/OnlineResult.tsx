@@ -11,24 +11,32 @@ export function OnlineResult({
   opp,
   oppGone,
   onLeave,
+  spectate,
   winner,
   children,
 }: OnlineGameProps & { winner: string; children?: React.ReactNode }) {
   const t = useT();
   useEffect(() => {
+    if (spectate) return; // only players record results
     recordResult(room.code, room.round, winner).catch(() => {});
-  }, [room.code, room.round, winner]);
-  const iWon = winner === uid;
+  }, [room.code, room.round, winner, spectate]);
+  const iWon = !spectate && winner === uid;
+  const winnerName = room.players?.[winner]?.name ?? opp?.name ?? '';
   const title =
-    winner === 'draw' ? t('draw') : iWon ? t('youWin') : t('playerWins', { name: opp?.name ?? '' });
+    winner === 'draw'
+      ? t('draw')
+      : iWon
+        ? t('youWin')
+        : t('playerWins', { name: spectate ? winnerName : (opp?.name ?? '') });
   const waiting = !!room.rematch?.[uid];
   return (
     <ResultModal
       title={title}
-      win={winner === 'draw' ? undefined : iWon}
+      win={winner === 'draw' || spectate ? undefined : iWon}
+      sound={spectate && winner !== 'draw' ? 'win' : undefined}
       actions={
         <>
-          {!oppGone && (
+          {!oppGone && !spectate && (
             <button
               className="btn"
               disabled={waiting}
