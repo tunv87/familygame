@@ -1,0 +1,2015 @@
+{
+  "run": "21",
+  "at": "2026-11-27 13:17 UTC",
+  "cases": [
+    {
+      "id": "UI-01",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-02",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-02b",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-03",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-04",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-05",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-06",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-07",
+      "status": "PASS",
+      "tests": 14,
+      "failures": []
+    },
+    {
+      "id": "UI-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UI-09",
+      "status": "PASS",
+      "tests": 19,
+      "failures": []
+    },
+    {
+      "id": "UI-10",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "UI-11",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "UI-12",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "UX-01",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-02",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-03",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-04",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-05",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-06",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-07",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-09",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-10",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-11",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-12",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-13",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-14",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-15",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-16",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-17",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-18",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-19",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-20",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-21",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-22",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-23",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-24",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-25",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-26",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-27",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-28",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "UX-29",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "UX-30",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "UX-31",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "CR-01",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-02",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-03",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-04",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-05",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-06",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-07",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-09",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-10",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-11",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-12",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-13",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-14",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-15",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-16",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "CR-17",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "LG-01",
+      "status": "PASS",
+      "tests": 6,
+      "failures": []
+    },
+    {
+      "id": "LG-02",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "LG-03",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "LG-04",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "LG-05",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-06",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-07",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "LG-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "LG-09",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-10",
+      "status": "PASS",
+      "tests": 7,
+      "failures": []
+    },
+    {
+      "id": "LG-11",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "LG-12",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-13",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "LG-14",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "LG-15",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-16",
+      "status": "PASS",
+      "tests": 5,
+      "failures": []
+    },
+    {
+      "id": "LG-17",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-18",
+      "status": "PASS",
+      "tests": 12,
+      "failures": []
+    },
+    {
+      "id": "LG-19",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-20",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-21",
+      "status": "PASS",
+      "tests": 7,
+      "failures": []
+    },
+    {
+      "id": "LG-22",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-23",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-24",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "LG-25",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-26",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-27",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-28",
+      "status": "PASS",
+      "tests": 8,
+      "failures": []
+    },
+    {
+      "id": "LG-29",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "LG-30",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "LG-31",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-01",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "AU-02",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-03",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-04",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-05",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-06",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-07",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-09",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "AU-10",
+      "status": "PASS",
+      "tests": 4,
+      "failures": []
+    },
+    {
+      "id": "SEC-01",
+      "status": "PASS",
+      "tests": 9,
+      "failures": []
+    },
+    {
+      "id": "SEC-02",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-03",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "SEC-04",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-05",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "SEC-06",
+      "status": "PASS",
+      "tests": 3,
+      "failures": []
+    },
+    {
+      "id": "SEC-07",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "SEC-08",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-09",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-10",
+      "status": "PASS",
+      "tests": 2,
+      "failures": []
+    },
+    {
+      "id": "SEC-11",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-12",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "SEC-13",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-01",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-02",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-03",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-04",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-05",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-06",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    },
+    {
+      "id": "BR-07",
+      "status": "PASS",
+      "tests": 1,
+      "failures": []
+    }
+  ],
+  "tests": [
+    {
+      "title": "[LG-31] game and mode availability › reads on / off / hidden for games and their modes; anything else counts as on",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-10] generated background music › three songs with different tempos, each with four chords and several motifs",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-10] generated background music › every composed bar stays in the scale and inside the bar",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-10] generated background music › the melody keeps changing (not the same bar over and over)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-10] generated background music › the cute theme starts with the bouncy song more often",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-01] every game sound exists for both themes, is a small MP3, and is licensed › classic",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-01] every game sound exists for both themes, is a small MP3, and is licensed › cute",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-01] every game sound exists for both themes, is a small MP3, and is licensed › licence file names the source and CC0",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-01] every game sound exists for both themes, is a small MP3, and is licensed › the PWA precaches the sounds for offline play",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-04] AI never picks an occupied cell › 3×3: 300 random positions per level, including nearly full boards",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-04] AI never picks an occupied cell › 15×15: 200 random positions per level, including nearly full boards",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-04] AI never picks an occupied cell › a single empty cell is always chosen",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-08] practice records keep only the best time › first time is a record, slower is not, faster is",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-09] translations use the same placeholders › every key has the same {variables} in Vietnamese and English",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-09] translations use the same placeholders › no empty translations",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] saved data with missing or wrong fields falls back to defaults › fills in missing fields",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] saved data with missing or wrong fields falls back to defaults › ignores invalid JSON and non-object values",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] saved data with missing or wrong fields falls back to defaults › round-trips through save",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] corrupt settings, profile and records are cleaned › settings with unknown values fall back to valid ones",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] corrupt settings, profile and records are cleaned › a corrupt record is ignored and replaced by the next real time",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] corrupt settings, profile and records are cleaned › an unknown level becomes easy",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-10] settings from the old single \"sound & vibration\" switch › sound off before the update → vibration stays off; sound on → vibration on; music off",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-03] no secrets in the repository or the web build › source tree",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-03] no secrets in the repository or the web build › only the public Firebase web API key is in the build",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-04] dependencies shipped in the app have no high/critical advisories › npm audit --omit=dev",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-05] native apps only talk over HTTPS › Android: no cleartext traffic",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-05] native apps only talk over HTTPS › iOS: App Transport Security is not disabled",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › a 6 or a 1 brings a horse out of the stable; other rolls pass the turn",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › a 6 gives another roll, any other number passes the turn",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › horses cannot jump over others or land on their own colour",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › landing on another colour kicks it back to its stable",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › coming out onto a start cell kicks a horse waiting there, but not your own",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › a horse may not go past its gate; from the gate a roll of n climbs to step n",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › four horses on steps 3–6 win",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-28] Cờ cá ngựa rules › turns go round the colours that play; a leaver drops out",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-30] Cờ cá ngựa board › the track is one closed loop of 52 different cells, outside the home columns",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-30] Cờ cá ngựa board › each colour's gate is the track cell right in front of its home column",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-29] Cờ cá ngựa online › two players sit opposite, three or four take the next colours",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-29] Cờ cá ngựa online › the die comes from the seed: everyone sees the same roll, nobody can roll again",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-29] Cờ cá ngựa online › a player who left is dropped by the others; the last one standing wins",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-29] Cờ cá ngựa online › rejects broken states",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-02] caro AI 3×3 › hard never loses against a random player (as X or O)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-02] caro AI 3×3 › hard vs hard is always a draw",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-02] caro AI 3×3 › easy is beatable by hard",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-03] caro AI 15×15 › every level completes its own four to win",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-03] caro AI 15×15 › medium and hard block an opponent four",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-03] caro AI 15×15 › hard blocks an open three",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-03] caro AI 15×15 › first move goes to the centre",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-03] caro AI 15×15 › hard beats easy most of the time and runs fast",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro winningLine › detects horizontal, vertical and both diagonals on 3×3",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro winningLine › needs 5 on the big board and handles edges",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro winningLine › does not wrap around rows",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro winningLine › detects anti-diagonal on the big board",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro outcome › X wins, draw, ongoing",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-01] caro outcome › boardFromMoves alternates X/O",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-07] caro online moves › enforces turns and empty cells, detects a win",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-07] caro online moves › handles RTDB dropping the empty moves array",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-07] caro online moves › declares a draw on a full board",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-16] Cờ gánh computer › always plays a legal move (and so obeys Mở) at every level, over random games",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-16] Cờ gánh computer › takes a Gánh when one is available (medium and hard)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-16] Cờ gánh computer › prefers the bigger Gánh",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-16] Cờ gánh computer › hard beats easy clearly and answers in under 300 ms",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-16] Cờ gánh computer › medium beats easy more often than not",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-11] Cờ gánh board and setup › diagonals only on points with (x + y) even",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-11] Cờ gánh board and setup › 8 pieces each, Black first, point-symmetric through the centre",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-11] Cờ gánh board and setup › one step to an empty neighbour; no jumps, no diagonal from an odd point",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-12] Gánh › single: moving between two enemies converts both",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-12] Gánh › several axes at once: chầu 6 on a diagonal point",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-12] Gánh › arriving at the end of a line does not capture (no custodian capture)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-12] Gánh › converted pieces do not capture in turn (no chain reaction)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-13] Chẹt (surround) › a single piece with no free neighbour is converted",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-13] Chẹt (surround) › a whole connected group is converted",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-13] Chẹt (surround) › a move that leaves a point gives a trapped group air again",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-13] Chẹt (surround) › Gánh runs before Chẹt: a group trapped only after the Gánh is converted too",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-13] Chẹt (surround) › the mover's own trapped pieces stay",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-14] Mở (forced Gánh) › (a) pulling a piece out opens a gap: the opponent must Gánh there",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-14] Mở (forced Gánh) › (b) stepping into a flanking position forces the Gánh too",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-14] Mở (forced Gánh) › a Gánh chance that already existed is not compulsory",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-14] Mở (forced Gánh) › the obligation lasts one turn only",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-14] Mở (forced Gánh) › several forced Gánh moves: any one of them may be chosen",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-15] End of the game › converting every opposing piece wins",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-15] End of the game › 100 plies without a conversion is a draw",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-15] End of the game › the same position three times is a draw",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-15] End of the game › (R3) in random games the side to move always has a move until the game ends",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-17] Cờ gánh online moves › Black (first player) moves first; turns alternate; illegal moves are rejected",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-17] Cờ gánh online moves › survives a Firebase round trip (empty arrays and objects are dropped)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-17] Cờ gánh online moves › a corrupt board is rejected instead of crashing",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-17] Cờ gánh online moves › records conversions and the winner by uid",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › builds the dictionary and finds continuations",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › accepts the second syllable alone or the whole word",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › needs the tone marks: a tone-less word is refused without giving it away",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › both tone placements are the same word: \"hoà\" = \"hòa\", \"thuỷ\" = \"thủy\"",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › refuses words that break the chain, repeat, or are not in the dictionary",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › turns alternate; running out of time or giving up loses",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-21] Nối từ rules › options exclude used words; the opening word is easy to continue",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-22] Nối từ computer › only plays legal words and gives up when it knows none",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-22] Nối từ computer › medium never uses rare words; hard leaves the fewest answers",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-25] Nối từ children's words › the easy computer and hints use children's words first",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-25] Nối từ children's words › children's games open with a children's word that is easy to continue",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-27] Nối từ accept-only words › words with only a Vietnamese meaning are accepted from players",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-27] Nối từ accept-only words › but the game never offers them: not as hints, not from the computer",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-23] Nối từ word list › is big enough, two syllables, with an English gloss each",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-23] Nối từ word list › has the everyday words children say and none of the blocked ones",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-23] Nối từ word list › has a hand-picked list of children's words that can open a game",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-23] Nối từ word list › most common words can be continued",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-24] Nối từ online › turns alternate, words are checked, the clock restarts",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-24] Nối từ online › giving up or timing out loses; the opponent can claim only after the grace time",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-24] Nối từ online › a corrupt chain is rejected instead of crashing",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-05] numbers layout › contains every number exactly once",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-05] numbers layout › is deterministic for the same seed and differs for another seed",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-05] numbers layout › gives every number the same size (only position/rotation vary)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-05] numbers layout › never overlaps tiles and stays inside the board",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-06] numbers claims › only the next number can be claimed and scores add up",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-06] numbers claims › finishes after the last number and picks the winner",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-06] numbers claims › reports a draw on equal scores",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-06] numbers bot › waits within the configured range for every level",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-19] Ô ăn quan computer › always plays a legal move and games finish",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-19] Ô ăn quan computer › takes an obvious quan capture on medium and hard",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-19] Ô ăn quan computer › hard beats easy most of the time",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-19] Ô ăn quan computer › hard answers within a phone-friendly time",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › starts with 5 stones per field, a quan on each end, player 1 to move",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › only your own non-empty fields can be played",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › sows one stone per cell and stops in front of a quan cell",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › picks up the next non-empty field and keeps sowing",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › captures after an empty cell, and chains while empty/full repeats",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › two empty cells in a row end the turn with nothing captured",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › sowing counter-clockwise wraps around the quan cell 0",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › a player with all fields empty re-seeds 1 per field from their captures (rải quân)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › borrowing: re-seeding with fewer than 5 points takes the score below zero",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › game ends when both quan cells are empty; each side collects its own fields",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › a draw when both sides end with the same score",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-18] Ô ăn quan rules › stones are never created or lost over a whole random game",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-20] Ô ăn quan online moves › player 1 moves first; turns alternate; illegal moves are rejected",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-20] Ô ăn quan online moves › survives a Firebase round trip (optional fields dropped)",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-20] Ô ăn quan online moves › a corrupt state is rejected instead of crashing",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-20] Ô ăn quan online moves › records captures and the winner by uid",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-26] Ô ăn quan move replay › replaying the steps ends on the same board and score as the move itself",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[LG-26] Ô ăn quan move replay › a capture step adds the points to the mover at that moment",
+      "kind": "Vitest",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › requires auth to read",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › lets a signed-in user create a room as host only, with a 4-digit code",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › cannot overwrite a fresh room, but can reuse a stale one",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › allows exactly one guest to join",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › cannot join a missing room or impersonate someone",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › validates player names",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › only members can change game state",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › members can leave and delete the room; strangers cannot",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-01] rooms rules › nothing outside /rooms is readable or writable",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-06] players cannot tamper with each other › a member cannot rename or remove the other player",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-06] players cannot tamper with each other › a member cannot take the host role or give the seat to someone else",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-06] players cannot tamper with each other › names must be text of at most 20 characters, even for members",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-07] rooms only hold game data (data minimisation) › extra fields on a player or a room are rejected",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-07] rooms only hold game data (data minimisation) › the full game flow still works under the stricter rules",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-08] game types › Cờ gánh and Ô ăn quan rooms are allowed, unknown games are not",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-09] Nối từ word suggestions › a signed-in player can send a two-syllable word, nothing else, and nobody can read them",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-10] Cờ cá ngựa rooms of up to four › a third and fourth player can join while waiting, one seat each",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-10] Cờ cá ngựa rooms of up to four › other games keep two players",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-11] play counter › anyone can read; signed-in players can only add exactly one",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-12] game availability config › anyone can read it; nobody can change it from the app",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-13] spectators › anyone signed in can watch, as themselves only, and cannot play",
+      "kind": "Vitest (rules)",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-02] countdown: three ticks then \"go\"",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-03] results: win, draw and new record each have their sound",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-04] small feedback is silent: taps, right/wrong numbers and moves make no sound",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-05] with sound off nothing plays",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-06] music is off by default, starts when switched on, survives a reload, stops when off",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[AU-07] each theme loads its own sound set",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-01] every screen opens without errors (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-02] Vietnamese text uses the bundled font (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-03] one move in every game (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-04] typing Vietnamese with tone marks in Nối từ (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-05] sounds play after the first tap (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-06] boards are big enough (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[BR-07] online room between two players (chromium D8)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-28] three players: the host starts, everyone rolls and moves, boards agree",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-16] no move hints: tap a piece, then where it goes; the opponent's pieces are refused",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-17][AU-08] Mở: the opened player must capture; Gánh and Mở have their sounds",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-18] vs computer: it answers, undo goes back to my turn, leaving asks first",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-13] bad Cờ gánh links do not crash",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-19] online Cờ gánh: moves, Mở and the result reach both players; colours swap next round",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-09] Cờ gánh board fits and points are big enough on D1 iPhone SE",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-09] Cờ gánh board fits and points are big enough on D2 iPhone 14",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-09] Cờ gánh board fits and points are big enough on D3 iPhone 15 Pro Max",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-09] Cờ gánh board fits and points are big enough on D4 Galaxy S8",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-09] Cờ gánh board fits and points are big enough on D5 Pixel 7",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-30] the owner can turn games and modes off or hide them",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-30] offline, the last config is kept",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-01] no JS errors on any route",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-02] unknown route goes home",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-03] bad URL parameters do not crash",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-04] corrupted saved data does not break the app",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-05] 300 random taps on the boards",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-06] rapid back/forward navigation",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-07] losing the connection mid-game and getting it back",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-08] reloading mid online game keeps the game",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-09] 20 games in a row",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-10] app works when the browser blocks storage",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-11] friend leaves mid-game",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-12] joining by link with a saved name has no rejected writes",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-16] if the app itself cannot load: one automatic reload, then a clear message",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-17] a game that cannot be downloaded shows a message, not a blank screen",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-12] boards fill the screen on D8 Laptop",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-12] boards fill the screen on D9 Desktop FHD",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-12] boards fill the screen on D11 iPad landscape",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-24][UX-27] same device: hint, tone marks required, refusals, giving up",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-25] vs computer: it answers; running out of time loses",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-15] bad Nối từ links do not crash",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-26] online Nối từ: words reach both players; giving up ends the round",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-11] Nối từ fits on D1 iPhone SE",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-11] Nối từ fits on D2 iPhone 14",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-11] Nối từ fits on D3 iPhone 15 Pro Max",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-11] Nối từ fits on D4 Galaxy S8",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-11] Nối từ fits on D5 Pixel 7",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-20][AU-09] pick a field, then a direction; stones are sown and captured",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-21] vs computer: it answers, undo goes back to my turn, leaving asks first",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[CR-14] bad Ô ăn quan links do not crash",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-22] online Ô ăn quan: each player sees their own fields at the bottom; moves sync",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-23] hub groups games; every game has rules and a story",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-10] Ô ăn quan board fits and fields are big enough on D1 iPhone SE",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-10] Ô ăn quan board fits and fields are big enough on D2 iPhone 14",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-10] Ô ăn quan board fits and fields are big enough on D3 iPhone 15 Pro Max",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-10] Ô ăn quan board fits and fields are big enough on D4 Galaxy S8",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-10] Ô ăn quan board fits and fields are big enough on D5 Pixel 7",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-29] starting a game adds one play; the hub shows all games together",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-29] offline: no counter and no errors from it",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[SEC-02] HTML in a player name is shown as text and never runs",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-31] a third person watches a Ca rô game: sees moves, cannot play, can leave",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-31] the room closes: spectators are told the game is over",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-31] Cờ cá ngựa: someone who arrives after the start watches",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D1 iPhone SE 375×667 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D2 iPhone 14 390×844 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D3 iPhone 15 Pro Max 430×932 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D4 Galaxy S8 360×740 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D5 Pixel 7 412×915 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D6 iPad mini 768×1024 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D7 iPad Pro 12.9 1024×1366 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D8 Laptop 1366×768 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D9 Desktop FHD 1920×1080 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D10 Phone landscape 844×390 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09][UI-08] D11 iPad landscape 1366×1024 classic",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D1 iPhone SE 375×667 cute",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D2 iPhone 14 390×844 cute",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UI-01][UI-02][UI-02b][UI-03][UI-04][UI-05][UI-06][UI-07][UI-09] D7 iPad Pro 12.9 1024×1366 cute",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-01] correct tap gives visual feedback within 100 ms",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-02] computer answers within 1 second on the 15×15 board (hard)",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-03] every screen has a way back or out",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-04] leaving mid-game asks first and \"keep playing\" keeps the game",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-05][UX-12] end of a round shows the result, play again and home; replay counts down",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-06] no hint: the next number is never highlighted for you",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-07] undo vs computer removes both moves",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-08] large text makes text bigger",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-09] settings survive a reload",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-10] with sound off there is no sound and no vibration",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-11] text contrast meets WCAG AA in both themes",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-13] a wrong room code gives a clear message within 5 s",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-14] creating a room while offline reports the problem within 10 s",
+      "kind": "Playwright",
+      "status": "passed"
+    },
+    {
+      "title": "[UX-15] welcome shows on first launch only",
+      "kind": "Playwright",
+      "status": "passed"
+    }
+  ]
+}
