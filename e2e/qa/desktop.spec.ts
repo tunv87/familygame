@@ -37,6 +37,17 @@ for (const d of DESKTOPS) {
       expect
         .soft(r.overflow, `[UI-12] ${d.id} ${name}: horizontal overflow`)
         .toBeLessThanOrEqual(0);
+      if (name === 'oanquan') {
+        // the wide board must not cover the buttons under it
+        const overlap = await page.evaluate(() => {
+          const b = document.querySelector('[data-testid="oaq-board"]')!.getBoundingClientRect();
+          const btn = document.querySelector('[data-testid="dir-right"]')!.getBoundingClientRect();
+          return b.bottom - btn.top;
+        });
+        expect
+          .soft(overlap, `[UI-12] ${d.id} oanquan: board covers the buttons`)
+          .toBeLessThanOrEqual(0);
+      }
       await evidence(page, 'desktop', d.id, `19-${name}`);
     }
     await ctx.close();

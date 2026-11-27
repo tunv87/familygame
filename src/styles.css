@@ -2408,6 +2408,10 @@ input {
     gap: 14px;
   }
 
+  .screen:has(> .poster) .stack > .muted.center {
+    text-align: left;
+  }
+
   .screen:has(> .poster) .stack > .card {
     min-height: 96px;
     padding: 18px 24px;
@@ -2445,12 +2449,15 @@ input {
     text-align: center;
   }
 
+  /* the board is as big as the space left allows, by width or by height */
   .screen.game .oaq-wrap {
     width: 100%;
+    container-type: size;
   }
 
   .screen.game .oaq-board {
-    max-width: 100%;
+    width: min(100cqw, 100cqh * 7 / 2.6);
+    max-width: none;
   }
 
   /* game screens: whose turn it is stands out in the side column */
