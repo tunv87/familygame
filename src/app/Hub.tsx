@@ -4,7 +4,8 @@ import { GAMES, GROUPS } from '../games/registry';
 import { useT } from '../i18n';
 import { Card, TopBar } from '../ui/components';
 import { PlayCount } from '../ui/PlayCount';
-import { gameStatus, useGamesConfig } from './gameConfig';
+import { gameStatus, getGamesConfig, useGamesConfig } from './gameConfig';
+import { usePrefetchGames } from './lazyGames';
 import { setSettings, useSettings } from './settings';
 import { useTheme } from './theme';
 import { Welcome, needsWelcome } from './Welcome';
@@ -15,6 +16,7 @@ export function Hub() {
   const settings = useSettings();
   const theme = useTheme();
   const config = useGamesConfig();
+  usePrefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden');
   const taps = useRef<number[]>([]);
   const [welcome, setWelcome] = useState(needsWelcome);
   // Hidden shortcut: tap the title 5 times quickly to open the debug log.

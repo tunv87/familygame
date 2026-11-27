@@ -3,7 +3,7 @@
  * the background soon after the app opens, so they still open offline; a load that fails is
  * tried once more, then the player gets a message with a Reload button, never a blank screen.
  */
-import { Component, lazy, type ComponentType, type ReactNode } from 'react';
+import { Component, lazy, useEffect, type ComponentType, type ReactNode } from 'react';
 import { useT } from '../i18n';
 import { createLogger, isLeaving } from '../lib/logger';
 import type { GameId } from '../online/types';
@@ -31,23 +31,33 @@ export function lazyGame<M>(game: GameId, load: () => Promise<M>, pick: (m: M) =
   return lazy(() => withRetry(load).then((m) => ({ default: pick(m) })));
 }
 
-let prefetched = false;
+const fetched = new Set<() => Promise<unknown>>();
+let running = false;
+let active = false; // the home screen is open
+
 /**
  * Downloads the games that can be played, in the background, one after another (so sounds and
- * the game being played are not slowed down); stops if the page is closing. Once per start.
+ * the screen are not slowed down). Pauses when the home screen closes or the page is leaving,
+ * and carries on from where it was the next time.
  */
 export async function prefetchGames(visible: (g: GameId) => boolean) {
-  if (prefetched) return;
-  prefetched = true;
-  for (const [game, list] of loaders) {
-    if (!visible(game)) continue;
-    for (const load of list) {
-      if (isLeaving()) return;
-      await load().catch(() => {}); // opened later: tried again then
+  if (running) return;
+  running = true;
+  try {
+    for (const [game, list] of loaders) {
+      if (!visible(game)) continue;
+      for (const load of list) {
+        if (fetched.has(load)) continue;
+        if (!active || isLeaving()) return;
+        await load().catch(() => {}); // opened later: tried again then
+        fetched.add(load);
+      }
     }
+    // for tests and the debug page: every playable game is on the device
+    (window as unknown as { __fgGamesReady?: boolean }).__fgGamesReady = true;
+  } finally {
+    running = false;
   }
-  // for tests and the debug page: every playable game is on the device
-  (window as unknown as { __fgGamesReady?: boolean }).__fgGamesReady = true;
 }
 
 export function Loading() {
@@ -91,4 +101,30 @@ export class GameLoadBoundary extends Component<
   render() {
     return this.state.failed ? <LoadFailed /> : this.props.children;
   }
+}
+
+/**
+ * On the home screen, once the browser is idle: fetch the playable games in the background so
+ * they open at once and offline. Not while a game is being played (it would slow it down).
+ */
+export function usePrefetchGames(visible: (g: GameId) => boolean) {
+  useEffect(() => {
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    active = true;
+    let idle = 0;
+    const timer = setTimeout(() => {
+      const go = () => void prefetchGames(visible);
+      if (w.requestIdleCallback) idle = w.requestIdleCallback(go, { timeout: 3000 });
+      else go();
+    }, 1500);
+    return () => {
+      active = false;
+      clearTimeout(timer);
+      if (idle) w.cancelIdleCallback?.(idle);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 }

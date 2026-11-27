@@ -1,6 +1,6 @@
 import { Suspense, useEffect, useRef } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
-import { GameLoadBoundary, Loading, lazyGame, prefetchGames } from './lazyGames';
+import { GameLoadBoundary, Loading, lazyGame } from './lazyGames';
 import { createLogger } from '../lib/logger';
 import { JoinScreen } from '../online/JoinScreen';
 import { RoomScreen } from '../online/RoomScreen';
@@ -12,7 +12,7 @@ import { getSettings, useSettings } from './settings';
 import { sfx } from '../lib/sound';
 import { startMusic, stopMusic } from '../lib/music';
 import { THEMES } from './theme';
-import { gameStatus, getGamesConfig, loadGamesConfig } from './gameConfig';
+import { loadGamesConfig } from './gameConfig';
 import { GameGate } from '../ui/GameGate';
 import { translate } from '../i18n';
 import { hideSplash, setStatusBarTheme } from '../lib/native';
@@ -137,14 +137,6 @@ export function App() {
   }, [bigText, lang, theme]);
   useEffect(hideSplash, []);
   useEffect(loadGamesConfig, []);
-  // fetch the playable games in the background, so they open at once and offline
-  useEffect(() => {
-    const id = setTimeout(
-      () => void prefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden'),
-      1500,
-    );
-    return () => clearTimeout(id);
-  }, []);
   useAudioLifecycle();
   return (
     <HashRouter>
