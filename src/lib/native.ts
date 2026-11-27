@@ -98,6 +98,24 @@ export function pushBackHandler(fn: BackHandler): () => void {
   };
 }
 
+/**
+ * Computers: Esc closes an open dialog, otherwise acts like the back button of the screen
+ * (which may ask "leave this game?"). Typing in a box is left alone.
+ */
+export function setupKeys() {
+  if (isNative || typeof window === 'undefined') return;
+  window.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape' || e.defaultPrevented || e.repeat) return;
+    const backdrops = document.querySelectorAll<HTMLElement>('.modal-backdrop');
+    if (backdrops.length) {
+      backdrops[backdrops.length - 1].click();
+      return;
+    }
+    const top = backHandlers[backHandlers.length - 1];
+    if (top) top();
+  });
+}
+
 export async function setupNative() {
   if (!isNative) return;
   document.documentElement.dataset.platform = platform;

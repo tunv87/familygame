@@ -263,6 +263,13 @@ export const en: Record<MessageKey, string> = {
   playCount: '{n} games played',
   playCountTotal: '{n} games played so far',
   gameOff: 'Under maintenance',
+  hubHeroTitle: 'Play together, near or far',
+  hubHeroText:
+    '{n} folk and brain games: play the computer, two on one device, or online with family.',
+  chipSolo: 'vs computer',
+  chipLocal: 'Same device',
+  chipOnline: 'Online',
+  posterStory: 'The story',
   gameUnavailable: 'This game is closed for now. Try another one!',
   onlineOff: 'New rooms for this game are closed for now.',
   spectating: 'You are watching – you cannot take part in this game',

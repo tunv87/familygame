@@ -64,6 +64,8 @@ export function Card({
   className = '',
   testId,
   off,
+  game,
+  children,
 }: {
   emoji: string;
   title: string;
@@ -73,11 +75,16 @@ export function Card({
   testId?: string;
   /** turned off by the owner: shown greyed out with a short note, cannot be opened */
   off?: string;
+  /** game id, for its colours on big screens */
+  game?: string;
+  /** extra content under the hint (shown on big screens only, by CSS) */
+  children?: ReactNode;
 }) {
   return (
     <button
       className={`card ${className} ${off ? 'off' : ''}`}
       data-testid={testId}
+      data-game={game}
       disabled={!!off}
       aria-disabled={!!off}
       onClick={() => {
@@ -99,6 +106,7 @@ export function Card({
         ) : hint ? (
           <div className="hint">{hint}</div>
         ) : null}
+        {children}
       </span>
     </button>
   );

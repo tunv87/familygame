@@ -264,6 +264,13 @@ export const vi = {
   playCount: '{n} lượt chơi',
   playCountTotal: 'Đã có {n} lượt chơi',
   gameOff: 'Đang bảo trì',
+  hubHeroTitle: 'Cả nhà cùng chơi, dù ở gần hay xa',
+  hubHeroText:
+    '{n} trò dân gian và trí tuệ: chơi với máy, hai người cùng máy, hoặc online với người thân.',
+  chipSolo: 'Với máy',
+  chipLocal: 'Cùng máy',
+  chipOnline: 'Online',
+  posterStory: 'Câu chuyện',
   gameUnavailable: 'Trò chơi này tạm thời chưa mở. Mời bạn chơi trò khác nhé!',
   onlineOff: 'Tạm thời chưa tạo được phòng mới cho trò này.',
   spectating: 'Bạn đang xem – không thể tham gia trận này',

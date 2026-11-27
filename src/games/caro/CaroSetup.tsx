@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModeCard } from '../../ui/GameGate';
-import { PlayCount } from '../../ui/PlayCount';
+import { GamePoster } from '../../ui/GamePoster';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
 import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
@@ -41,7 +41,7 @@ export function CaroSetup() {
         onBack={back}
         right={<HelpButton steps={CARO_HELP} story={CARO_STORY} />}
       />
-      <PlayCount game="caro" />
+      <GamePoster game="caro" story={CARO_STORY} />
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
