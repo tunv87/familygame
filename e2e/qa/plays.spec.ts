@@ -50,7 +50,11 @@ test('[UX-29] offline: no counter and no errors from it', async ({ browser }) =>
   await page.goto('/');
   await page.getByTestId('play-count').waitFor({ timeout: 15_000 });
   // the playable games are downloaded in the background soon after the app opens
-  await page.waitForLoadState('networkidle');
+  await page.waitForFunction(
+    () => (window as unknown as { __fgGamesReady?: boolean }).__fgGamesReady === true,
+    undefined,
+    { timeout: 30_000 },
+  );
   await ctx.setOffline(true);
   // a game started offline is simply not counted
   await page.getByTestId('game-caro').click();

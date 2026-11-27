@@ -140,8 +140,8 @@ export function App() {
   // fetch the playable games in the background, so they open at once and offline
   useEffect(() => {
     const id = setTimeout(
-      () => prefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden'),
-      800,
+      () => void prefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden'),
+      1500,
     );
     return () => clearTimeout(id);
   }, []);

@@ -11,11 +11,15 @@ import type { GameId } from '../online/types';
 const log = createLogger('games');
 const loaders = new Map<GameId, (() => Promise<unknown>)[]>();
 
+/** a promise that never settles: the page is closing, there is nothing left to show */
+const never = <T,>() => new Promise<T>(() => {});
+
 async function withRetry<T>(load: () => Promise<T>): Promise<T> {
   try {
     return await load();
   } catch (e) {
-    if (isLeaving()) throw e;
+    // a download cut off because the page is closing (reload, leaving) is not an error
+    if (isLeaving()) return never<T>();
     log.warn('game load failed, retrying', String(e));
     await new Promise((r) => setTimeout(r, 600));
     return load();
@@ -28,12 +32,22 @@ export function lazyGame<M>(game: GameId, load: () => Promise<M>, pick: (m: M) =
 }
 
 let prefetched = false;
-/** Downloads the games that can be played, in the background (once per app start). */
-export function prefetchGames(visible: (g: GameId) => boolean) {
+/**
+ * Downloads the games that can be played, in the background, one after another (so sounds and
+ * the game being played are not slowed down); stops if the page is closing. Once per start.
+ */
+export async function prefetchGames(visible: (g: GameId) => boolean) {
   if (prefetched) return;
   prefetched = true;
-  for (const [game, list] of loaders)
-    if (visible(game)) for (const load of list) load().catch(() => {}); // opened later: retried
+  for (const [game, list] of loaders) {
+    if (!visible(game)) continue;
+    for (const load of list) {
+      if (isLeaving()) return;
+      await load().catch(() => {}); // opened later: tried again then
+    }
+  }
+  // for tests and the debug page: every playable game is on the device
+  (window as unknown as { __fgGamesReady?: boolean }).__fgGamesReady = true;
 }
 
 export function Loading() {
