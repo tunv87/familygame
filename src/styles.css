@@ -2305,11 +2305,11 @@ input {
 
   /* ---------- a game's start page: poster on the left, choices on the right ---------- */
   .screen:has(> .poster) {
-    max-width: 1180px;
+    max-width: 1440px;
     display: grid;
-    grid-template-columns: minmax(320px, 400px) minmax(0, 1fr);
+    grid-template-columns: minmax(280px, 360px) minmax(0, 1fr) minmax(280px, 360px);
     grid-template-rows: auto repeat(10, min-content) 1fr;
-    column-gap: 48px;
+    column-gap: 36px;
     row-gap: 16px;
     align-content: start;
     padding: 20px 40px 40px;
@@ -2324,15 +2324,27 @@ input {
     grid-column: 1 / -1;
   }
 
+  /* left: the story; middle: game modes; right: how to play */
+  .screen:has(> .poster) > .poster-rules {
+    grid-column: 3;
+    grid-row: 2 / -1;
+  }
+
+  .screen:has(> .poster) > :is(.poster, .poster-rules) {
+    align-self: start;
+    border-radius: 28px;
+    background: var(--surface);
+    box-shadow:
+      0 1px 0 rgba(0, 0, 0, 0.04),
+      0 20px 44px -24px rgba(80, 50, 0, 0.45);
+  }
+
   .screen:has(> .poster) > .poster {
     grid-column: 1;
     grid-row: 2 / -1;
-    align-self: start;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    border-radius: 28px;
-    background: var(--surface);
     box-shadow:
       0 1px 0 rgba(0, 0, 0, 0.04),
       0 20px 44px -24px rgba(80, 50, 0, 0.45);
@@ -2394,22 +2406,16 @@ input {
     margin: 0;
   }
 
-  .poster-story:has(+ .poster-rules) {
-    margin-bottom: 0;
-  }
-
   .poster-rules {
-    margin: 16px 26px 24px;
-    padding-top: 16px;
-    border-top: 2px dashed var(--border);
+    padding: 24px 24px 26px;
     font-size: 0.72em;
     line-height: 1.5;
     color: #374151;
   }
 
   .poster-rules h3 {
-    margin: 0 0 10px;
-    font-size: 1.15em;
+    margin: 0 0 14px;
+    font-size: 1.3em;
     color: var(--text);
   }
 
@@ -2419,7 +2425,7 @@ input {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 14px;
   }
 
   .poster-rules li {

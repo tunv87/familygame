@@ -54,24 +54,27 @@ export function GamePoster({
   const info = GAMES.find((g) => g.id === game);
   if (!info) return <PlayCount game={game} />;
   return (
-    <aside className="poster" data-game={game}>
-      <div className="poster-art desk-only" aria-hidden>
-        <span>{theme.gameEmoji[game] ?? info.emoji}</span>
-      </div>
-      <div className="poster-body desk-only">
-        <h2 className="poster-title">{t(info.title)}</h2>
-        <p className="poster-desc">{t(info.desc)}</p>
-        <ModeChips game={game} />
-      </div>
-      <PlayCount game={game} />
-      {story?.length ? (
-        <div className="poster-story desk-only">
-          <h3>🏮 {t('posterStory')}</h3>
-          <p>{t(story[0])}</p>
+    <>
+      <aside className="poster" data-game={game}>
+        <div className="poster-art desk-only" aria-hidden>
+          <span>{theme.gameEmoji[game] ?? info.emoji}</span>
         </div>
-      ) : null}
+        <div className="poster-body desk-only">
+          <h2 className="poster-title">{t(info.title)}</h2>
+          <p className="poster-desc">{t(info.desc)}</p>
+          <ModeChips game={game} />
+        </div>
+        <PlayCount game={game} />
+        {story?.length ? (
+          <div className="poster-story desk-only">
+            <h3>🏮 {t('posterStory')}</h3>
+            <p>{t(story[0])}</p>
+          </div>
+        ) : null}
+        {children}
+      </aside>
       {rules?.length ? (
-        <div className="poster-rules desk-only" data-testid="poster-rules">
+        <aside className="poster-rules desk-only" data-game={game} data-testid="poster-rules">
           <h3>📖 {t('helpRules')}</h3>
           <ol>
             {rules.map(([emoji, key]) => (
@@ -83,9 +86,8 @@ export function GamePoster({
               </li>
             ))}
           </ol>
-        </div>
+        </aside>
       ) : null}
-      {children}
-    </aside>
+    </>
   );
 }
