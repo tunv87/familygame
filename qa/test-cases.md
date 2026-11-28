@@ -138,6 +138,7 @@ Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). M�
 | AU-11 | P2      | Âm thanh Cờ cá ngựa                           | Đổ xí ngầu có tiếng lắc 2 xí ngầu; ngựa đi có tiếng vó; hiện 2 xí ngầu 1–6                                                    |
 | AU-09 | P2      | Ô ăn quan: ăn sỏi                             | Có âm "ganh" (ăn quan: "ganhBig")                                                                                             |
 | AU-10 | P2      | Nhạc nền tự phối                              | 3 bài khác nhịp; mỗi ô nhịp sáng tác lại từ mô-típ, luôn trong thang âm, không lặp y hệt; giao diện Dễ thương ưu tiên bài vui |
+| AU-12 | P2      | Chạm ngay khi trang vừa hiện                  | Cú chạm đầu tiên vẫn mở khoá âm thanh và tải bộ âm thanh của giao diện                                                        |
 
 ## SEC – Bảo mật
 
