@@ -97,7 +97,7 @@ for (const theme of THEMES) {
 
       await page.getByRole('button', { name: /Cài đặt/ }).click();
       await checkScreen(page, theme, 'settings');
-      await page.getByRole('button', { name: /Nhật ký lỗi/ }).click();
+      await page.goto('/#/debug');
       await checkScreen(page, theme, 'debug');
 
       await page.goto('/#/caro');

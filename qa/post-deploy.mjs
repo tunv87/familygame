@@ -83,9 +83,11 @@ let buildVersion = 'unknown';
 {
   const { ctx, page } = await newPage(DESKTOP, 'desktop');
   await run('TC-14', 'debug page', async () => {
+    // players get no button to the log (F06); open it by its address
     await go(page, '#/settings');
-    await page.getByRole('button', { name: /Nhật ký lỗi|Debug log/ }).click();
-    await page.waitForURL(/#\/debug/);
+    await page.getByTestId('about').waitFor();
+    const debugButton = await page.getByRole('button', { name: /Nhật ký lỗi|Error log/ }).count();
+    await go(page, '#/debug');
     const text = await page.locator('.log-view').innerText();
     const m = text.match(/version (\S+) built ([^\n]+)/);
     if (m) buildVersion = `${m[1]} (${m[2].trim()})`;
@@ -100,9 +102,14 @@ let buildVersion = 'unknown';
     ].filter(([re]) => re.test(text));
     check(
       'TC-14',
-      secrets.length === 0,
-      `#/debug shows build ${buildVersion} and logs only; no keys, tokens or e-mails`,
-      `#/debug exposes: ${secrets.map(([, what]) => what).join(', ')}`,
+      secrets.length === 0 && debugButton === 0,
+      `#/debug shows build ${buildVersion} and logs only; no keys, tokens or e-mails; no button to it in Settings`,
+      [
+        secrets.length ? `#/debug exposes: ${secrets.map(([, what]) => what).join(', ')}` : '',
+        debugButton ? 'Settings still shows the error log button' : '',
+      ]
+        .filter(Boolean)
+        .join('; '),
     );
   });
   await ctx.close();
