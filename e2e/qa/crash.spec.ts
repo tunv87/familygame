@@ -407,3 +407,44 @@ for (const [game, route, cellId, button] of [
     await ctx.close();
   });
 }
+
+test('[CR-19] a ready guest leaves the waiting room: the next guest must tap Ready too', async ({
+  browser,
+}) => {
+  const a = await openApp(browser, { name: 'An' });
+  const b = await openApp(browser, { name: 'Bình' });
+  const c = await openApp(browser, { name: 'Chi' });
+  await a.page.goto('/#/caro');
+  await a.page.getByTestId('mode-online').click();
+  await a.page.getByTestId('size-3').click();
+  const code = await createRoomAs(a.page, 'An');
+  await joinAs(b.page, code, 'Bình');
+  await readyUp(b.page);
+  await expect(a.page.getByTestId('lobby-opp-ready'), '[CR-19] host sees Bình ready').toBeVisible();
+  // Bình leaves before the host is ready
+  await b.page
+    .getByRole('button', { name: /quay lại|back/i })
+    .first()
+    .click();
+  await expect(a.page.getByTestId('lobby-status')).toContainText('Đang chờ bạn vào', {
+    timeout: 15_000,
+  });
+  await readyUp(a.page);
+  // Chi takes the free seat: not ready yet, so nothing starts
+  await joinAs(c.page, code, 'Chi');
+  await expect(a.page.getByTestId('lobby-status')).toContainText('Đang chờ Chi bấm Sẵn sàng', {
+    timeout: 15_000,
+  });
+  await expect(
+    a.page.getByTestId('lobby-opp-ready'),
+    '[CR-19] old ready flag carried over',
+  ).toHaveCount(0);
+  await a.page.waitForTimeout(800);
+  await expect(a.page.getByTestId('caro-board'), '[CR-19] started without Chi').toHaveCount(0);
+  await readyUp(c.page);
+  await expect(c.page.getByTestId('caro-board'), '[CR-19] did not start').toBeVisible({
+    timeout: 15_000,
+  });
+  expect([...a.errors, ...b.errors, ...c.errors], '[CR-19] errors').toEqual([]);
+  for (const p of [a, b, c]) await p.ctx.close();
+});

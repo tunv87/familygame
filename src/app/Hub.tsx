@@ -11,6 +11,7 @@ import { useFamily } from './family';
 import { setSettings, useProfile, useSettings } from './settings';
 import { useTheme } from './theme';
 import { Welcome, needsWelcome } from './Welcome';
+import { unlockDevTools } from './devtools';
 
 export function Hub() {
   const t = useT();
@@ -23,11 +24,15 @@ export function Hub() {
   usePrefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden');
   const taps = useRef<number[]>([]);
   const [welcome, setWelcome] = useState(needsWelcome);
-  // Hidden shortcut: tap the title 5 times quickly to open the debug log.
+  // Hidden shortcut: tap the title 5 times quickly to open the debug log (and show its button
+  // in Settings from then on).
   const onTitleTap = () => {
     const now = Date.now();
     taps.current = [...taps.current.filter((x) => now - x < 2000), now];
-    if (taps.current.length >= 5) navigate('/debug');
+    if (taps.current.length >= 5) {
+      unlockDevTools();
+      navigate('/debug');
+    }
   };
   return (
     <main className="screen hub">

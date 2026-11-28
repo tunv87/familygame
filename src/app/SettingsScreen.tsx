@@ -4,6 +4,7 @@ import { useT } from '../i18n';
 import { Avatar, ProfileModal, TopBar } from '../ui/components';
 import { setSettings, useProfile, useSettings, type Lang, type ThemeId } from './settings';
 import { useState } from 'react';
+import { devToolsUnlocked } from './devtools';
 
 function Toggle({ value, onChange }: { value: boolean; onChange: (v: boolean) => void }) {
   const t = useT();
@@ -89,9 +90,11 @@ export function SettingsScreen() {
       <button className="btn secondary" onClick={() => navigate('/about')} data-testid="about">
         ℹ️ {t('about')} · {t('privacy')}
       </button>
-      <button className="btn secondary" onClick={() => navigate('/debug')}>
-        🪵 {t('debug')}
-      </button>
+      {devToolsUnlocked() && (
+        <button className="btn secondary" onClick={() => navigate('/debug')} data-testid="debug">
+          🪵 {t('debug')}
+        </button>
+      )}
       <div className="muted center" style={{ fontSize: 14 }}>
         v{__APP_VERSION__} · {__BUILD_TIME__}
       </div>

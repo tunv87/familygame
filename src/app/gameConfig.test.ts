@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { cleanConfig, gameStatus, modeStatus } from './gameConfig';
 
-describe('[LG-31] game and mode availability', () => {
+describe('[LG-34] game and mode availability', () => {
   it('reads on / off / hidden for games and their modes; anything else counts as on', () => {
     const c = cleanConfig({
       caro: { status: 'off' },
