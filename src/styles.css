@@ -2192,3 +2192,10 @@ a:focus-visible,
   border-color: #f4b740;
   background: linear-gradient(135deg, #fff9e6 0%, #ffffff 70%);
 }
+
+/* Cờ cá ngựa: two dice side by side */
+.cn-dice {
+  display: flex;
+  gap: 8px;
+  flex: none;
+}

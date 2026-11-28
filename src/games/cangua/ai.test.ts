@@ -1,18 +1,21 @@
 import { describe, expect, it } from 'vitest';
 import { createRng } from '../../lib/rng';
 import { chooseMove } from './ai';
-import { applyMove, applyRoll, initialState, legalMoves, type CaNguaState } from './logic';
+import {
+  applyMove,
+  applyRoll,
+  initialState,
+  legalMoves,
+  type CaNguaState,
+  type Dice,
+} from './logic';
 
 /** Plays a whole game; `pick` chooses the horse for each colour. */
-function play(
-  colors: (0 | 1 | 2 | 3)[],
-  seed: number,
-  pick: (s: CaNguaState, d: number) => number,
-) {
+function play(colors: (0 | 1 | 2 | 3)[], seed: number, pick: (s: CaNguaState, d: Dice) => number) {
   const rng = createRng(seed);
   let s = initialState(colors);
   for (let i = 0; i < 20000 && s.winner === null; i++) {
-    const d = 1 + Math.floor(rng() * 6);
+    const d: Dice = [1 + Math.floor(rng() * 6), 1 + Math.floor(rng() * 6)];
     const r = applyRoll(s, d);
     if (!r) throw new Error('roll refused');
     s = r;
@@ -30,7 +33,7 @@ describe('[LG-31] Cờ cá ngựa computer player', () => {
     const rng = createRng(7);
     let s = initialState([0, 1, 2, 3]);
     for (let i = 0; i < 3000 && s.winner === null; i++) {
-      const d = 1 + Math.floor(rng() * 6);
+      const d: Dice = [1 + Math.floor(rng() * 6), 1 + Math.floor(rng() * 6)];
       const legal = legalMoves(s, d).map((m) => m.horse);
       const h = chooseMove(s, d, rng);
       if (legal.length === 0) expect(h).toBeNull();
@@ -45,8 +48,8 @@ describe('[LG-31] Cờ cá ngựa computer player', () => {
     s.horses[0] = 10; // red on track cell 10
     s.horses[1] = 20; // another red horse that could move instead
     s.horses[8] = 39; // green (starts at cell 26) on track cell 13, three cells ahead of red
-    expect(legalMoves(s, 3).some((m) => m.kick === 8)).toBe(true);
-    expect(chooseMove(s, 3, () => 0)).toBe(0);
+    expect(legalMoves(s, [1, 2]).some((m) => m.kick === 8)).toBe(true);
+    expect(chooseMove(s, [1, 2], () => 0)).toBe(0);
   });
 
   it('every game between computers ends with a winner', () => {

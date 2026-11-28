@@ -100,7 +100,7 @@ test('[UX-31] Cờ cá ngựa: someone who arrives after the start watches', asy
   await expect(c.page.getByTestId('status')).toContainText('Lượt của');
   // An rolls: Chi sees the die
   await a.page.getByTestId('cn-roll').click();
-  await expect(c.page.getByTestId('cn-die'), '[UX-31] roll not shown').not.toHaveAttribute(
+  await expect(c.page.getByTestId('cn-dice'), '[UX-31] roll not shown').not.toHaveAttribute(
     'data-value',
     '',
     { timeout: 10_000 },

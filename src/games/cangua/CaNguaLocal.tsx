@@ -13,7 +13,7 @@ import {
   useBackHandler,
 } from '../../ui/components';
 import { chooseMove } from './ai';
-import { CaNguaBoard, DieFace, HORSE_COLORS } from './CaNguaBoard';
+import { CaNguaBoard, Dice2, HORSE_COLORS } from './CaNguaBoard';
 import { CN_HELP, CN_STORY } from './help';
 import {
   applyMove,
@@ -21,7 +21,9 @@ import {
   colorOf,
   initialState,
   legalMoves,
+  rollsAgain,
   type CaNguaState,
+  type Dice,
   type Color,
 } from './logic';
 import { colorsFor } from './online';
@@ -84,20 +86,18 @@ export function CaNguaLocal() {
     if (busy.current || state.winner !== null || state.roll !== null) return;
     busy.current = true;
     setRolling(true);
+    sfx.dice();
     window.setTimeout(() => {
       const s = current.current;
-      const d = 1 + Math.floor(Math.random() * 6);
-      const next = applyRoll(s, d);
+      const r = () => 1 + Math.floor(Math.random() * 6);
+      const dice: Dice = [r(), r()];
+      const next = applyRoll(s, dice);
       setRolling(false);
       busy.current = false;
       if (!next) return;
-      const who = nameOf(s.turn);
-      setMessage(
-        next.lastRoll?.passed
-          ? t('cnNoMove', { name: who, n: d })
-          : t('cnRolled', { name: who, n: d }),
-      );
-      if (d === 6) sfx.ganh();
+      const vars = { name: nameOf(s.turn), a: dice[0], b: dice[1], n: dice[0] + dice[1] };
+      setMessage(next.lastRoll?.passed ? t('cnNoMove', vars) : t('cnRolled', vars));
+      if (rollsAgain(dice)) sfx.lucky();
       setState(next);
     }, ROLL_MS);
   };
@@ -106,12 +106,14 @@ export function CaNguaLocal() {
     const s = state;
     const next = applyMove(s, horse);
     if (!next) return;
+    sfx.hooves(next.last ? Math.max(1, next.last.to - Math.max(0, next.last.from)) : 1);
     if (next.last?.kick !== undefined) {
       sfx.ganh(true);
       setMessage(
         t('cnKick', { name: nameOf(colorOf(horse)), other: nameOf(colorOf(next.last.kick)) }),
       );
-    } else if (s.roll === 6 && next.winner === null) setMessage(t('cnAgain'));
+    } else if (s.roll && rollsAgain(s.roll) && next.winner === null)
+      setMessage(t('cnAgain', { a: s.roll[0], b: s.roll[1] }));
     else setMessage('');
     if (!local && next.turn === ME && next.winner === null && s.turn !== ME) sfx.opponent();
     setState(next);
@@ -151,7 +153,8 @@ export function CaNguaLocal() {
     myTurn && state.roll !== null && !rolling
       ? legalMoves(state, state.roll).map((m) => m.horse)
       : [];
-  const shownRoll = state.lastRoll?.value ?? null;
+  const shownDice = state.lastRoll?.dice ?? null;
+  const rollText = (d: Dice) => `${d[0]} + ${d[1]} = ${d[0] + d[1]}`;
 
   const status =
     state.winner !== null
@@ -161,11 +164,11 @@ export function CaNguaLocal() {
         : myTurn && local
           ? state.roll === null
             ? t('cnTurnRoll', { name: nameOf(state.turn) })
-            : t('cnTurnPick', { name: nameOf(state.turn), n: state.roll })
+            : t('cnTurnPick', { name: nameOf(state.turn), n: rollText(state.roll) })
           : myTurn
             ? state.roll === null
               ? t('cnYourRoll')
-              : t('cnPickHorse', { n: state.roll })
+              : t('cnPickHorse', { n: rollText(state.roll) })
             : t('turnOf', { name: nameOf(state.turn) });
 
   return (
@@ -196,7 +199,7 @@ export function CaNguaLocal() {
       </div>
       <CaNguaBoard state={state} playable={playable} onHorse={move} />
       <div className="cn-controls">
-        <DieFace value={rolling ? null : shownRoll} rolling={rolling} />
+        <Dice2 dice={rolling ? null : shownDice} rolling={rolling} />
         <button
           className="btn grow"
           data-testid="cn-roll"

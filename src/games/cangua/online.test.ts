@@ -1,5 +1,14 @@
 import { describe, expect, it } from 'vitest';
-import { applyCaNguaOnline, dieFor, initialCaNguaState, toLocal, turnUidOf } from './online';
+import {
+  applyCaNguaOnline,
+  diceFor,
+  dieFor,
+  initialCaNguaState,
+  packDice,
+  toLocal,
+  turnUidOf,
+  unpackDice,
+} from './online';
 
 describe('[LG-29] Cờ cá ngựa online', () => {
   it('two players sit opposite, three or four take the next colours', () => {
@@ -10,13 +19,15 @@ describe('[LG-29] Cờ cá ngựa online', () => {
     expect(toLocal(initialCaNguaState(['a', 'b', 'c', 'd'], 1)).colors).toEqual([0, 1, 2, 3]);
   });
 
-  it('the die comes from the seed: everyone sees the same roll, nobody can roll again', () => {
+  it('the dice come from the seed: everyone sees the same roll, nobody can roll again', () => {
     const rolls = Array.from({ length: 600 }, (_, i) => dieFor(42, i));
     for (let d = 1; d <= 6; d++) expect(rolls.filter((x) => x === d).length).toBeGreaterThan(70);
     let o = initialCaNguaState(['a', 'b'], 42);
     expect(applyCaNguaOnline(o, 'b', { t: 'roll' })).toBeNull(); // not b's turn
     const r = applyCaNguaOnline(o, 'a', { t: 'roll' })!;
-    expect(r.lastRoll?.v).toBe(dieFor(42, 0));
+    expect(r.lastRoll?.d).toBe(packDice(diceFor(42, 0)));
+    expect(unpackDice(36)).toEqual([3, 6]);
+    expect(unpackDice(70)).toBeNull();
     expect(r.rolls).toBe(1);
     // play a long game with random-but-legal actions: always consistent, someone may win
     o = r;
@@ -27,7 +38,7 @@ describe('[LG-29] Cờ cá ngựa online', () => {
         const ok = [...Array(16).keys()]
           .map((h) => applyCaNguaOnline(o, who, { t: 'move', horse: h }))
           .find(Boolean);
-        expect(ok, 'a rolled die always has a move').toBeTruthy();
+        expect(ok, 'rolled dice always have a move').toBeTruthy();
         o = ok!;
       }
     }

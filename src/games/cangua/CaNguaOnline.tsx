@@ -6,14 +6,15 @@ import { OnlineResult } from '../../online/OnlineResult';
 import { PlayerChip } from '../../online/PlayerChip';
 import { transactState, winsOf } from '../../online/room';
 import type { OnlineGameProps } from '../../online/RoomScreen';
-import { CaNguaBoard, DieFace, HORSE_COLORS } from './CaNguaBoard';
-import { colorOf, legalMoves, type Color } from './logic';
+import { CaNguaBoard, Dice2, HORSE_COLORS } from './CaNguaBoard';
+import { colorOf, legalMoves, rollsAgain, type Color } from './logic';
 import {
   applyCaNguaOnline,
   colorOfUid,
   seatsOf,
   toLocal,
   turnUidOf,
+  unpackDice,
   type CaNguaAction,
   type CaNguaOnlineState,
 } from './online';
@@ -45,22 +46,28 @@ export function CaNguaOnline(props: OnlineGameProps) {
     seen.current = { rolls: o.rolls, last: lastKey };
     if (o.rolls === before.rolls + 1 && o.lastRoll) {
       setRolling(true);
+      sfx.dice();
       const lr = o.lastRoll;
+      const dice = unpackDice(lr.d);
       const id = window.setTimeout(() => {
         setRolling(false);
-        if (lr.p) setMessage(t('cnNoMove', { name: nameOf(lr.c), n: lr.v }));
-        else setMessage(t('cnRolled', { name: nameOf(lr.c), n: lr.v }));
-        if (lr.v === 6) sfx.ganh();
+        if (!dice) return;
+        const vars = { name: nameOf(lr.c), a: dice[0], b: dice[1], n: dice[0] + dice[1] };
+        setMessage(lr.p ? t('cnNoMove', vars) : t('cnRolled', vars));
+        if (rollsAgain(dice)) sfx.lucky();
       }, ROLL_MS);
       return () => window.clearTimeout(id);
     }
     if (lastKey !== before.last && o.last) {
+      sfx.hooves(Math.max(1, o.last.t - Math.max(0, o.last.f)));
+      const lastDice = unpackDice(o.lastRoll?.d);
       if (o.last.k !== undefined) {
         sfx.ganh(true);
         setMessage(
           t('cnKick', { name: nameOf(colorOf(o.last.h)), other: nameOf(colorOf(o.last.k)) }),
         );
-      } else if (o.lastRoll?.v === 6 && !o.winner) setMessage(t('cnAgain'));
+      } else if (lastDice && rollsAgain(lastDice) && !o.winner)
+        setMessage(t('cnAgain', { a: lastDice[0], b: lastDice[1] }));
       else setMessage('');
       if (turnUidOf(o) === uid && !o.winner) sfx.opponent();
     }
@@ -95,7 +102,7 @@ export function CaNguaOnline(props: OnlineGameProps) {
     myTurn && s.roll !== null && !pending && !rolling
       ? legalMoves(s, s.roll).map((m) => m.horse)
       : [];
-  const shownRoll = o.lastRoll?.v ?? null;
+  const shownDice = unpackDice(o.lastRoll?.d);
 
   const status = o.winner
     ? ''
@@ -106,7 +113,7 @@ export function CaNguaOnline(props: OnlineGameProps) {
         : myTurn
           ? s.roll === null
             ? t('cnYourRoll')
-            : t('cnPickHorse', { n: s.roll })
+            : t('cnPickHorse', { n: `${s.roll[0]} + ${s.roll[1]} = ${s.roll[0] + s.roll[1]}` })
           : t('caroWaitTurn', { name: nameOf(s.turn) });
 
   const winnerPlayer = o.winner ? players[o.winner] : undefined;
@@ -138,7 +145,7 @@ export function CaNguaOnline(props: OnlineGameProps) {
         onHorse={(h) => void act({ t: 'move', horse: h })}
       />
       <div className="cn-controls">
-        <DieFace value={rolling ? null : shownRoll} rolling={rolling} />
+        <Dice2 dice={rolling ? null : shownDice} rolling={rolling} />
         <button
           className="btn grow"
           data-testid="cn-roll"

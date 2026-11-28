@@ -1,5 +1,5 @@
 /**
- * Computer player for Cờ cá ngựa. Picks one of the legal moves for the rolled die with simple
+ * Computer player for Cờ cá ngựa. Picks one of the legal moves for the rolled dice with simple
  * family-game priorities: climb home, kick a horse, bring a horse out, stay out of reach of
  * horses behind, then run the horse that is furthest along. A little randomness keeps it from
  * being predictable.
@@ -13,8 +13,10 @@ import {
   colorOf,
   horsesOf,
   legalMoves,
+  rollsAgain,
   startCell,
   type CaNguaState,
+  type Dice,
   type Color,
 } from './logic';
 
@@ -40,7 +42,7 @@ function threats(s: CaNguaState, me: Color, cell: number, ignore: number): numbe
   return n;
 }
 
-function score(s: CaNguaState, d: number, horse: number, to: number, kick?: number) {
+function score(s: CaNguaState, dice: Dice, horse: number, to: number, kick?: number) {
   const me = colorOf(horse);
   const from = s.horses[horse];
   let v = 0;
@@ -55,19 +57,19 @@ function score(s: CaNguaState, d: number, horse: number, to: number, kick?: numb
   if (now !== null && threats(s, me, now, -1) > 0) v += 15;
   // otherwise move the horse that is furthest along
   v += Math.max(0, to) * 0.4;
-  // a 6 rolls again: no need to hurry a horse out of the stable onto a busy start
-  if (d === 6 && from === STABLE && landing !== null) v -= 5 * threats(s, me, landing, -1);
+  // another roll is coming: no need to hurry a horse out of the stable onto a busy start
+  if (rollsAgain(dice) && from === STABLE && landing !== null) v -= 5 * threats(s, me, landing, -1);
   return v;
 }
 
-/** The horse the computer moves with the rolled die, or null when there is no legal move. */
-export function chooseMove(s: CaNguaState, d: number, rng: () => number = Math.random) {
-  const moves = legalMoves(s, d);
+/** The horse the computer moves with the rolled dice, or null when there is no legal move. */
+export function chooseMove(s: CaNguaState, dice: Dice, rng: () => number = Math.random) {
+  const moves = legalMoves(s, dice);
   if (moves.length === 0) return null;
   let best = moves[0].horse;
   let bestV = -Infinity;
   for (const m of moves) {
-    const v = score(s, d, m.horse, m.to, m.kick) + rng() * 4;
+    const v = score(s, dice, m.horse, m.to, m.kick) + rng() * 4;
     if (v > bestV) {
       bestV = v;
       best = m.horse;

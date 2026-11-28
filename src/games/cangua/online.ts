@@ -1,7 +1,9 @@
 /**
  * Cờ cá ngựa state as stored in a Firebase room (2–4 players), and action validation run inside
- * a transaction. The die comes from the room's seed and the number of rolls so far, so nobody
+ * a transaction. The dice come from the room's seed and the number of rolls so far, so nobody
  * can roll again for a better number. Rules live in logic.ts.
+ *
+ * Two dice are stored as one number: 10 × first + second (e.g. 36 = 3 and 6; 0 = no roll).
  */
 import { createRng } from '../../lib/rng';
 import {
@@ -10,8 +12,10 @@ import {
   applyRoll,
   initialState,
   removeColor,
+  validDice,
   type CaNguaState,
   type Color,
+  type Dice,
 } from './logic';
 
 export interface CaNguaOnlineState {
@@ -25,11 +29,11 @@ export interface CaNguaOnlineState {
   /** colours still playing, e.g. "02" */
   colors: string;
   turn: Color;
-  /** die to move with, 0 = must roll */
+  /** dice to move with (10 × first + second), 0 = must roll */
   roll: number;
   rolls: number;
   seed: number;
-  lastRoll?: { c: Color; v: number; p?: boolean };
+  lastRoll?: { c: Color; d: number; p?: boolean };
   last?: { h: number; f: number; t: number; k?: number };
   /** uid of the winner */
   winner?: string;
@@ -58,6 +62,18 @@ export function dieFor(seed: number, rolls: number) {
   return 1 + Math.floor(createRng((seed ^ Math.imul(rolls + 1, 0x9e3779b1)) >>> 0)() * 6);
 }
 
+/** The two dice of roll number `rolls`. */
+export const diceFor = (seed: number, rolls: number): Dice => [
+  dieFor(seed, rolls * 2),
+  dieFor(seed, rolls * 2 + 1),
+];
+export const packDice = ([a, b]: Dice) => a * 10 + b;
+export function unpackDice(n: unknown): Dice | null {
+  if (typeof n !== 'number' || !Number.isInteger(n)) return null;
+  const d: Dice = [Math.floor(n / 10), n % 10];
+  return validDice(d) ? d : null;
+}
+
 export const seatsOf = (o: CaNguaOnlineState) => [o.u0 ?? '', o.u1 ?? '', o.u2 ?? '', o.u3 ?? ''];
 export const colorOfUid = (o: CaNguaOnlineState, uid: string): Color | null => {
   const i = seatsOf(o).indexOf(uid);
@@ -78,11 +94,13 @@ export function toLocal(o: CaNguaOnlineState): CaNguaState {
     colors,
     horses,
     turn: o.turn,
-    roll: o.roll >= 1 && o.roll <= 6 ? o.roll : null,
+    roll: unpackDice(o.roll),
     rolls: o.rolls ?? 0,
     winner,
   };
-  if (o.lastRoll) s.lastRoll = { color: o.lastRoll.c, value: o.lastRoll.v, passed: !!o.lastRoll.p };
+  const lastDice = unpackDice(o.lastRoll?.d);
+  if (o.lastRoll && lastDice)
+    s.lastRoll = { color: o.lastRoll.c, dice: lastDice, passed: !!o.lastRoll.p };
   if (o.last)
     s.last = {
       horse: o.last.h,
@@ -102,12 +120,12 @@ function toOnline(s: CaNguaState, seats: string[], seed: number): CaNguaOnlineSt
     horses: s.horses.join(','),
     colors: s.colors.join(''),
     turn: s.turn,
-    roll: s.roll ?? 0,
+    roll: s.roll ? packDice(s.roll) : 0,
     rolls: s.rolls,
     seed,
   };
   if (s.lastRoll) {
-    out.lastRoll = { c: s.lastRoll.color, v: s.lastRoll.value };
+    out.lastRoll = { c: s.lastRoll.color, d: packDice(s.lastRoll.dice) };
     if (s.lastRoll.passed) out.lastRoll.p = true;
   }
   if (s.last) {
@@ -145,7 +163,7 @@ export function applyCaNguaOnline(
     if (next === s) return null;
   } else {
     if (turnUidOf(o) !== uid) return null;
-    next = a.t === 'roll' ? applyRoll(s, dieFor(o.seed, s.rolls)) : applyMove(s, a.horse);
+    next = a.t === 'roll' ? applyRoll(s, diceFor(o.seed, s.rolls)) : applyMove(s, a.horse);
   }
   return next ? toOnline(next, seats, o.seed) : null;
 }

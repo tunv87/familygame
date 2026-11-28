@@ -258,9 +258,9 @@ export const en: Record<MessageKey, string> = {
   cnRolling: 'Rolling…',
   cnYourRoll: 'Your turn: roll the die',
   cnPickHorse: 'You rolled {n}: tap a glowing horse',
-  cnRolled: '{name} rolled {n}',
-  cnNoMove: '{name} rolled {n} and cannot move',
-  cnAgain: 'A 6 – roll again!',
+  cnRolled: '{name} rolled {a} and {b} ({n} steps)',
+  cnNoMove: '{name} rolled {a} and {b}, no move',
+  cnAgain: '{a}-{b}: roll again!',
   cnKick: '{name} sent {other}’s horse back to its stable!',
   cnYouAre: 'You play {color}',
   cnMoveHorse: 'Move the {color} horse',
@@ -269,14 +269,14 @@ export const en: Record<MessageKey, string> = {
   cnColor2: 'green',
   cnColor3: 'yellow',
   cnHelp1:
-    'Everyone has 4 horses in their stable. Take turns rolling the die; a 6 or a 1 brings a horse out onto your start cell.',
+    'Everyone has 4 horses in their stable. Take turns rolling 2 dice; if either shows a 1 or a 6, a horse may come out onto your start cell.',
   cnHelp2:
-    'A horse moves exactly the number rolled, clockwise round the board. A 6 gives you another roll.',
+    'A horse moves exactly the SUM of the two dice, clockwise round the board. 1-1, 1-6, 6-1 or 6-6 gives you another roll.',
   cnHelp3:
     'You cannot jump over other horses, land on your own colour, or go past the gate of your home.',
   cnHelp4: 'Land exactly on a horse of another colour to send it back to its stable!',
   cnHelp5:
-    'At your gate, a roll of n climbs to step n; on step k only a roll of k+1 climbs on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
+    'Home steps use ONE die: at your gate, a die showing n climbs to step n; on step k a die must show k+1 to climb on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
   cnStory1:
     'Once upon a time in India, people played a game called Pachisi. Legend says some emperors played it on a giant courtyard board, with real people as the pieces!',
   cnStory2:

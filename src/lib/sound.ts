@@ -102,8 +102,12 @@ const FALLBACK: Record<SoundEvent, () => void> = {
 };
 
 /** Recent plays, for tests and the debug page. */
-const played: SoundEvent[] = [];
-(window as unknown as { __fgSounds: SoundEvent[] }).__fgSounds = played;
+const played: string[] = [];
+(window as unknown as { __fgSounds: string[] }).__fgSounds = played;
+const remember = (name: string) => {
+  played.push(name);
+  if (played.length > 50) played.shift();
+};
 
 export function playSound(ev: SoundEvent) {
   const a = effects();
@@ -111,8 +115,7 @@ export function playSound(ev: SoundEvent) {
   const now = performance.now();
   if (now - (lastPlayed.get(ev) ?? -1e9) < 40) return; // avoid stacking on rapid taps
   lastPlayed.set(ev, now);
-  played.push(ev);
-  if (played.length > 50) played.shift();
+  remember(ev);
   const buf = buffers.get(`${getSettings().theme}/${ev}`);
   if (!(buf instanceof AudioBuffer)) {
     preloadSounds();
@@ -145,6 +148,64 @@ function tone(freq: number, start: number, dur: number, type: OscillatorType = '
   osc.stop(t0 + dur);
 }
 
+// ---------------------------------------------------------------------------
+// Cờ cá ngựa: dice and hooves, synthesised (no files needed)
+
+/** A short burst of filtered noise: a die hitting the table, or a hoof. */
+function knock(start: number, dur: number, freq: number, vol: number, q = 1) {
+  const a = effects();
+  if (!a) return;
+  const t0 = a.currentTime + start;
+  const len = Math.max(1, Math.floor(a.sampleRate * dur));
+  const buf = a.createBuffer(1, len, a.sampleRate);
+  const data = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 2;
+  const src = a.createBufferSource();
+  src.buffer = buf;
+  const filter = a.createBiquadFilter();
+  filter.type = 'bandpass';
+  filter.frequency.value = freq;
+  filter.Q.value = q;
+  const gain = a.createGain();
+  gain.gain.value = vol;
+  src.connect(filter).connect(gain).connect(a.destination);
+  src.start(t0);
+}
+
+/** Two dice rattling in a cup and landing (about half a second). */
+function diceRoll() {
+  if (!effects()) return;
+  remember('dice');
+  // rattles get slower, like dice settling down
+  let t = 0;
+  for (let i = 0; i < 9; i++) {
+    knock(t, 0.03, 2200 + Math.random() * 1800, 0.35, 2);
+    t += 0.025 + i * 0.006;
+  }
+  // the two dice land
+  knock(t + 0.02, 0.06, 900, 0.7, 1.5);
+  knock(t + 0.09, 0.05, 1100, 0.55, 1.5);
+}
+
+/** A horse trots one square per hoofbeat (at most 6 beats). */
+function hooves(steps: number) {
+  if (!effects()) return;
+  remember('hooves');
+  const n = Math.max(1, Math.min(6, steps));
+  for (let i = 0; i < n; i++) {
+    const t = i * 0.12;
+    knock(t, 0.04, 650, 0.6, 3);
+    knock(t + 0.045, 0.035, 900, 0.4, 3);
+  }
+}
+
+/** Lucky roll (1-1, 1-6, 6-1, 6-6): roll again. */
+function lucky() {
+  if (!effects()) return;
+  remember('lucky');
+  [784, 988, 1175, 1568].forEach((f, i) => tone(f, i * 0.06, 0.18, 'triangle', 0.09));
+}
+
 /** Vibration has its own switch in Settings. */
 function buzz(kind: keyof typeof haptic) {
   if (getSettings().vibrate) haptic[kind]();
@@ -175,6 +236,13 @@ export const sfx = {
     playSound('forced');
     buzz('wrong');
   },
+  /** Cờ cá ngựa */
+  dice: () => {
+    diceRoll();
+    buzz('tap');
+  },
+  hooves: (steps: number) => hooves(steps),
+  lucky: () => lucky(),
   tick: () => playSound('tick'),
   go: () => playSound('go'),
   /** Call from a user gesture: unlocks audio on iOS and starts loading the sounds. */

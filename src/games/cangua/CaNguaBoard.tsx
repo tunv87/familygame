@@ -185,3 +185,13 @@ export function DieFace({ value, rolling }: { value: number | null; rolling?: bo
     </svg>
   );
 }
+
+/** The two dice of a roll, side by side (blank before the first roll). */
+export function Dice2({ dice, rolling }: { dice: [number, number] | null; rolling?: boolean }) {
+  return (
+    <div className="cn-dice" data-testid="cn-dice" data-value={dice ? dice.join('') : ''}>
+      <DieFace value={dice?.[0] ?? null} rolling={rolling} />
+      <DieFace value={dice?.[1] ?? null} rolling={rolling} />
+    </div>
+  );
+}
