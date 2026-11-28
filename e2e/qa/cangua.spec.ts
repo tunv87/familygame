@@ -119,3 +119,39 @@ test('[UX-32] against the computer: choose 3 computers, roll, the computers play
   expect(errors, '[UX-32] errors').toEqual([]);
   await ctx.close();
 });
+
+test('[UX-33] same device: 4 players take turns rolling on one device', async ({ browser }) => {
+  test.setTimeout(120_000);
+  const { page, errors, ctx } = await openApp(browser, { name: 'An' });
+  await page.goto('/#/cangua');
+  await page.getByTestId('mode-local').click();
+  await page.getByTestId('players-4').click();
+  await page.getByTestId('cn-board').waitFor();
+  await expect(page.locator('[data-testid^="horse-"]'), '[UX-33] four colours').toHaveCount(16);
+  await expect(page.getByTestId('status')).toContainText(/Người 1/);
+  // nobody plays by themselves: every roll and move is pressed on this device
+  const seen = new Set<string>();
+  for (let i = 0; i < 80 && seen.size < 4; i++) {
+    const status = (await page.getByTestId('status').textContent()) ?? '';
+    const who = status.match(/Người \d/)?.[0];
+    const roll = page.getByTestId('cn-roll');
+    if (who && (await roll.isEnabled())) {
+      seen.add(who);
+      await roll.click();
+      await page.waitForTimeout(600);
+      continue;
+    }
+    const can = page.locator('.cn-horse.can');
+    if (await can.count()) await can.first().dispatchEvent('pointerdown');
+    await page.waitForTimeout(250);
+  }
+  expect([...seen].sort(), '[UX-33] every player got a turn').toEqual([
+    'Người 1',
+    'Người 2',
+    'Người 3',
+    'Người 4',
+  ]);
+  await evidence(page, 'cangua', 'D2', 'UX-33-same-device');
+  expect(errors, '[UX-33] errors').toEqual([]);
+  await ctx.close();
+});

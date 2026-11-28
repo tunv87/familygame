@@ -31,15 +31,22 @@ const BOT_ROLL_MS = 750;
 const BOT_MOVE_MS = 650;
 const ME: Color = 0;
 const BOT_AVATARS = ['🤖', '👾', '🦾'];
+const LOCAL_AVATARS = ['🙂', '😎', '🤠', '🥳'];
 
-/** Cờ cá ngựa against 1–3 computer players on this device (?bots=1|2|3). */
+/**
+ * Cờ cá ngựa on one device: against 1–3 computer players (?mode=solo&bots=1|2|3), or 2–4
+ * people passing the device around (?mode=local&players=2|3|4).
+ */
 export function CaNguaLocal() {
   const t = useT();
   const navigate = useNavigate();
   const [params] = useSearchParams();
   const profile = useProfile();
-  const bots = Math.min(3, Math.max(1, Number(params.get('bots')) || 1));
-  const colors = colorsFor(bots + 1);
+  const local = params.get('mode') === 'local';
+  const players = local ? Math.min(4, Math.max(2, Number(params.get('players')) || 2)) : 1;
+  const bots = local ? 0 : Math.min(3, Math.max(1, Number(params.get('bots')) || 1));
+  const colors = colorsFor(players + bots);
+  const isHuman = (c: Color) => local || c === ME;
 
   const [round, setRound] = useState(0);
   useCountPlay('cangua', round);
@@ -51,15 +58,23 @@ export function CaNguaLocal() {
 
   const botIndex = (c: Color) => colors.indexOf(c); // 1, 2, 3 for the computers
   const nameOf = (c: Color) =>
-    c === ME
-      ? profile.name || t('you')
-      : bots === 1
-        ? t('caroComputer')
-        : t('cnBotName', { n: botIndex(c) });
-  const avatarOf = (c: Color) => (c === ME ? profile.avatar : BOT_AVATARS[botIndex(c) - 1]);
+    local
+      ? t('cnPlayerN', { n: colors.indexOf(c) + 1 })
+      : c === ME
+        ? profile.name || t('you')
+        : bots === 1
+          ? t('caroComputer')
+          : t('cnBotName', { n: botIndex(c) });
+  const avatarOf = (c: Color) =>
+    local
+      ? LOCAL_AVATARS[colors.indexOf(c)]
+      : c === ME
+        ? profile.avatar
+        : BOT_AVATARS[botIndex(c) - 1];
 
-  const myTurn = !state.winner && state.turn === ME;
-  const botTurn = state.winner === null && state.turn !== ME;
+  // whoever's turn it is on this device (one person, or anyone holding it in "same device")
+  const myTurn = state.winner === null && isHuman(state.turn);
+  const botTurn = state.winner === null && !isHuman(state.turn);
 
   // latest state for the roll timer (the roll lands after a short animation)
   const current = useRef(state);
@@ -98,7 +113,7 @@ export function CaNguaLocal() {
       );
     } else if (s.roll === 6 && next.winner === null) setMessage(t('cnAgain'));
     else setMessage('');
-    if (next.turn === ME && next.winner === null && s.turn !== ME) sfx.opponent();
+    if (!local && next.turn === ME && next.winner === null && s.turn !== ME) sfx.opponent();
     setState(next);
   };
 
@@ -143,11 +158,15 @@ export function CaNguaLocal() {
       ? ''
       : rolling
         ? t('cnRolling')
-        : myTurn
+        : myTurn && local
           ? state.roll === null
-            ? t('cnYourRoll')
-            : t('cnPickHorse', { n: state.roll })
-          : t('turnOf', { name: nameOf(state.turn) });
+            ? t('cnTurnRoll', { name: nameOf(state.turn) })
+            : t('cnTurnPick', { name: nameOf(state.turn), n: state.roll })
+          : myTurn
+            ? state.roll === null
+              ? t('cnYourRoll')
+              : t('cnPickHorse', { n: state.roll })
+            : t('turnOf', { name: nameOf(state.turn) });
 
   return (
     <main className="screen game">
@@ -190,18 +209,22 @@ export function CaNguaLocal() {
           🎲 {t('cnRoll')}
         </button>
       </div>
-      <div className="muted center" style={{ fontSize: 14 }}>
-        {t('cnYouAre', { color: t(`cnColor${ME}` as MessageKey) })}
-      </div>
+      {!local && (
+        <div className="muted center" style={{ fontSize: 14 }}>
+          {t('cnYouAre', { color: t(`cnColor${ME}` as MessageKey) })}
+        </div>
+      )}
       {confirmExit && (
         <ExitConfirm onConfirm={() => navigate('/cangua')} onCancel={() => setConfirmExit(false)} />
       )}
       {state.winner !== null && (
         <ResultModal
           title={
-            state.winner === ME ? t('youWin') : t('playerWins', { name: nameOf(state.winner) })
+            state.winner === ME && !local
+              ? t('youWin')
+              : t('playerWins', { name: nameOf(state.winner) })
           }
-          win={state.winner === ME}
+          win={local || state.winner === ME}
           actions={
             <>
               <button className="btn" onClick={newRound} data-testid="play-again">

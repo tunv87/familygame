@@ -57,6 +57,7 @@ Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). M�
 | UX-30 | P1      | Admin bật/tắt/ẩn game và từng chế độ                                                                   | Game off: hiện mờ "Đang bảo trì", không mở được; hidden: không có ở trang chủ, link báo tạm chưa mở; chế độ off/hidden tương tự; mất mạng giữ cấu hình cũ                            |
 | UX-31 | P1      | Người xem trong phòng online                                                                           | Hết ghế hoặc ván đã bắt đầu → vào xem: thấy nước đi, "Lượt của…", không bấm được, không có Chơi lại; người chơi thấy số người xem; Thoát ngay; phòng đóng thì báo trận đã kết thúc   |
 | UX-32 | P1      | Cờ cá ngựa chơi với máy                                                                                | Chọn 1–3 máy → đủ màu ngựa; máy tự đổ và tự đi; lượt quay lại người chơi; rời giữa ván thì hỏi trước; không lỗi                                                                      |
+| UX-33 | P1      | Cờ cá ngựa hai người cùng máy                                                                          | Chọn 2–4 người → đủ màu; mỗi người lần lượt đổ và đi trên cùng máy; không có máy tự chơi; không lỗi                                                                                  |
 
 ## CR – Chống crash
 
