@@ -203,6 +203,7 @@ function Game({ loaded }: { loaded: Loaded }) {
         <ResultModal
           title={resultTitle}
           win={win}
+          record={mode === 'solo' && win ? 'noitu' : undefined}
           actions={
             <>
               <button className="btn" onClick={newRound} data-testid="play-again">

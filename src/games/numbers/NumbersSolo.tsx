@@ -166,6 +166,7 @@ export function NumbersSolo() {
             practice ? result!.record || undefined : winner === 'draw' ? undefined : winner === ME
           }
           sound={practice && result!.record ? 'record' : undefined}
+          record={!practice && winner === ME ? 'numbers' : undefined}
           actions={
             <>
               <button className="btn" onClick={restart} data-testid="play-again">

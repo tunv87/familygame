@@ -225,6 +225,7 @@ export function CaNguaLocal() {
               : t('playerWins', { name: nameOf(state.winner) })
           }
           win={local || state.winner === ME}
+          record={!local && state.winner === ME ? 'cangua' : undefined}
           actions={
             <>
               <button className="btn" onClick={newRound} data-testid="play-again">
