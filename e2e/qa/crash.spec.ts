@@ -363,3 +363,35 @@ test('[CR-17] a game that cannot be downloaded shows a message, not a blank scre
   );
   expect(unexpected, '[CR-17] errors').toEqual([]);
 });
+
+// A tap made the moment a board appears (before React's after-paint effects run) used to be
+// undone, so the direction buttons of Ô ăn quan stayed off (seen on Safari in CI).
+for (const [game, route, cellId, button] of [
+  ['oanquan', '/#/oanquan/play?mode=solo&level=hard', 'cell-3', 'dir-left'],
+  ['coganh', '/#/coganh/play?mode=local', 'pt-10', ''],
+] as const) {
+  test(`[CR-18] ${game}: a tap right as the board appears is kept`, async ({ browser }) => {
+    const { page, errors, ctx } = await openApp(browser);
+    await page.addInitScript((id) => {
+      new MutationObserver((_, obs) => {
+        const c = document.querySelector(`[data-testid="${id}"]`);
+        if (!c) return;
+        obs.disconnect();
+        c.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
+      }).observe(document, { childList: true, subtree: true });
+    }, cellId);
+    for (let i = 0; i < 5; i++) {
+      await page.goto('/#/');
+      await page.goto(route);
+      await page.getByTestId(cellId).waitFor();
+      await page.waitForTimeout(400);
+      await expect(page.getByTestId(cellId), `[CR-18] ${game}: tap lost`).toHaveClass(
+        /\bselected\b/,
+      );
+      if (button) await expect(page.getByTestId(button)).toBeEnabled();
+      await page.reload(); // the init script runs again on a fresh page
+    }
+    expect(errors, '[CR-18] errors').toEqual([]);
+    await ctx.close();
+  });
+}

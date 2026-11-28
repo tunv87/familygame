@@ -49,12 +49,18 @@ export function oaqFeedback(
 
 /** Pick a field, then a direction. Shared by local and online play. */
 export function useOAQSelection(state: OAQState, myTurn: boolean) {
-  const [selected, setSelected] = useState<number | null>(null);
+  // The pick belongs to the position it was made in: a new position has no pick. (Resetting
+  // it in an effect instead lost a tap made right as the board first appeared, before the
+  // effect ran.)
+  const [pick, setPick] = useState<{ at: OAQState; i: number } | null>(null);
+  const selected = pick && pick.at === state ? pick.i : null;
+  // forget it as soon as the position changes, so going back (undo) does not bring it back
+  if (pick && pick.at !== state) setPick(null);
+  const setSelected = (i: number | null) => setPick(i === null ? null : { at: state, i });
   const playable = useMemo(
     () => (myTurn ? [...new Set(legalMoves(state).map((m) => m.from))] : []),
     [state, myTurn],
   );
-  useEffect(() => setSelected(null), [state]);
   const tap = (i: number) => {
     if (!myTurn) return;
     if (playable.includes(i)) {

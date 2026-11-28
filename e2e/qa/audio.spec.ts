@@ -140,3 +140,25 @@ test('[AU-07] each theme loads its own sound set', async ({ browser }) => {
     })
     .toBe(true);
 });
+
+test('[AU-12] a tap the moment the page appears unlocks sound', async ({ browser }) => {
+  const { page } = await openApp(browser, { sound: true, theme: 'classic' });
+  const loaded: string[] = [];
+  page.on('request', (r) => {
+    const m = r.url().match(/sounds\/(\w+)\/\w+\.mp3/);
+    if (m) loaded.push(m[1]);
+  });
+  // tap as soon as the settings page is put on the screen, before React's after-paint effects
+  await page.addInitScript(() => {
+    new MutationObserver((_, obs) => {
+      const el = document.querySelector('[data-testid="setting-music"]');
+      if (!el) return;
+      obs.disconnect();
+      el.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true }));
+    }).observe(document, { childList: true, subtree: true });
+  });
+  await page.goto('/#/settings');
+  await expect
+    .poll(() => loaded.includes('classic'), { message: '[AU-12] first tap did not unlock sound' })
+    .toBe(true);
+});

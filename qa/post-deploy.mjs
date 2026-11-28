@@ -120,6 +120,9 @@ let buildVersion = 'unknown';
     await page.getByTestId('nt-error').filter({ hasText: /.+/ }).waitFor();
     const refused = (await page.getByTestId('nt-word-1').count()) === 0;
     await page.getByTestId('nt-hint').click();
+    await page.waitForFunction(
+      () => document.querySelector('[data-testid="nt-input"]')?.value !== '',
+    );
     const hint = await page.getByTestId('nt-input').inputValue();
     await page.getByTestId('nt-go').click();
     await page.getByTestId('nt-word-1').waitFor();

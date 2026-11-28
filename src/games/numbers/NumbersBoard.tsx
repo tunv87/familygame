@@ -18,16 +18,16 @@ export function useCountdown(round: unknown): number {
 }
 
 export function Countdown({ count }: { count: number }) {
-  // 3, 2, 1 → tick; 0 → go
-  const started = useRef(false);
+  // 3, 2, 1 → tick; 0 → go. Each number sounds once, even if the effect runs again for the
+  // same number (React runs effects twice in development; a 40 ms guard was not enough on
+  // slow devices and gave 4 ticks).
+  const last = useRef<number | null>(null);
   useEffect(() => {
-    if (count > 0) {
-      started.current = true;
-      sfx.tick();
-    } else if (started.current) {
-      started.current = false;
-      sfx.go();
-    }
+    const prev = last.current;
+    if (prev === count) return;
+    last.current = count;
+    if (count > 0) sfx.tick();
+    else if (prev !== null && prev > 0) sfx.go();
   }, [count]);
   return count > 0 ? (
     <div className="countdown" data-testid="countdown">

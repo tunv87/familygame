@@ -1,12 +1,23 @@
+import { readFileSync } from 'node:fs';
 /** Nối từ (word chain) through the real UI (qa/test-cases.md: UX-24..27, UI-11, CR-15). */
 import { expect, test, type Page } from '@playwright/test';
 import { PHONES, createRoomAs, evidence, joinAs, openApp } from './fixtures';
 
+/** every word the game knows (to tell when a spelling without tone marks is a real word too) */
+const WORDS = new Set(
+  (
+    JSON.parse(
+      readFileSync(new URL('../../src/games/noitu/words.json', import.meta.url), 'utf8'),
+    ) as { w: [string, ...unknown[]][] }
+  ).w.map((r) => r[0]),
+);
 const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd');
 
 /** Answers with the hint word, typed out again with its tone marks. */
 async function answerWithHint(page: Page) {
   await page.getByTestId('nt-hint').click();
+  // the hint is filled in by the app: wait for it (a slow device may not have done it yet)
+  await expect(page.getByTestId('nt-input')).not.toHaveValue('');
   const word = await page.getByTestId('nt-input').inputValue();
   await page.getByTestId('nt-input').fill(word);
   await page.getByTestId('nt-go').click();
@@ -33,8 +44,13 @@ test('[UX-24][UX-27] same device: hint, tone marks required, refusals, giving up
   await evidence(page, 'noitu', 'D2', 'UX-27-report');
   // the hint word without its tone marks is refused, without giving the word away
   await page.getByTestId('nt-hint').click();
+  await expect(page.getByTestId('nt-input')).not.toHaveValue('');
   const hinted = await page.getByTestId('nt-input').inputValue();
-  if (plain(hinted) !== hinted) {
+  // Without its tone marks the hint must be refused, unless that spelling happens to be a real
+  // word too (e.g. "bò" → "bo"): then the game rightly accepts it, so skip the check.
+  const prefix1 = await page.getByTestId('nt-prefix').innerText();
+  const plainIsWord = WORDS.has(`${prefix1.trim()} ${plain(hinted)}`);
+  if (plain(hinted) !== hinted && !plainIsWord) {
     await page.getByTestId('nt-input').fill(plain(hinted));
     await page.getByTestId('nt-go').click();
     await expect(page.getByTestId('nt-error'), '[UX-24] tone-less word accepted').toContainText(

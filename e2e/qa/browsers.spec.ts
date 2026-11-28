@@ -102,6 +102,7 @@ test(`[BR-04] typing Vietnamese with tone marks in Nối từ (${TAG})`, async (
   await page.goto('/#/noitu/play?mode=local');
   await page.getByTestId('nt-input').waitFor({ timeout: 15_000 });
   await page.getByTestId('nt-hint').click();
+  await expect(page.getByTestId('nt-input')).not.toHaveValue('');
   const word = await page.getByTestId('nt-input').inputValue();
   await page.getByTestId('nt-input').fill('');
   // type it key by key (composed characters), as a keyboard would

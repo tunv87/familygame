@@ -41,15 +41,21 @@ export function moveFeedback(r: MoveResult, t: ReturnType<typeof useT>): string 
 
 /** Selection logic shared by local and online play. */
 export function useSelection(state: CoGanhState, myTurn: boolean) {
-  const [selected, setSelected] = useState<number | null>(null);
+  // The pick belongs to the position it was made in: a new position has no pick. (Resetting
+  // it in an effect instead lost a tap made right as the board first appeared.)
+  const [pick, setPick] = useState<{ at: CoGanhState; i: number } | null>(null);
+  const selected = pick && pick.at === state ? pick.i : null;
+  // forget it as soon as the position changes, so going back (undo) does not bring it back
+  if (pick && pick.at !== state) setPick(null);
+  const setSelected = (i: number | null) => setPick(i === null ? null : { at: state, i });
   const legal = useMemo(() => (myTurn ? legalMoves(state) : []), [state, myTurn]);
   const movable = useMemo(() => [...new Set(legal.map((m) => m.from))], [legal]);
   const targets =
     selected === null ? [] : legal.filter((m) => m.from === selected).map((m) => m.to);
-  useEffect(() => setSelected(null), [state]);
   // With exactly one piece to move (typical for a Mở), pick it up for the player.
   useEffect(() => {
-    if (myTurn && state.forced.length && movable.length === 1) setSelected(movable[0]);
+    if (myTurn && state.forced.length && movable.length === 1)
+      setPick({ at: state, i: movable[0] });
   }, [myTurn, state, movable]);
   /** returns the move to play, or null if the tap only changed the selection */
   const tap = (i: number) => {

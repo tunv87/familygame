@@ -1,4 +1,4 @@
-import { Suspense, useEffect, useRef } from 'react';
+import { Suspense, useEffect, useLayoutEffect, useRef } from 'react';
 import { HashRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { GameLoadBoundary, Loading, lazyGame } from './lazyGames';
 import { createLogger } from '../lib/logger';
@@ -96,7 +96,10 @@ function RouteLogger() {
 function useAudioLifecycle() {
   const { music, theme } = useSettings();
   const unlocked = useRef(false);
-  useEffect(() => {
+  // A layout effect, so the first-tap listener is there before the page is first shown: with a
+  // normal effect, a tap made right after the page appeared (before the effect ran, easy on a
+  // slow device) did not unlock sound.
+  useLayoutEffect(() => {
     const onFirstTap = () => {
       unlocked.current = true;
       sfx.unlock();
