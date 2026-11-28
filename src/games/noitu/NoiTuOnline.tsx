@@ -93,6 +93,8 @@ function Game(props: OnlineGameProps & { loaded: Loaded }) {
     return s === 0 ? 0 : s === mySide ? 1 : 2;
   };
 
+  // words each player has added this game (the opening word belongs to nobody)
+  const wordsOf = (side: 1 | 2) => state.chain.filter((_, i) => sideOf(i) === side).length;
   const status = o.winner
     ? ''
     : watching
@@ -104,10 +106,17 @@ function Game(props: OnlineGameProps & { loaded: Loaded }) {
   return (
     <div className="nt-screen grow" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
       <div className="players">
-        <PlayerChip player={me} score={winsOf(room, uid)} active={hostTurn} testId="me" />
+        <PlayerChip
+          player={me}
+          score={winsOf(room, uid)}
+          active={hostTurn}
+          testId="me"
+          note={t('ntWordsCount', { n: wordsOf(mySide) })}
+        />
         <PlayerChip
           player={opp}
           score={winsOf(room, oppUid)}
+          note={t('ntWordsCount', { n: wordsOf(mySide === 1 ? 2 : 1) })}
           active={!o.winner && !hostTurn}
           testId="opp"
         />

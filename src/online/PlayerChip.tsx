@@ -11,6 +11,7 @@ export function PlayerChip({
   active,
   color,
   testId,
+  note,
 }: {
   player?: RoomPlayer;
   mark?: 'x' | 'o';
@@ -20,6 +21,8 @@ export function PlayerChip({
   active?: boolean;
   color?: string;
   testId?: string;
+  /** small note before the score, e.g. "3 từ" in Nối từ */
+  note?: string;
 }) {
   const theme = useTheme();
   return (
@@ -34,9 +37,14 @@ export function PlayerChip({
         {stone ? <span className={`badge cg-badge ${stone}`} /> : null}
       </span>
       <span className="name">{player?.name ?? '…'}</span>
+      {note ? (
+        <span className="player-note" data-testid={testId && `${testId}-note`}>
+          {note}
+        </span>
+      ) : null}
       {score !== undefined && (
         <span
-          className="score"
+          className={`score ${note ? 'with-note' : ''}`}
           style={color ? { color: inkOf(color) } : undefined}
           data-testid={testId && `${testId}-score`}
         >

@@ -273,8 +273,11 @@ export const en: Record<MessageKey, string> = {
   hubHeroText:
     '{n} folk and brain games: play the computer, two on one device, or online with family.',
   chipSolo: 'vs computer',
+  chipPractice: 'Practice',
   chipLocal: 'Same device',
   chipOnline: 'Online',
+  deleteDigit: 'Delete digit',
+  ntWordsCount: '{n} words',
   posterStory: 'The story',
   gameUnavailable: 'This game is closed for now. Try another one!',
   onlineOff: 'New rooms for this game are closed for now.',

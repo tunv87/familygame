@@ -18,6 +18,7 @@ function firstEmoji(s: string) {
 
 const CHIPS: [ModeKey, string, MessageKey][] = [
   ['solo', '🤖', 'chipSolo'],
+  ['practice', '🎯', 'chipPractice'],
   ['local', '👫', 'chipLocal'],
   ['online', '🌏', 'chipOnline'],
 ];
@@ -29,7 +30,10 @@ export function ModeChips({ game }: { game: GameId }) {
   const info = GAMES.find((g) => g.id === game);
   if (!info) return null;
   const chips = CHIPS.filter(
-    ([m]) => info.modes.includes(m as never) && modeStatus(config, game, m) !== 'hidden',
+    ([m]) =>
+      // Tìm số also has "practice alone" (not one of the shared modes)
+      (info.modes.includes(m as never) || (m === 'practice' && game === 'numbers')) &&
+      modeStatus(config, game, m) !== 'hidden',
   );
   return (
     <span className="mode-chips desk-only" aria-hidden>

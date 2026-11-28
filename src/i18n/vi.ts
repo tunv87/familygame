@@ -275,8 +275,11 @@ export const vi = {
   hubHeroText:
     '{n} trò dân gian và trí tuệ: chơi với máy, hai người cùng máy, hoặc online với người thân.',
   chipSolo: 'Với máy',
+  chipPractice: 'Luyện tập',
   chipLocal: 'Cùng máy',
   chipOnline: 'Online',
+  deleteDigit: 'Xoá số',
+  ntWordsCount: '{n} từ',
   posterStory: 'Câu chuyện',
   gameUnavailable: 'Trò chơi này tạm thời chưa mở. Mời bạn chơi trò khác nhé!',
   onlineOff: 'Tạm thời chưa tạo được phòng mới cho trò này.',
