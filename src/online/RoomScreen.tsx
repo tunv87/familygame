@@ -7,7 +7,15 @@ import { ExitConfirm, TopBar, useBackHandler } from '../ui/components';
 import { shareInvite } from '../lib/native';
 import { ensureAuth } from './firebase';
 import { PlayerChip } from './PlayerChip';
-import { leaveRoom, shareUrl, startGame, startRematch, watchRoom } from './room';
+import {
+  allReady,
+  leaveRoom,
+  setReady,
+  shareUrl,
+  startGame,
+  startRematch,
+  watchRoom,
+} from './room';
 import { maxPlayers, type Room, type RoomPlayer } from './types';
 
 // each game's online screen is loaded when a room of that game opens
@@ -115,13 +123,13 @@ export function RoomScreen() {
     if (room && uid && !isMember && !leaving.current) navigate(`/join/${code}`, { replace: true });
   }, [room, uid, isMember, code, navigate]);
 
-  // Host starts the game once both players are in (Cờ cá ngựa: when the host taps Start),
-  // and starts rematches.
+  // Host starts the game once both players are in and both tapped Ready (Cờ cá ngựa: when
+  // the host taps Start), and starts rematches.
   const multi = room?.game === 'cangua';
   useEffect(() => {
     if (!room || !isHost) return;
     const count = Object.keys(players).length;
-    if (room.status === 'waiting' && count === 2 && !multi) {
+    if (room.status === 'waiting' && count === 2 && !multi && allReady(room)) {
       startGame(room).catch((e) => log.error('start failed', e));
     } else if (room.status === 'playing' && count >= 2) {
       const r = room.rematch ?? {};
@@ -130,11 +138,15 @@ export function RoomScreen() {
     }
   }, [room, isHost, players, multi]);
 
-  // Sound cue when the friend arrives.
+  // Sound cue when the friend arrives, and when someone else says they are ready.
   const oppCount = Object.keys(players).length - 1;
   useEffect(() => {
     if (oppCount) sfx.good();
   }, [oppCount]);
+  const othersReady = Object.keys(room?.ready ?? {}).filter((u) => u !== uid).length;
+  useEffect(() => {
+    if (othersReady) sfx.good();
+  }, [othersReady]);
 
   const leave = async () => {
     leaving.current = true;
@@ -250,14 +262,28 @@ export function RoomScreen() {
           </button>
           {watchLine}
           {multi ? (
-            <MultiLobby room={room} uid={uid} isHost={isHost} />
+            <MultiLobby room={room} uid={uid} isHost={isHost} watching={isSpectator} />
           ) : (
             <>
-              <div className="status-line">⏳ {t('waitingOpponent')}</div>
-              <div className="players" style={{ width: '100%' }}>
-                <PlayerChip player={me} />
-                <PlayerChip player={oppEntry?.[1]} />
+              <div className="status-line" data-testid="lobby-status">
+                ⏳{' '}
+                {!oppEntry
+                  ? t('waitingOpponent')
+                  : isSpectator
+                    ? t('waitReady')
+                    : !room.ready?.[uid]
+                      ? t('pressReady', { name: oppEntry[1].name })
+                      : t('waitOppReady', { name: oppEntry[1].name })}
               </div>
+              <div className="players" style={{ width: '100%' }}>
+                <PlayerChip player={me} ready={!!room.ready?.[viewUid]} testId="lobby-me" />
+                <PlayerChip
+                  player={oppEntry?.[1]}
+                  ready={!!oppEntry && !!room.ready?.[oppEntry[0]]}
+                  testId="lobby-opp"
+                />
+              </div>
+              {!isSpectator && <ReadyButton room={room} uid={uid} />}
             </>
           )}
         </div>
@@ -334,12 +360,51 @@ export function RoomScreen() {
   );
 }
 
-/** Waiting room for games of 2–4 players: who is in, and a Start button for the host. */
-function MultiLobby({ room, uid, isHost }: { room: Room; uid: string; isHost: boolean }) {
+/** Ready / not ready toggle for a player in the waiting room. */
+function ReadyButton({ room, uid }: { room: Room; uid: string }) {
+  const t = useT();
+  const [busy, setBusy] = useState(false);
+  const ready = !!room.ready?.[uid];
+  const toggle = () => {
+    sfx.tap();
+    setBusy(true);
+    setReady(room.code, uid, !ready)
+      .catch((e) => log.error('ready failed', e))
+      .finally(() => setBusy(false));
+  };
+  return (
+    <button
+      className={`btn ${ready ? 'secondary' : ''}`}
+      disabled={busy}
+      onClick={toggle}
+      data-testid="ready"
+      aria-pressed={ready}
+    >
+      {ready ? `↩️ ${t('notReady')}` : `✅ ${t('ready')}`}
+    </button>
+  );
+}
+
+/**
+ * Waiting room for games of 2–4 players: who is in, a Ready button for the others and a Start
+ * button for the host, which works once everyone else is ready.
+ */
+function MultiLobby({
+  room,
+  uid,
+  isHost,
+  watching,
+}: {
+  room: Room;
+  uid: string;
+  isHost: boolean;
+  watching: boolean;
+}) {
   const t = useT();
   const [starting, setStarting] = useState(false);
   const list = Object.entries(room.players ?? {}).sort((a, b) => a[1].joinedAt - b[1].joinedAt);
   const max = maxPlayers(room.game);
+  const everyone = allReady(room, room.hostUid);
   const start = () => {
     setStarting(true);
     startGame(room).catch((e) => {
@@ -349,8 +414,17 @@ function MultiLobby({ room, uid, isHost }: { room: Room; uid: string; isHost: bo
   };
   return (
     <>
-      <div className="status-line">
-        ⏳ {list.length < 2 ? t('waitingOpponent') : isHost ? t('cnCanStart') : t('cnWaitHost')}
+      <div className="status-line" data-testid="lobby-status">
+        ⏳{' '}
+        {list.length < 2
+          ? t('waitingOpponent')
+          : !everyone
+            ? isHost || watching || room.ready?.[uid]
+              ? t('waitReady')
+              : t('pressReadyMulti')
+            : isHost
+              ? t('cnCanStart')
+              : t('cnWaitHost')}
       </div>
       <div className="lobby-grid" data-testid="lobby-players">
         {Array.from({ length: max }, (_, i) => (
@@ -358,19 +432,21 @@ function MultiLobby({ room, uid, isHost }: { room: Room; uid: string; isHost: bo
             key={list[i]?.[0] ?? `empty-${i}`}
             player={list[i]?.[1]}
             active={list[i]?.[0] === uid}
+            ready={!!list[i] && (list[i][0] === room.hostUid || !!room.ready?.[list[i][0]])}
           />
         ))}
       </div>
       {isHost && (
         <button
           className="btn"
-          disabled={list.length < 2 || starting}
+          disabled={!everyone || starting}
           onClick={start}
           data-testid="start-game"
         >
           ▶️ {t('cnStart', { n: list.length })}
         </button>
       )}
+      {!isHost && !watching && <ReadyButton room={room} uid={uid} />}
     </>
   );
 }

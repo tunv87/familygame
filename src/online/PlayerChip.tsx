@@ -12,6 +12,7 @@ export function PlayerChip({
   color,
   testId,
   note,
+  ready,
 }: {
   player?: RoomPlayer;
   mark?: 'x' | 'o';
@@ -23,11 +24,15 @@ export function PlayerChip({
   testId?: string;
   /** small note before the score, e.g. "3 từ" in Nối từ */
   note?: string;
+  /** waiting room: this player tapped Ready */
+  ready?: boolean;
 }) {
   const theme = useTheme();
   return (
     <div
-      className={`player ${active ? 'active' : ''} ${player && !player.online ? 'offline' : ''}`}
+      className={`player ${active ? 'active' : ''} ${player && !player.online ? 'offline' : ''} ${
+        ready ? 'ready' : ''
+      }`}
       style={color ? { borderColor: color } : undefined}
       data-testid={testId}
     >
@@ -35,6 +40,11 @@ export function PlayerChip({
         <Avatar emoji={player?.avatar ?? '❔'} />
         {mark ? <span className={`badge ${mark}`}>{mark === 'x' ? theme.x : theme.o}</span> : null}
         {stone ? <span className={`badge cg-badge ${stone}`} /> : null}
+        {ready ? (
+          <span className="badge ready-badge" data-testid={testId && `${testId}-ready`}>
+            ✅
+          </span>
+        ) : null}
       </span>
       <span className="name">{player?.name ?? '…'}</span>
       {note ? (

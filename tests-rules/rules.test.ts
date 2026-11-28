@@ -195,12 +195,18 @@ describe('[SEC-07] rooms only hold game data (data minimisation)', () => {
     const [alice, bob] = [await user(), await user()];
     await ok(set(ref(alice.db, 'rooms/1234'), room(alice.uid)));
     await ok(join(bob));
+    // each player says they are ready, only for themselves
+    await ok(set(ref(bob.db, `rooms/1234/ready/${bob.uid}`), true));
+    await denied(set(ref(bob.db, `rooms/1234/ready/${alice.uid}`), true));
+    await denied(set(ref(bob.db, `rooms/1234/ready/${bob.uid}`), 'yes'));
+    await ok(set(ref(alice.db, `rooms/1234/ready/${alice.uid}`), true));
     await ok(
       update(ref(alice.db, 'rooms/1234'), {
         status: 'playing',
         round: 1,
         state: { size: 3, xUid: alice.uid, oUid: bob.uid },
         rematch: null,
+        ready: null,
       }),
     );
     await ok(set(ref(bob.db, 'rooms/1234/state/moves'), [4]));

@@ -211,8 +211,20 @@ export async function startGame(room: Room) {
     round: 1,
     state: await newState(room, 1),
     rematch: null,
+    ready: null,
   });
   countPlay(room.game); // one play per online round, counted by the host
+}
+
+/** In the waiting room: say (or take back) that we are ready to play. */
+export async function setReady(code: string, uid: string, ready: boolean) {
+  await set(ref(getDb(), `rooms/${code}/ready/${uid}`), ready ? true : null);
+}
+
+/** Everyone in the room (at least two) tapped Ready; `except` need not (the host who starts). */
+export function allReady(room: Room, except?: string) {
+  const uids = Object.keys(room.players ?? {});
+  return uids.length >= 2 && uids.every((u) => u === except || room.ready?.[u]);
 }
 
 export async function requestRematch(code: string, uid: string) {
@@ -244,6 +256,7 @@ export async function leaveRoom(code: string, uid: string) {
     else
       await update(roomRef(code), {
         [`players/${uid}`]: null,
+        [`ready/${uid}`]: null,
         ...(room?.guestUid === uid ? { guestUid: null } : {}),
         ...(room?.seat3 === uid ? { seat3: null } : {}),
         ...(room?.seat4 === uid ? { seat4: null } : {}),

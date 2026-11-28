@@ -1,6 +1,6 @@
 /** SEC – security checks that need the running app (qa/test-cases.md: SEC-02). */
 import { expect, test } from '@playwright/test';
-import { createRoomAs, joinAs, openApp, waitCountdown } from './fixtures';
+import { createRoomAs, joinAs, openApp, waitCountdown, readyUp } from './fixtures';
 
 // Names are limited to 20 characters, so use short markup that would render if injected.
 const NAME = '<b>Bi</b><svg/onload=';
@@ -13,6 +13,7 @@ test('[SEC-02] HTML in a player name is shown as text and never runs', async ({ 
   await a.page.getByTestId('level-easy').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, NAME.slice(0, 20));
+  await readyUp(a.page, b.page);
   await waitCountdown(a.page);
   await expect(
     a.page.getByTestId('opp-score').locator('..'),

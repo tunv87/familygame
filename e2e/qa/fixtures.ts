@@ -207,3 +207,17 @@ export async function pickField(page: Page, cell: number) {
     await expect(c).toHaveClass(/\bselected\b/, { timeout: 700 });
   }).toPass({ timeout: 20_000 });
 }
+
+/** Each player taps Ready in the waiting room (an online game starts once everyone has). */
+export async function readyUp(...pages: Page[]) {
+  for (const p of pages) {
+    const btn = p.getByTestId('ready');
+    await btn.click({ timeout: 15_000 });
+    // pressed, or already gone because that was the last Ready and the game started
+    await expect(async () => {
+      // (a short timeout: the button can vanish between the two calls when the game starts)
+      if (await btn.count())
+        expect(await btn.getAttribute('aria-pressed', { timeout: 300 })).toBe('true');
+    }).toPass({ timeout: 10_000 });
+  }
+}

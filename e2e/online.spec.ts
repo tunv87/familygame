@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test';
-import { createRoom, joinByLink, newPlayer } from './helpers';
+import { createRoom, joinByLink, newPlayer, readyUp } from './helpers';
 
 test('online caro 3×3: host wins, then rematch swaps who starts', async ({ browser }) => {
   const a = await newPlayer(browser);
@@ -12,6 +12,14 @@ test('online caro 3×3: host wins, then rematch swaps who starts', async ({ brow
   await a.screenshot({ path: 'test-results/screens/room-waiting.png' });
 
   await joinByLink(b, code, 'Bé Na');
+  // nothing starts until both players tap Ready
+  await expect(a.getByTestId('lobby-status')).toContainText('Bé Na đã vào', { timeout: 15_000 });
+  await readyUp(a);
+  await expect(a.getByTestId('lobby-status')).toContainText('Đang chờ Bé Na bấm Sẵn sàng');
+  await expect(b.getByTestId('lobby-opp-ready')).toBeVisible();
+  await b.waitForTimeout(800);
+  await expect(a.getByTestId('caro-board'), 'started before both were ready').toHaveCount(0);
+  await readyUp(b);
   await expect(a.getByTestId('status')).toContainText('Đến lượt bạn', { timeout: 15_000 });
   await expect(b.getByTestId('status')).toContainText('Chờ Ông Nội');
 
@@ -52,6 +60,7 @@ test('online numbers easy: race to find 1→30', async ({ browser }) => {
   await b.getByTestId('name-input').fill('Con');
   await b.getByTestId('save-profile').click();
   for (const d of code) await b.getByTestId(`key-${d}`).click();
+  await readyUp(a, b);
 
   await expect(a.getByTestId('numbers-board')).toBeVisible({ timeout: 15_000 });
   await expect(b.getByTestId('numbers-board')).toBeVisible();
@@ -89,6 +98,7 @@ test('joining a missing room shows an error; a third person only watches', async
   const code = await createRoom(host, 'Bố');
   const guest = await newPlayer(browser);
   await joinByLink(guest, code, 'Mẹ');
+  await readyUp(host, guest);
   await expect(guest.getByTestId('caro-board')).toBeVisible({ timeout: 15_000 });
   const third = await newPlayer(browser);
   await joinByLink(third, code, 'Cô');
@@ -104,6 +114,7 @@ test('exit asks for confirmation mid-game and the friend sees you left', async (
   await a.getByTestId('level-easy').click();
   const code = await createRoom(a, 'Bà');
   await joinByLink(b, code, 'Cháu');
+  await readyUp(a, b);
   await expect(a.getByTestId('numbers-board')).toBeVisible({ timeout: 15_000 });
   await a.getByTestId('exit').click();
   await a.getByTestId('keep-playing').click();

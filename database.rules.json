@@ -36,6 +36,13 @@
         "results": {
           ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists()"
         },
+        "ready": {
+          ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists() && !newData.exists()",
+          "$uid": {
+            ".write": "auth != null && auth.uid === $uid && root.child('rooms').child($code).child('players').child(auth.uid).exists()",
+            ".validate": "newData.isBoolean()"
+          }
+        },
         "rematch": {
           ".write": "auth != null && root.child('rooms').child($code).child('players').child(auth.uid).exists() && !newData.exists()",
           "$uid": {
