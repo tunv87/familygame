@@ -7,7 +7,8 @@ import { ModeChips } from '../ui/GamePoster';
 import { PlayCount } from '../ui/PlayCount';
 import { gameStatus, getGamesConfig, useGamesConfig } from './gameConfig';
 import { usePrefetchGames } from './lazyGames';
-import { setSettings, useSettings } from './settings';
+import { useFamily } from './family';
+import { setSettings, useProfile, useSettings } from './settings';
 import { useTheme } from './theme';
 import { Welcome, needsWelcome } from './Welcome';
 
@@ -17,6 +18,8 @@ export function Hub() {
   const settings = useSettings();
   const theme = useTheme();
   const config = useGamesConfig();
+  const { family } = useFamily();
+  const profileName = useProfile().name;
   usePrefetchGames((g) => gameStatus(getGamesConfig(), g) !== 'hidden');
   const taps = useRef<number[]>([]);
   const [welcome, setWelcome] = useState(needsWelcome);
@@ -95,6 +98,16 @@ export function Hub() {
           </p>
         </div>
         <PlayCount />
+        <Card
+          emoji="👨‍👩‍👧"
+          title={t('family')}
+          hint={
+            family.members.length ? t('familyHint', { name: profileName }) : t('familyHintNone')
+          }
+          onClick={() => navigate('/family')}
+          testId="hub-family"
+          className="hub-family"
+        />
         <Card
           emoji="🔑"
           title={t('joinRoom')}

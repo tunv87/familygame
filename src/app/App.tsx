@@ -8,6 +8,7 @@ import { AboutScreen } from './AboutScreen';
 import { DebugScreen } from './DebugScreen';
 import { Hub } from './Hub';
 import { SettingsScreen } from './SettingsScreen';
+import { FamilyScreen } from './FamilyScreen';
 import { getSettings, useSettings } from './settings';
 import { sfx } from '../lib/sound';
 import { startMusic, stopMusic } from '../lib/music';
@@ -250,6 +251,7 @@ export function App() {
             <Route path="/join/:code" element={<JoinScreen />} />
             <Route path="/room/:code" element={<RoomScreen />} />
             <Route path="/settings" element={<SettingsScreen />} />
+            <Route path="/family" element={<FamilyScreen />} />
             <Route path="/debug" element={<DebugScreen />} />
             <Route path="/about" element={<AboutScreen />} />
             <Route path="*" element={<Navigate to="/" replace />} />
