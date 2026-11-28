@@ -272,8 +272,13 @@ export function ResultModal({
   /** the person playing on this device won this game (vs computer or online): count it */
   record?: GameId;
 }) {
+  // count the win once, even if the effect runs twice (React strict mode in development)
+  const counted = useRef(false);
   useEffect(() => {
-    if (record) recordWin(record);
+    if (record && !counted.current) {
+      counted.current = true;
+      recordWin(record);
+    }
     sfx[sound ?? (win === true ? 'win' : win === false ? 'lose' : 'draw')]();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

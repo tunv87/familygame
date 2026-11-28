@@ -2186,3 +2186,9 @@ a:focus-visible,
   font-size: 1.4em;
   font-weight: 900;
 }
+
+/* today's challenge card stands out a little */
+.card.daily-card {
+  border-color: #f4b740;
+  background: linear-gradient(135deg, #fff9e6 0%, #ffffff 70%);
+}

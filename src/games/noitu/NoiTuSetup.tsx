@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { DailyCard } from '../../ui/DailyCard';
 import { ModeCard } from '../../ui/GameGate';
 import { GamePoster } from '../../ui/GamePoster';
 import { useT } from '../../i18n';
@@ -38,6 +39,7 @@ export function NoiTuSetup() {
       {mode === null ? (
         <div className="stack">
           <h2 className="section-title">{t('chooseMode')}</h2>
+          <DailyCard game="noitu" onClick={() => navigate('/noitu/play?mode=daily')} />
           <ModeCard
             game="noitu"
             mode="solo"
