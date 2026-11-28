@@ -150,13 +150,16 @@ test('[CR-06] rapid back/forward navigation', async ({ browser }) => {
   // Stay inside the app (a player cannot go back past its first screen), and press quickly:
   // don't wait for each page to finish loading.
   await page.goto(ROUTES[0]);
-  for (const r of ROUTES.slice(0, 9)) await page.goto(r);
-  const quick = { waitUntil: 'commit' } as const;
+  // 18 screens deep: even if every "forward" below is lost (overtaken by the next press), the
+  // 16 "back" presses stay inside the app
+  for (const r of [...ROUTES.slice(0, 9), ...ROUTES.slice(0, 9)]) await page.goto(r);
+  // A press that is overtaken by the next one may never "commit": don't wait for it for long.
+  const quick = { waitUntil: 'commit', timeout: 3000 } as const;
   // Pressing this fast, Playwright itself sometimes asks for the history while the page is
   // switching ("Not attached to an active page"). That is the test tool, not the app: skip it.
   const press = (p: Promise<unknown>) =>
     p.catch((e: Error) => {
-      if (!/Not attached to an active page/.test(e.message)) throw e;
+      if (!/Not attached to an active page|Timeout .* exceeded/.test(e.message)) throw e;
     });
   for (let i = 0; i < 8; i++) {
     await press(page.goBack(quick));
