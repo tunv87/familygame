@@ -1,0 +1,219 @@
+import { useEffect, useRef, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useProfile } from '../../app/settings';
+import { useT, type MessageKey } from '../../i18n';
+import { sfx } from '../../lib/sound';
+import { useCountPlay } from '../../online/plays';
+import {
+  Avatar,
+  ExitConfirm,
+  HelpButton,
+  ResultModal,
+  TopBar,
+  useBackHandler,
+} from '../../ui/components';
+import { chooseMove } from './ai';
+import { CaNguaBoard, DieFace, HORSE_COLORS } from './CaNguaBoard';
+import { CN_HELP, CN_STORY } from './help';
+import {
+  applyMove,
+  applyRoll,
+  colorOf,
+  initialState,
+  legalMoves,
+  type CaNguaState,
+  type Color,
+} from './logic';
+import { colorsFor } from './online';
+
+const ROLL_MS = 450;
+const BOT_ROLL_MS = 750;
+const BOT_MOVE_MS = 650;
+const ME: Color = 0;
+const BOT_AVATARS = ['🤖', '👾', '🦾'];
+
+/** Cờ cá ngựa against 1–3 computer players on this device (?bots=1|2|3). */
+export function CaNguaLocal() {
+  const t = useT();
+  const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const profile = useProfile();
+  const bots = Math.min(3, Math.max(1, Number(params.get('bots')) || 1));
+  const colors = colorsFor(bots + 1);
+
+  const [round, setRound] = useState(0);
+  useCountPlay('cangua', round);
+  const [state, setState] = useState<CaNguaState>(() => initialState(colors));
+  const [rolling, setRolling] = useState(false);
+  const [message, setMessage] = useState('');
+  const [confirmExit, setConfirmExit] = useState(false);
+  const busy = useRef(false);
+
+  const botIndex = (c: Color) => colors.indexOf(c); // 1, 2, 3 for the computers
+  const nameOf = (c: Color) =>
+    c === ME
+      ? profile.name || t('you')
+      : bots === 1
+        ? t('caroComputer')
+        : t('cnBotName', { n: botIndex(c) });
+  const avatarOf = (c: Color) => (c === ME ? profile.avatar : BOT_AVATARS[botIndex(c) - 1]);
+
+  const myTurn = !state.winner && state.turn === ME;
+  const botTurn = state.winner === null && state.turn !== ME;
+
+  // latest state for the roll timer (the roll lands after a short animation)
+  const current = useRef(state);
+  current.current = state;
+
+  const roll = () => {
+    if (busy.current || state.winner !== null || state.roll !== null) return;
+    busy.current = true;
+    setRolling(true);
+    window.setTimeout(() => {
+      const s = current.current;
+      const d = 1 + Math.floor(Math.random() * 6);
+      const next = applyRoll(s, d);
+      setRolling(false);
+      busy.current = false;
+      if (!next) return;
+      const who = nameOf(s.turn);
+      setMessage(
+        next.lastRoll?.passed
+          ? t('cnNoMove', { name: who, n: d })
+          : t('cnRolled', { name: who, n: d }),
+      );
+      if (d === 6) sfx.ganh();
+      setState(next);
+    }, ROLL_MS);
+  };
+
+  const move = (horse: number) => {
+    const s = state;
+    const next = applyMove(s, horse);
+    if (!next) return;
+    if (next.last?.kick !== undefined) {
+      sfx.ganh(true);
+      setMessage(
+        t('cnKick', { name: nameOf(colorOf(horse)), other: nameOf(colorOf(next.last.kick)) }),
+      );
+    } else if (s.roll === 6 && next.winner === null) setMessage(t('cnAgain'));
+    else setMessage('');
+    if (next.turn === ME && next.winner === null && s.turn !== ME) sfx.opponent();
+    setState(next);
+  };
+
+  // the computers roll and move by themselves, a little slower than a person would
+  useEffect(() => {
+    if (!botTurn || rolling) return;
+    const id = window.setTimeout(
+      () => {
+        if (state.roll === null) roll();
+        else {
+          const h = chooseMove(state, state.roll);
+          if (h !== null) move(h);
+        }
+      },
+      state.roll === null ? BOT_ROLL_MS : BOT_MOVE_MS,
+    );
+    return () => window.clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state, rolling, botTurn]);
+
+  const newRound = () => {
+    setState(initialState(colors));
+    setMessage('');
+    setRolling(false);
+    busy.current = false;
+    setRound((r) => r + 1);
+  };
+
+  const started = state.rolls > 0;
+  const exit = () =>
+    started && state.winner === null ? setConfirmExit(true) : navigate('/cangua');
+  useBackHandler(exit);
+
+  const playable =
+    myTurn && state.roll !== null && !rolling
+      ? legalMoves(state, state.roll).map((m) => m.horse)
+      : [];
+  const shownRoll = state.lastRoll?.value ?? null;
+
+  const status =
+    state.winner !== null
+      ? ''
+      : rolling
+        ? t('cnRolling')
+        : myTurn
+          ? state.roll === null
+            ? t('cnYourRoll')
+            : t('cnPickHorse', { n: state.roll })
+          : t('turnOf', { name: nameOf(state.turn) });
+
+  return (
+    <main className="screen game">
+      <TopBar
+        title={t('gameCaNgua')}
+        onBack={exit}
+        right={<HelpButton steps={CN_HELP} story={CN_STORY} />}
+      />
+      <div className="players cn-players">
+        {colors.map((c) => (
+          <div
+            key={c}
+            className={`player ${state.winner === null && state.turn === c ? 'active' : ''}`}
+            style={{ borderColor: HORSE_COLORS[c] }}
+            data-testid={c === ME ? 'me' : `p-${c}`}
+          >
+            <Avatar emoji={avatarOf(c)} />
+            <span className="name">{nameOf(c)}</span>
+          </div>
+        ))}
+      </div>
+      <div className="status-line" data-testid="status">
+        {status}
+      </div>
+      <div className="numbers-toast" data-testid="cn-message">
+        {message}
+      </div>
+      <CaNguaBoard state={state} playable={playable} onHorse={move} />
+      <div className="cn-controls">
+        <DieFace value={rolling ? null : shownRoll} rolling={rolling} />
+        <button
+          className="btn grow"
+          data-testid="cn-roll"
+          disabled={!myTurn || state.roll !== null || rolling}
+          onClick={() => {
+            sfx.tap();
+            roll();
+          }}
+        >
+          🎲 {t('cnRoll')}
+        </button>
+      </div>
+      <div className="muted center" style={{ fontSize: 14 }}>
+        {t('cnYouAre', { color: t(`cnColor${ME}` as MessageKey) })}
+      </div>
+      {confirmExit && (
+        <ExitConfirm onConfirm={() => navigate('/cangua')} onCancel={() => setConfirmExit(false)} />
+      )}
+      {state.winner !== null && (
+        <ResultModal
+          title={
+            state.winner === ME ? t('youWin') : t('playerWins', { name: nameOf(state.winner) })
+          }
+          win={state.winner === ME}
+          actions={
+            <>
+              <button className="btn" onClick={newRound} data-testid="play-again">
+                🔄 {t('playAgain')}
+              </button>
+              <button className="btn secondary" onClick={() => navigate('/')}>
+                🏠 {t('home')}
+              </button>
+            </>
+          }
+        />
+      )}
+    </main>
+  );
+}

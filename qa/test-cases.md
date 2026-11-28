@@ -56,6 +56,7 @@ Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). M�
 | UX-29 | P2      | Bộ đếm lượt chơi                                                                                       | Trang chủ hiện tổng lượt chơi mọi game, trang mỗi game hiện số của game đó; bắt đầu ván / ván mới +1; mất mạng thì ẩn, không lỗi                                                     |
 | UX-30 | P1      | Admin bật/tắt/ẩn game và từng chế độ                                                                   | Game off: hiện mờ "Đang bảo trì", không mở được; hidden: không có ở trang chủ, link báo tạm chưa mở; chế độ off/hidden tương tự; mất mạng giữ cấu hình cũ                            |
 | UX-31 | P1      | Người xem trong phòng online                                                                           | Hết ghế hoặc ván đã bắt đầu → vào xem: thấy nước đi, "Lượt của…", không bấm được, không có Chơi lại; người chơi thấy số người xem; Thoát ngay; phòng đóng thì báo trận đã kết thúc   |
+| UX-32 | P1      | Cờ cá ngựa chơi với máy                                                                                | Chọn 1–3 máy → đủ màu ngựa; máy tự đổ và tự đi; lượt quay lại người chơi; rời giữa ván thì hỏi trước; không lỗi                                                                      |
 
 ## CR – Chống crash
 
@@ -113,6 +114,7 @@ Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). M�
 | LG-28 | P1      | Luật Cờ cá ngựa                                               | Ra quân bằng 6 hoặc 1; không nhảy qua ngựa; không đứng lên ngựa cùng màu; đá ngựa khác màu; không quá cửa chuồng; lên bậc đúng số; 6 được đổ tiếp; 4 ngựa bậc 3–6 thì thắng        |
 | LG-29 | P1      | Cờ cá ngựa online                                             | 2 người ngồi đối diện, 3–4 người lấy màu kế tiếp; xí ngầu tính từ seed (không đổ lại được); chỉ đúng lượt; người rời phòng bị loại, người cuối thắng                               |
 | LG-30 | P2      | Bàn Cờ cá ngựa                                                | Đường đi 52 ô liền nhau, khép kín, không trùng chuồng; cửa chuồng mỗi màu nằm ngay trước bậc 1                                                                                     |
+| LG-31 | P1      | Máy chơi Cờ cá ngựa                                           | Luôn chọn ngựa đi hợp lệ (hoặc không đi khi không có nước); đá ngựa khi được; ván giữa các máy luôn có người thắng; thắng người đi ngẫu nhiên > 60%                                |
 | LG-31 | P2      | Đọc cấu hình bật/tắt                                          | on/off/hidden cho game và chế độ; giá trị lạ coi là on; game off thì mọi chế độ off                                                                                                |
 
 ## AU – Âm thanh

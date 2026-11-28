@@ -45,7 +45,7 @@ export const GAMES: GameInfo[] = [
     title: 'gameCaNgua',
     desc: 'gameCaNguaDesc',
     path: '/cangua',
-    modes: ['online'],
+    modes: ['solo', 'online'],
     group: 'folk',
   },
   {

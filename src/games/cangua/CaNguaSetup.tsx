@@ -1,29 +1,78 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GamePoster } from '../../ui/GamePoster';
 import { useT } from '../../i18n';
 import { OnlineLobby } from '../../online/OnlineLobby';
-import { HelpButton, TopBar, useBackHandler } from '../../ui/components';
+import { Card, HelpButton, TopBar, useBackHandler } from '../../ui/components';
+import { ModeCard } from '../../ui/GameGate';
+import { GamePoster } from '../../ui/GamePoster';
 import { CN_HELP, CN_STORY } from './help';
 
-/** Cờ cá ngựa is played online, 2–4 players: straight to creating or joining a room. */
+/** Cờ cá ngựa: race the computer (1–3 of them) on this device, or 2–4 people online. */
 export function CaNguaSetup() {
   const t = useT();
   const navigate = useNavigate();
-  useBackHandler(() => navigate('/'));
+  const [mode, setMode] = useState<'solo' | 'online' | null>(null);
+  const back = () => (mode !== null ? setMode(null) : navigate('/'));
+  useBackHandler(back);
+
+  const counts: [number, string, string, string][] = [
+    [1, '🤖', t('cnBots1'), t('cnBots1Hint')],
+    [2, '🤖🤖', t('cnBots2'), t('cnBots2Hint')],
+    [3, '🤖🤖🤖', t('cnBots3'), t('cnBots3Hint')],
+  ];
+
   return (
     <main className="screen">
       <TopBar
         title={t('gameCaNgua')}
-        onBack={() => navigate('/')}
+        onBack={back}
         right={<HelpButton steps={CN_HELP} story={CN_STORY} />}
       />
       <GamePoster game="cangua" story={CN_STORY} rules={CN_HELP} />
-      <div className="stack">
-        <div className="muted center" data-testid="cn-intro">
-          🐴 {t('cnIntro')}
+      {mode === null ? (
+        <div className="stack">
+          <h2 className="section-title">{t('chooseMode')}</h2>
+          <ModeCard
+            game="cangua"
+            mode="solo"
+            emoji="🤖"
+            title={t('modeSolo')}
+            hint={t('cnSoloHint')}
+            onClick={() => setMode('solo')}
+            testId="mode-solo"
+          />
+          <ModeCard
+            game="cangua"
+            mode="online"
+            emoji="🌏"
+            title={t('modeOnline')}
+            hint={t('cnOnlineHint')}
+            onClick={() => setMode('online')}
+            testId="mode-online"
+          />
         </div>
-        <OnlineLobby game="cangua" options={{}} />
-      </div>
+      ) : mode === 'solo' ? (
+        <div className="stack">
+          <h2 className="section-title">{t('cnHowMany')}</h2>
+          {counts.map(([n, emoji, title, hint]) => (
+            <Card
+              key={n}
+              emoji={emoji}
+              title={title}
+              hint={hint}
+              testId={`bots-${n}`}
+              onClick={() => navigate(`/cangua/play?mode=solo&bots=${n}`)}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="stack">
+          <div className="muted center" data-testid="cn-intro">
+            🐴 {t('cnIntro')}
+          </div>
+          <OnlineLobby game="cangua" options={{}} />
+        </div>
+      )}
     </main>
   );
 }
