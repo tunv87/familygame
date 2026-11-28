@@ -260,9 +260,9 @@ export const vi = {
   cnRolling: 'Đang đổ…',
   cnYourRoll: 'Đến lượt bạn: đổ xí ngầu',
   cnPickHorse: 'Bạn đổ được {n}: chạm một con ngựa đang sáng',
-  cnRolled: '{name} đổ được {n}',
-  cnNoMove: '{name} đổ được {n}, không đi được',
-  cnAgain: 'Đổ được 6, đổ tiếp!',
+  cnRolled: '{name} đổ được {a} và {b} ({n} bước)',
+  cnNoMove: '{name} đổ được {a} và {b}, không đi được',
+  cnAgain: 'Đổ được {a}-{b}, đổ thêm lượt nữa!',
   cnKick: '{name} đá ngựa của {other} về chuồng!',
   cnYouAre: 'Bạn là ngựa {color}',
   cnMoveHorse: 'Đi ngựa {color}',
@@ -271,14 +271,14 @@ export const vi = {
   cnColor2: 'xanh lá',
   cnColor3: 'vàng',
   cnHelp1:
-    'Mỗi người có 4 con ngựa trong chuồng. Lần lượt đổ xí ngầu; đổ được 6 hoặc 1 thì được đưa một con ngựa ra ô xuất phát.',
+    'Mỗi người có 4 con ngựa trong chuồng. Lần lượt đổ 2 xí ngầu; có một con 1 hoặc 6 thì được đưa một con ngựa ra ô xuất phát.',
   cnHelp2:
-    'Ngựa đi đúng số vừa đổ, theo chiều kim đồng hồ quanh bàn. Đổ được 6 thì được đổ thêm lượt nữa.',
+    'Ngựa đi đúng TỔNG hai xí ngầu, theo chiều kim đồng hồ quanh bàn. Đổ được 1-1, 1-6, 6-1 hoặc 6-6 thì được đổ thêm lượt nữa.',
   cnHelp3:
     'Không được nhảy qua ngựa khác, không được đứng lên ngựa cùng màu, không được đi quá cửa chuồng của mình.',
   cnHelp4: 'Đi vừa đúng vào ô có ngựa màu khác thì đá nó về chuồng!',
   cnHelp5:
-    'Đến cửa chuồng, đổ n thì lên bậc n; đang ở bậc k phải đổ đúng k+1 mới lên tiếp. Ai đưa đủ 4 ngựa lên bậc 3, 4, 5, 6 trước thì thắng.',
+    'Lên chuồng dùng MỘT xí ngầu: ở cửa chuồng, xí ngầu ra n thì lên bậc n; đang ở bậc k phải có xí ngầu ra k+1 mới lên tiếp. Ai đưa đủ 4 ngựa lên bậc 3, 4, 5, 6 trước thì thắng.',
   cnStory1:
     'Ngày xửa ngày xưa ở Ấn Độ, người ta chơi một trò tên là Pachisi. Chuyện kể rằng có những vị vua chơi trên sân gạch khổng lồ, dùng người thật làm quân cờ!',
   cnStory2:

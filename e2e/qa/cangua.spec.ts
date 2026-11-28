@@ -55,7 +55,7 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
       await a.page.waitForTimeout(300); // a roll is animating or syncing
     else await a.page.waitForTimeout(150);
   }
-  await expect(a.page.getByTestId('cn-die')).not.toHaveAttribute('data-value', '');
+  await expect(a.page.getByTestId('cn-dice')).not.toHaveAttribute('data-value', '');
   // everyone sees the same horses in the same places
   await expect(async () => {
     const pa = await positions(a.page);
@@ -108,7 +108,7 @@ test('[UX-32] against the computer: choose 3 computers, roll, the computers play
     await page.waitForTimeout(300);
   }
   expect(myTurns, '[UX-32] the turn never came back to me').toBeGreaterThanOrEqual(4);
-  await expect(page.getByTestId('cn-die')).not.toHaveAttribute('data-value', '');
+  await expect(page.getByTestId('cn-dice')).not.toHaveAttribute('data-value', '');
   await evidence(page, 'cangua', 'D2', 'UX-32-vs-computer');
   // leaving mid-game asks first
   await page
@@ -153,5 +153,36 @@ test('[UX-33] same device: 4 players take turns rolling on one device', async ({
   ]);
   await evidence(page, 'cangua', 'D2', 'UX-33-same-device');
   expect(errors, '[UX-33] errors').toEqual([]);
+  await ctx.close();
+});
+
+test('[AU-11] Cờ cá ngựa: two dice rattle when rolled, hooves when a horse moves', async ({
+  browser,
+}) => {
+  const { page, errors, ctx } = await openApp(browser, { name: 'An', sound: true });
+  await page.goto('/#/cangua/play?mode=local&players=2');
+  await page.getByTestId('cn-board').waitFor();
+  await page.mouse.click(5, 5); // first tap unlocks audio
+  const sounds = () =>
+    page.evaluate(() => [...((window as unknown as { __fgSounds?: string[] }).__fgSounds ?? [])]);
+  // roll until a horse can move, then move it
+  for (let i = 0; i < 30 && !(await sounds()).includes('hooves'); i++) {
+    if (await page.getByTestId('cn-roll').isEnabled()) {
+      await page.getByTestId('cn-roll').click();
+      await page.waitForTimeout(600);
+    }
+    const can = page.locator('.cn-horse.can');
+    if (await can.count()) {
+      await can.first().dispatchEvent('pointerdown');
+      await page.waitForTimeout(200);
+    }
+  }
+  const played = await sounds();
+  expect(played, '[AU-11] no dice sound').toContain('dice');
+  expect(played, '[AU-11] no hooves').toContain('hooves');
+  // two dice are shown, each 1–6
+  const value = await page.getByTestId('cn-dice').getAttribute('data-value');
+  expect(value, '[AU-11] two dice').toMatch(/^[1-6][1-6]$/);
+  expect(errors, '[AU-11] errors').toEqual([]);
   await ctx.close();
 });
