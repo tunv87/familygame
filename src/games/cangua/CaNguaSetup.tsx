@@ -61,6 +61,7 @@ export function CaNguaSetup() {
               title={title}
               hint={hint}
               testId={`bots-${n}`}
+              className="bots"
               onClick={() => navigate(`/cangua/play?mode=solo&bots=${n}`)}
             />
           ))}

@@ -15,6 +15,12 @@ const TINT: Record<Color, string> = {
   3: '#fde9b0',
 };
 
+/** A small horse head, centred on 0,0, about 0.5 board cells tall. */
+const HORSE_PATH =
+  'M-0.2 0.26h0.42v-0.07h-0.05l-0.03-0.18c0.06-0.03 0.1-0.09 0.1-0.17 0-0.1-0.07-0.19-0.18-0.2' +
+  'l-0.04-0.07-0.06 0.07c-0.1 0.02-0.18 0.1-0.2 0.2l-0.03 0.07 0.07 0.04 0.07-0.05 0.04 0.03' +
+  '-0.08 0.16h-0.05z';
+
 /** The cross-shaped board with the horses. Horses in `playable` glow and can be tapped. */
 export function CaNguaBoard({
   state,
@@ -116,9 +122,8 @@ export function CaNguaBoard({
             >
               {can && <circle r={0.75} className="cn-glow" />}
               <circle r={0.42} fill={HORSE_COLORS[c]} stroke="#fff" strokeWidth={0.09} />
-              <text y={0.17} className="cn-horse-face">
-                ♞
-              </text>
+              {/* drawn horse head (the ♞ character is missing from many fonts) */}
+              <path className="cn-horse-face" d={HORSE_PATH} />
               {/* a bigger invisible target for fingers */}
               <circle r={0.75} fill="transparent" />
             </g>
