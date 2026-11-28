@@ -450,7 +450,8 @@
   .screen:has(> .poster) .stack > .card .emoji {
     display: grid;
     place-items: center;
-    width: 64px;
+    min-width: 64px;
+    padding: 0 10px;
     height: 64px;
     border-radius: 18px;
     font-size: 2.1em;
