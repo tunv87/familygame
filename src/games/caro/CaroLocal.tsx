@@ -53,13 +53,26 @@ export function CaroLocal() {
 
   useEffect(() => {
     if (!aiTurn) return;
-    const id = setTimeout(() => {
+    // Think first, then show the move 450 ms after the player's move: the thinking time is
+    // part of the pause, not added to it (on a slow phone the hard level can think for half a
+    // second, which used to come on top of the pause).
+    let show: number | undefined;
+    const t0 = performance.now();
+    const think = setTimeout(() => {
       const idx = chooseMove(board, cfg, toMove, level);
-      log.debug('ai move', { idx, level });
-      sfx.opponent();
-      setMoves((m) => [...m, idx]);
-    }, 450);
-    return () => clearTimeout(id);
+      log.debug('ai move', { idx, level, ms: Math.round(performance.now() - t0) });
+      show = window.setTimeout(
+        () => {
+          sfx.opponent();
+          setMoves((m) => [...m, idx]);
+        },
+        Math.max(0, 450 - (performance.now() - t0)),
+      );
+    }, 0);
+    return () => {
+      clearTimeout(think);
+      if (show !== undefined) clearTimeout(show);
+    };
   }, [aiTurn, board, cfg, toMove, level]);
 
   useEffect(() => {
