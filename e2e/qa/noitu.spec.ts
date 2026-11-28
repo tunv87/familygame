@@ -16,6 +16,8 @@ const plain = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').replace(
 /** Answers with the hint word, typed out again with its tone marks. */
 async function answerWithHint(page: Page) {
   await page.getByTestId('nt-hint').click();
+  // the hint is filled in by the app: wait for it (a slow device may not have done it yet)
+  await expect(page.getByTestId('nt-input')).not.toHaveValue('');
   const word = await page.getByTestId('nt-input').inputValue();
   await page.getByTestId('nt-input').fill(word);
   await page.getByTestId('nt-go').click();
@@ -42,6 +44,7 @@ test('[UX-24][UX-27] same device: hint, tone marks required, refusals, giving up
   await evidence(page, 'noitu', 'D2', 'UX-27-report');
   // the hint word without its tone marks is refused, without giving the word away
   await page.getByTestId('nt-hint').click();
+  await expect(page.getByTestId('nt-input')).not.toHaveValue('');
   const hinted = await page.getByTestId('nt-input').inputValue();
   // Without its tone marks the hint must be refused, unless that spelling happens to be a real
   // word too (e.g. "bò" → "bo"): then the game rightly accepts it, so skip the check.
