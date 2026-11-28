@@ -29,8 +29,10 @@ export interface CaNguaOnlineState {
   /** colours still playing, e.g. "02" */
   colors: string;
   turn: Color;
-  /** dice to move with (10 × first + second), 0 = must roll */
+  /** dice of the current roll (10 × first + second), 0 = must roll */
   roll: number;
+  /** dice of the roll already used (bit 0 = first, bit 1 = second) */
+  used?: number;
   rolls: number;
   seed: number;
   lastRoll?: { c: Color; d: number; p?: boolean };
@@ -40,7 +42,7 @@ export interface CaNguaOnlineState {
 }
 
 export type CaNguaAction =
-  { t: 'roll' } | { t: 'move'; horse: number } | { t: 'drop'; uid: string };
+  { t: 'roll' } | { t: 'move'; horse: number; die?: 0 | 1 } | { t: 'drop'; uid: string };
 
 /** Colours for 2, 3 or 4 players: two players sit opposite each other. */
 export function colorsFor(n: number): Color[] {
@@ -85,7 +87,7 @@ export function toLocal(o: CaNguaOnlineState): CaNguaState {
   const horses = String(o.horses ?? '')
     .split(',')
     .map(Number);
-  if (horses.length !== 16 || horses.some((x) => !Number.isInteger(x) || x < -1 || x > 56))
+  if (horses.length !== 16 || horses.some((x) => !Number.isInteger(x) || x < -1 || x > 57))
     throw new Error('bad horses');
   const colors = COLORS.filter((c) => String(o.colors ?? '').includes(String(c)));
   if (colors.length < 1 || !colors.includes(o.turn)) throw new Error('bad colours');
@@ -95,6 +97,7 @@ export function toLocal(o: CaNguaOnlineState): CaNguaState {
     horses,
     turn: o.turn,
     roll: unpackDice(o.roll),
+    used: Number.isInteger(o.used) && o.used! >= 0 && o.used! <= 2 ? o.used! : 0,
     rolls: o.rolls ?? 0,
     winner,
   };
@@ -124,6 +127,7 @@ function toOnline(s: CaNguaState, seats: string[], seed: number): CaNguaOnlineSt
     rolls: s.rolls,
     seed,
   };
+  if (s.roll && s.used) out.used = s.used;
   if (s.lastRoll) {
     out.lastRoll = { c: s.lastRoll.color, d: packDice(s.lastRoll.dice) };
     if (s.lastRoll.passed) out.lastRoll.p = true;
@@ -163,7 +167,11 @@ export function applyCaNguaOnline(
     if (next === s) return null;
   } else {
     if (turnUidOf(o) !== uid) return null;
-    next = a.t === 'roll' ? applyRoll(s, diceFor(o.seed, s.rolls)) : applyMove(s, a.horse);
+    if (a.t === 'roll') next = applyRoll(s, diceFor(o.seed, s.rolls));
+    else {
+      if (a.die !== undefined && a.die !== 0 && a.die !== 1) return null;
+      next = applyMove(s, a.horse, a.die);
+    }
   }
   return next ? toOnline(next, seats, o.seed) : null;
 }

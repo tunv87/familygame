@@ -245,7 +245,8 @@ export const en: Record<MessageKey, string> = {
   cnBots3Hint: 'All four colours – the most fun!',
   cnPlayerN: 'Player {n}',
   cnTurnRoll: '{name}: roll the die',
-  cnTurnPick: '{name} rolled {n}: tap a glowing horse',
+  cnTurnPick: '{name} rolled {a} and {b}: pick a die, then tap a glowing horse',
+  cnTurnPickRest: '{name} has a {n} left: tap a glowing horse',
   cnLocalHint: 'Pass the device around, 2–4 players',
   cnHowManyPlayers: 'How many players?',
   cnPlayers2: '2 players',
@@ -257,8 +258,10 @@ export const en: Record<MessageKey, string> = {
   cnRoll: 'Roll',
   cnRolling: 'Rolling…',
   cnYourRoll: 'Your turn: roll the die',
-  cnPickHorse: 'You rolled {n}: tap a glowing horse',
-  cnRolled: '{name} rolled {a} and {b} ({n} steps)',
+  cnPickHorse: 'You rolled {a} and {b}: pick a die, then tap a glowing horse',
+  cnPickRest: 'A {n} left: tap a glowing horse',
+  cnPickDie: 'Use the {n}',
+  cnRolled: '{name} rolled {a} and {b}',
   cnNoMove: '{name} rolled {a} and {b}, no move',
   cnAgain: '{a}-{b}: roll again!',
   cnKick: '{name} sent {other}’s horse back to its stable!',
@@ -269,14 +272,14 @@ export const en: Record<MessageKey, string> = {
   cnColor2: 'green',
   cnColor3: 'yellow',
   cnHelp1:
-    'Everyone has 4 horses in their stable. Take turns rolling 2 dice; if either shows a 1 or a 6, a horse may come out onto your start cell.',
+    'Everyone has 4 horses in their stable. Take turns rolling 2 dice. A die showing 1 or 6 can bring a horse out onto your start cell.',
   cnHelp2:
-    'A horse moves exactly the SUM of the two dice, clockwise round the board. 1-1, 1-6, 6-1 or 6-6 gives you another roll.',
+    'Each die is a move of its own: tap a die, then the horse that moves that many cells clockwise. Move two different horses, or one horse twice. 1-1, 1-6, 6-1 or 6-6 gives you another roll.',
   cnHelp3:
     'You cannot jump over other horses, land on your own colour, or go past the gate of your home.',
   cnHelp4: 'Land exactly on a horse of another colour to send it back to its stable!',
   cnHelp5:
-    'Home steps use ONE die: at your gate, a die showing n climbs to step n; on step k a die must show k+1 to climb on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
+    'Home steps: at your gate, a die showing n climbs to step n; on step k a die must show k+1 to climb on. First to get 4 horses onto steps 3, 4, 5 and 6 wins.',
   cnStory1:
     'Once upon a time in India, people played a game called Pachisi. Legend says some emperors played it on a giant courtyard board, with real people as the pieces!',
   cnStory2:

@@ -6,9 +6,9 @@ import { ARM, GATE, HOME, STABLE, colorOf, type Color } from './logic';
 
 export type RC = [number, number];
 
-/** The 52 track cells, clockwise from red's start cell. */
+/** The 52 track cells, clockwise from red's start cell (the first cell next to its stable). */
 export const TRACK_CELLS: RC[] = (() => {
-  const out: RC[] = [];
+  const out: RC[] = [[6, 0]];
   const run = (r0: number, c0: number, dr: number, dc: number, n: number) => {
     for (let i = 0; i < n; i++) out.push([r0 + dr * i, c0 + dc * i]);
   };
@@ -24,7 +24,6 @@ export const TRACK_CELLS: RC[] = (() => {
   run(14, 6, -1, 0, 6); // ↑ col 6
   run(8, 5, 0, -1, 6); // ← row 8
   run(7, 0, -1, 0, 1);
-  run(6, 0, 0, 1, 1);
   return out;
 })();
 

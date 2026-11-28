@@ -45,6 +45,24 @@ describe('[LG-29] Cờ cá ngựa online', () => {
     expect(o.winner).toBeTruthy();
   });
 
+  it('each die is its own move: the used die is stored until the turn ends', () => {
+    // find a seed whose first roll lets red out and has a second die to use
+    let seed = 1;
+    while (!(diceFor(seed, 0)[0] === 6 && diceFor(seed, 0)[1] !== 6)) seed++;
+    const [, b] = diceFor(seed, 0);
+    let o = applyCaNguaOnline(initialCaNguaState(['a', 'b'], seed), 'a', { t: 'roll' })!;
+    expect(applyCaNguaOnline(o, 'a', { t: 'move', horse: 0, die: 1 })).toBeNull(); // b ≠ 1, 6
+    expect(applyCaNguaOnline(o, 'a', { t: 'move', horse: 0, die: 3 as 0 })).toBeNull();
+    o = applyCaNguaOnline(o, 'a', { t: 'move', horse: 0, die: 0 })!;
+    expect(toLocal(o).horses[0]).toBe(0);
+    expect(o.used).toBe(1);
+    expect(turnUidOf(o)).toBe('a');
+    o = applyCaNguaOnline(o, 'a', { t: 'move', horse: 0, die: 1 })!;
+    expect(toLocal(o).horses[0]).toBe(b);
+    expect(o.used).toBeUndefined();
+    expect(o.roll).toBe(0);
+  });
+
   it('a player who left is dropped by the others; the last one standing wins', () => {
     const o = initialCaNguaState(['a', 'b', 'c'], 5);
     expect(applyCaNguaOnline(o, 'x', { t: 'drop', uid: 'b' })).toBeNull(); // not in the game

@@ -1,5 +1,5 @@
 /**
- * Computer player for Cờ cá ngựa. Picks one of the legal moves for the rolled dice with simple
+ * Computer player for Cờ cá ngựa. Picks one of the legal moves (a die and a horse) with simple
  * family-game priorities: climb home, kick a horse, bring a horse out, stay out of reach of
  * horses behind, then run the horse that is furthest along. A little randomness keeps it from
  * being predictable.
@@ -17,6 +17,7 @@ import {
   startCell,
   type CaNguaState,
   type Dice,
+  type Move,
   type Color,
 } from './logic';
 
@@ -42,7 +43,7 @@ function threats(s: CaNguaState, me: Color, cell: number, ignore: number): numbe
   return n;
 }
 
-function score(s: CaNguaState, dice: Dice, horse: number, to: number, kick?: number) {
+function score(s: CaNguaState, dice: Dice, { horse, to, kick }: Move) {
   const me = colorOf(horse);
   const from = s.horses[horse];
   let v = 0;
@@ -62,17 +63,22 @@ function score(s: CaNguaState, dice: Dice, horse: number, to: number, kick?: num
   return v;
 }
 
-/** The horse the computer moves with the rolled dice, or null when there is no legal move. */
-export function chooseMove(s: CaNguaState, dice: Dice, rng: () => number = Math.random) {
-  const moves = legalMoves(s, dice);
+/** The move (die and horse) the computer plays, or null when there is no legal move. */
+export function chooseMove(
+  s: CaNguaState,
+  dice: Dice,
+  rng: () => number = Math.random,
+  used = 0,
+): Move | null {
+  const moves = legalMoves(s, dice, used);
   if (moves.length === 0) return null;
-  let best = moves[0].horse;
+  let best = moves[0];
   let bestV = -Infinity;
   for (const m of moves) {
-    const v = score(s, dice, m.horse, m.to, m.kick) + rng() * 4;
+    const v = score(s, dice, m) + rng() * 4;
     if (v > bestV) {
       bestV = v;
-      best = m.horse;
+      best = m;
     }
   }
   return best;

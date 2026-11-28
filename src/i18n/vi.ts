@@ -247,7 +247,8 @@ export const vi = {
   cnBots3Hint: 'Đủ bốn màu ngựa, vui nhất!',
   cnPlayerN: 'Người {n}',
   cnTurnRoll: '{name}: đổ xí ngầu',
-  cnTurnPick: '{name} đổ được {n}: chạm một con ngựa đang sáng',
+  cnTurnPick: '{name} đổ được {a} và {b}: chọn xí ngầu, rồi chạm ngựa đang sáng',
+  cnTurnPickRest: '{name} còn xí ngầu {n}: chạm ngựa đang sáng',
   cnLocalHint: 'Chuyền tay nhau, 2–4 người',
   cnHowManyPlayers: 'Mấy người cùng chơi?',
   cnPlayers2: '2 người',
@@ -259,8 +260,10 @@ export const vi = {
   cnRoll: 'Đổ xí ngầu',
   cnRolling: 'Đang đổ…',
   cnYourRoll: 'Đến lượt bạn: đổ xí ngầu',
-  cnPickHorse: 'Bạn đổ được {n}: chạm một con ngựa đang sáng',
-  cnRolled: '{name} đổ được {a} và {b} ({n} bước)',
+  cnPickHorse: 'Bạn đổ được {a} và {b}: chọn xí ngầu, rồi chạm ngựa đang sáng',
+  cnPickRest: 'Còn xí ngầu {n}: chạm ngựa đang sáng',
+  cnPickDie: 'Dùng xí ngầu {n}',
+  cnRolled: '{name} đổ được {a} và {b}',
   cnNoMove: '{name} đổ được {a} và {b}, không đi được',
   cnAgain: 'Đổ được {a}-{b}, đổ thêm lượt nữa!',
   cnKick: '{name} đá ngựa của {other} về chuồng!',
@@ -271,14 +274,14 @@ export const vi = {
   cnColor2: 'xanh lá',
   cnColor3: 'vàng',
   cnHelp1:
-    'Mỗi người có 4 con ngựa trong chuồng. Lần lượt đổ 2 xí ngầu; có một con 1 hoặc 6 thì được đưa một con ngựa ra ô xuất phát.',
+    'Mỗi người có 4 con ngựa trong chuồng. Lần lượt đổ 2 xí ngầu. Xí ngầu nào ra 1 hoặc 6 thì dùng nó để đưa một con ngựa ra ô xuất phát.',
   cnHelp2:
-    'Ngựa đi đúng TỔNG hai xí ngầu, theo chiều kim đồng hồ quanh bàn. Đổ được 1-1, 1-6, 6-1 hoặc 6-6 thì được đổ thêm lượt nữa.',
+    'Mỗi xí ngầu là một lượt đi riêng: chạm xí ngầu, rồi chạm con ngựa muốn đi đúng số đó. Có thể đi 2 con khác nhau, hoặc 1 con đi cả 2 lần. Đổ được 1-1, 1-6, 6-1 hoặc 6-6 thì được đổ thêm lượt nữa.',
   cnHelp3:
     'Không được nhảy qua ngựa khác, không được đứng lên ngựa cùng màu, không được đi quá cửa chuồng của mình.',
   cnHelp4: 'Đi vừa đúng vào ô có ngựa màu khác thì đá nó về chuồng!',
   cnHelp5:
-    'Lên chuồng dùng MỘT xí ngầu: ở cửa chuồng, xí ngầu ra n thì lên bậc n; đang ở bậc k phải có xí ngầu ra k+1 mới lên tiếp. Ai đưa đủ 4 ngựa lên bậc 3, 4, 5, 6 trước thì thắng.',
+    'Lên chuồng: ở cửa chuồng, xí ngầu ra n thì lên bậc n; đang ở bậc k phải có xí ngầu ra k+1 mới lên tiếp. Ai đưa đủ 4 ngựa lên bậc 3, 4, 5, 6 trước thì thắng.',
   cnStory1:
     'Ngày xửa ngày xưa ở Ấn Độ, người ta chơi một trò tên là Pachisi. Chuyện kể rằng có những vị vua chơi trên sân gạch khổng lồ, dùng người thật làm quân cờ!',
   cnStory2:

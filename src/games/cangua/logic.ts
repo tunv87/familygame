@@ -3,24 +3,27 @@
  *
  * Board: a cross-shaped track of 52 cells around the centre, walked clockwise. Each of the four
  * colours (0 red, 1 blue, 2 green, 3 yellow) has a stable (chuồng) in a corner, a start cell on
- * the track and a home column of 6 steps (bậc 1–6) leading to the centre.
+ * the track (the first cell next to its stable) and a home column of 6 steps (bậc 1–6) leading
+ * to the centre.
  *
  * A horse's position is stored relative to its own colour:
  *   -1        in the stable
- *   0 … 50    on the track, 0 = its start cell, 50 = its gate (the cell in front of its home)
- *   51 … 56   home steps 1 … 6
+ *   0 … 51    on the track, 0 = its start cell, 51 = its gate (the cell in front of its home)
+ *   52 … 57   home steps 1 … 6
  * Its track cell is (13 × colour + position) mod 52.
  *
  * Rules (as chosen for this app, common Vietnamese family rules, two dice):
- *  - Roll both dice. If either shows a 1 or a 6, a horse may leave the stable onto its start
- *    cell (that uses the whole roll).
- *  - On the track a horse moves exactly the SUM of the dice. It may not jump over any horse,
+ *  - Roll both dice. Each die is a move of its own: the player picks a die and a horse, then
+ *    uses the other die, for the same horse or another one (in either order).
+ *  - A die showing 1 or 6 may bring a horse out of the stable onto its start cell.
+ *  - On the track a horse moves exactly the number on the die. It may not jump over any horse,
  *    may not land on a horse of its own colour, and may not go past its gate.
  *  - Landing exactly on another colour's horse kicks it back to its stable (đá).
- *  - Home steps use ONE die: from the gate, a die showing n climbs straight to step n (steps
- *    1 … n must be free). On step k, only a die showing k + 1 climbs one more step.
- *  - 1-1, 1-6, 6-1 and 6-6 give another roll. With no possible move the turn passes (those
- *    rolls still roll again).
+ *  - Home steps: from the gate, a die showing n climbs straight to step n (steps 1 … n must be
+ *    free). On step k, only a die showing k + 1 climbs one more step.
+ *  - A die that can move must be used; a die that cannot is skipped. The turn ends when both
+ *    dice are used or skipped.
+ *  - 1-1, 1-6, 6-1 and 6-6 give another roll (also when nothing could move).
  *  - The first colour with its four horses on steps 3, 4, 5 and 6 wins.
  */
 
@@ -28,8 +31,8 @@ export type Color = 0 | 1 | 2 | 3;
 export const COLORS: Color[] = [0, 1, 2, 3];
 export const TRACK = 52;
 export const ARM = 13; // track cells between two start cells
-export const GATE = 50;
-export const HOME = 51; // position of home step 1
+export const GATE = 51;
+export const HOME = 52; // position of home step 1
 export const STEPS = 6;
 export const HORSES = 4;
 export const STABLE = -1;
@@ -41,6 +44,8 @@ export type Dice = [number, number];
 
 export interface Move {
   horse: number; // 0 … 15 (colour × 4 + i)
+  /** which die (0 or 1) the move uses */
+  die: 0 | 1;
   to: number;
   /** index of the horse that is kicked back to its stable */
   kick?: number;
@@ -52,8 +57,10 @@ export interface CaNguaState {
   /** 16 positions, see above (horses of colours not playing stay in their stable) */
   horses: number[];
   turn: Color;
-  /** the dice the player must now move with, or null when they must roll */
+  /** the dice of the current roll, or null when the player must roll */
   roll: Dice | null;
+  /** dice of `roll` already used: bit 0 = first die, bit 1 = second */
+  used: number;
   rolls: number;
   winner: Color | null;
   /** last roll and move, for the screen */
@@ -78,6 +85,7 @@ export function initialState(colors: Color[]): CaNguaState {
     horses: Array(16).fill(STABLE),
     turn: list[0],
     roll: null,
+    used: 0,
     rolls: 0,
     winner: null,
   };
@@ -95,23 +103,21 @@ export const validDice = (d: unknown): d is Dice =>
 export const rollsAgain = ([a, b]: Dice) => (a === 1 || a === 6) && (b === 1 || b === 6);
 export const canLeaveStable = ([a, b]: Dice) => a === 1 || a === 6 || b === 1 || b === 6;
 
-/** Every legal move for the player to move with the dice (at most one per horse). */
-export function legalMoves(s: CaNguaState, dice: Dice): Move[] {
-  if (s.winner !== null) return [];
+/** Every move of the player to move with one die showing `d` (at most one per horse). */
+function movesWithDie(s: CaNguaState, d: number, die: 0 | 1): Move[] {
   const c = s.turn;
-  const sum = dice[0] + dice[1];
   const out: Move[] = [];
   let leftStable = false;
   for (const h of horsesOf(c)) {
     const p = s.horses[h];
     if (p === STABLE) {
-      if (!canLeaveStable(dice) || leftStable) continue;
+      if ((d !== 1 && d !== 6) || leftStable) continue;
       leftStable = true; // one choice is enough: the horses in the stable are all the same
       const other = onCell(s, startCell(c));
       if (other !== null && colorOf(other) === c) continue;
-      out.push(other === null ? { horse: h, to: 0 } : { horse: h, to: 0, kick: other });
+      out.push(other === null ? { horse: h, die, to: 0 } : { horse: h, die, to: 0, kick: other });
     } else if (p < GATE) {
-      const to = p + sum;
+      const to = p + d;
       if (to > GATE) continue; // cannot go past the gate
       let blocked = false;
       for (let q = p + 1; q < to && !blocked; q++)
@@ -119,24 +125,37 @@ export function legalMoves(s: CaNguaState, dice: Dice): Move[] {
       if (blocked) continue;
       const other = onCell(s, (startCell(c) + to) % TRACK);
       if (other !== null && colorOf(other) === c) continue;
-      out.push(other === null ? { horse: h, to } : { horse: h, to, kick: other });
+      out.push(other === null ? { horse: h, die, to } : { horse: h, die, to, kick: other });
     } else if (p === GATE) {
-      // climb with either die: take the highest free step
-      let best = -1;
-      for (const d of dice) {
-        const to = GATE + d; // step d
-        const busy = horsesOf(c).some((o) => s.horses[o] > GATE && s.horses[o] <= to);
-        if (!busy && to > best) best = to;
-      }
-      if (best > 0) out.push({ horse: h, to: best });
+      const to = GATE + d; // step d
+      if (!horsesOf(c).some((o) => s.horses[o] > GATE && s.horses[o] <= to))
+        out.push({ horse: h, die, to });
     } else {
       const step = p - GATE;
-      if (step >= STEPS || !dice.includes(step + 1)) continue;
-      if (!horsesOf(c).some((o) => s.horses[o] === p + 1)) out.push({ horse: h, to: p + 1 });
+      if (step >= STEPS || d !== step + 1) continue;
+      if (!horsesOf(c).some((o) => s.horses[o] === p + 1)) out.push({ horse: h, die, to: p + 1 });
     }
   }
   return out;
 }
+
+/**
+ * Every legal move for the player to move with `dice`, for each die not yet `used` (when both
+ * dice show the same number only the first one is listed).
+ */
+export function legalMoves(s: CaNguaState, dice: Dice, used = 0): Move[] {
+  if (s.winner !== null) return [];
+  const out: Move[] = [];
+  for (const die of [0, 1] as const) {
+    if (used & (1 << die)) continue;
+    if (die === 1 && !(used & 1) && dice[0] === dice[1]) continue;
+    out.push(...movesWithDie(s, dice[die], die));
+  }
+  return out;
+}
+
+/** Legal moves of the current roll (none while the player must roll). */
+export const movesNow = (s: CaNguaState) => (s.roll ? legalMoves(s, s.roll, s.used) : []);
 
 export function nextColor(s: CaNguaState, c: Color = s.turn): Color {
   const i = s.colors.indexOf(c);
@@ -157,10 +176,18 @@ export function applyRoll(s: CaNguaState, dice: Dice): CaNguaState | null {
   const rolls = s.rolls + 1;
   const moves = legalMoves(s, d);
   if (moves.length > 0)
-    return { ...s, roll: d, rolls, lastRoll: { color: s.turn, dice: d }, last: undefined };
+    return {
+      ...s,
+      roll: d,
+      used: 0,
+      rolls,
+      lastRoll: { color: s.turn, dice: d },
+      last: undefined,
+    };
   const out: CaNguaState = {
     ...s,
     roll: null,
+    used: 0,
     rolls,
     turn: rollsAgain(d) ? s.turn : nextColor(s),
     lastRoll: { color: s.turn, dice: d, passed: true },
@@ -169,24 +196,39 @@ export function applyRoll(s: CaNguaState, dice: Dice): CaNguaState | null {
   return rolls >= MAX_ROLLS ? { ...out, winner: leader(out) } : out;
 }
 
-/** Moves `horse` with the rolled die. */
-export function applyMove(s: CaNguaState, horse: number): CaNguaState | null {
+/**
+ * Moves `horse` with die `die` of the roll (0 or 1; when left out, the first die that can move
+ * it). The turn goes on while the other die can still move.
+ */
+export function applyMove(s: CaNguaState, horse: number, die?: 0 | 1): CaNguaState | null {
   if (s.roll === null || s.winner !== null) return null;
-  const m = legalMoves(s, s.roll).find((x) => x.horse === horse);
+  const all = legalMoves(s, s.roll, s.used);
+  let m = all.find((x) => x.horse === horse && (die === undefined || x.die === die));
+  // the same number on both dice: the moves are listed once, for the first die
+  if (!m && die === 1 && s.roll[0] === s.roll[1] && !(s.used & 1))
+    m = all.find((x) => x.horse === horse);
   if (!m) return null;
   const horses = s.horses.slice();
   const from = horses[horse];
   horses[horse] = m.to;
   if (m.kick !== undefined) horses[m.kick] = STABLE;
-  const next: CaNguaState = {
+  const used = s.used | (1 << m.die);
+  const moved: CaNguaState = {
     ...s,
     horses,
-    roll: null,
-    turn: rollsAgain(s.roll) ? s.turn : nextColor(s),
+    used,
     last:
       m.kick !== undefined ? { horse, from, to: m.to, kick: m.kick } : { horse, from, to: m.to },
   };
-  if (hasWon(next, s.turn)) return { ...next, winner: s.turn, turn: s.turn };
+  if (hasWon(moved, s.turn)) return { ...moved, roll: null, used: 0, winner: s.turn };
+  // the other die can still move: same player goes on
+  if (used !== 3 && legalMoves(moved, s.roll, used).length > 0) return moved;
+  const next: CaNguaState = {
+    ...moved,
+    roll: null,
+    used: 0,
+    turn: rollsAgain(s.roll) ? s.turn : nextColor(s),
+  };
   if (next.rolls >= MAX_ROLLS) return { ...next, winner: leader(next) };
   return next;
 }
@@ -213,6 +255,7 @@ export function removeColor(s: CaNguaState, c: Color): CaNguaState {
     horses,
     turn,
     roll: s.turn === c ? null : s.roll,
+    used: s.turn === c ? 0 : s.used,
   };
   return colors.length === 1 ? { ...out, winner: colors[0], roll: null } : out;
 }
