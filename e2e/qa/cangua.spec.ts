@@ -17,6 +17,7 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
   const b = await openApp(browser, { name: 'Bình' });
   const c = await openApp(browser, { name: 'Chi' });
   await a.page.goto('/#/cangua');
+  await a.page.getByTestId('mode-online').click();
   await expect(a.page.getByTestId('cn-intro')).toBeVisible();
   const code = await createRoomAs(a.page, 'An');
   await expect(a.page.getByTestId('start-game'), '[UX-28] start with one player').toBeDisabled();
@@ -76,4 +77,45 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
   );
   expect([...a.errors, ...b.errors, ...c.errors], '[UX-28] errors').toEqual([]);
   for (const p of [a, b, c]) await p.ctx.close();
+});
+
+test('[UX-32] against the computer: choose 3 computers, roll, the computers play by themselves', async ({
+  browser,
+}) => {
+  test.setTimeout(120_000);
+  const { page, errors, ctx } = await openApp(browser, { name: 'An' });
+  await page.goto('/#/cangua');
+  await page.getByTestId('mode-solo').click();
+  await page.getByTestId('bots-3').click();
+  await page.getByTestId('cn-board').waitFor();
+  await expect(page.locator('[data-testid^="horse-"]'), '[UX-32] four colours').toHaveCount(16);
+  // play until the turn has come back to me a few times (the computers roll and move alone)
+  let myTurns = 0;
+  for (let i = 0; i < 200 && myTurns < 4; i++) {
+    const roll = page.getByTestId('cn-roll');
+    if (await roll.isEnabled()) {
+      await roll.click();
+      myTurns++;
+      await page.waitForTimeout(600);
+      continue;
+    }
+    const can = page.locator('.cn-horse.can');
+    if (await can.count()) {
+      await can.first().dispatchEvent('pointerdown');
+      await page.waitForTimeout(200);
+      continue;
+    }
+    await page.waitForTimeout(300);
+  }
+  expect(myTurns, '[UX-32] the turn never came back to me').toBeGreaterThanOrEqual(4);
+  await expect(page.getByTestId('cn-die')).not.toHaveAttribute('data-value', '');
+  await evidence(page, 'cangua', 'D2', 'UX-32-vs-computer');
+  // leaving mid-game asks first
+  await page
+    .getByRole('button', { name: /quay lại|back/i })
+    .first()
+    .click();
+  await expect(page.getByTestId('confirm-exit')).toBeVisible();
+  expect(errors, '[UX-32] errors').toEqual([]);
+  await ctx.close();
 });

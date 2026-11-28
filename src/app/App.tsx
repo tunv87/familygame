@@ -48,6 +48,11 @@ const NoiTuSetup = lazyGame(
   () => import('../games/noitu/NoiTuSetup'),
   (m) => m.NoiTuSetup,
 );
+const CaNguaLocal = lazyGame(
+  'cangua',
+  () => import('../games/cangua/CaNguaLocal'),
+  (m) => m.CaNguaLocal,
+);
 const CaNguaSetup = lazyGame(
   'cangua',
   () => import('../games/cangua/CaNguaSetup'),
@@ -190,6 +195,14 @@ export function App() {
               element={
                 <GameGate game="cangua">
                   <CaNguaSetup />
+                </GameGate>
+              }
+            />
+            <Route
+              path="/cangua/play"
+              element={
+                <GameGate game="cangua" play>
+                  <CaNguaLocal />
                 </GameGate>
               }
             />

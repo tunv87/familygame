@@ -88,6 +88,7 @@ test('[UX-31] Cờ cá ngựa: someone who arrives after the start watches', asy
   const b = await openApp(browser, { name: 'Bình' });
   const c = await openApp(browser, { name: 'Chi' });
   await a.page.goto('/#/cangua');
+  await a.page.getByTestId('mode-online').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
   await a.page.getByTestId('start-game').click({ timeout: 15_000 });

@@ -168,7 +168,12 @@ function Game({ loaded }: { loaded: Loaded }) {
           >
             <Avatar emoji={avatars[side - 1]} />
             <span className="name">{names[side - 1]}</span>
-            <span className="score">{score[side - 1]}</span>
+            <span className="player-note" data-testid={side === 1 ? 'me-note' : 'opp-note'}>
+              {t('ntWordsCount', {
+                n: state.chain.filter((_, i) => sideOf(i) === side).length,
+              })}
+            </span>
+            <span className="score with-note">{score[side - 1]}</span>
           </div>
         ))}
       </div>

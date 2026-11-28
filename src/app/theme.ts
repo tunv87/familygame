@@ -37,7 +37,7 @@ export const THEMES: Record<ThemeId, ThemeAssets> = {
       coganh: '🌸',
       oanquan: '🐚',
       noitu: '🧸',
-      cangua: '🦄',
+      cangua: '🎠',
     },
     titleEmoji: '🎀',
     themeColor: '#ff8fc8',

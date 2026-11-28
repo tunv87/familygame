@@ -168,5 +168,8 @@ if viwikt:
 
 out = sorted(([w, *v] for w, v in words.items()), key=lambda x: x[0])
 json.dump({'w': out}, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, separators=(',', ':'))
+# clean up English meanings (pointers to other words, rare first senses)
+import subprocess
+subprocess.run([sys.executable, 'scripts/noitu-fix-glosses.py'], check=True)
 from collections import Counter
 print(len(out), Counter(r[2] for r in out), file=sys.stderr)

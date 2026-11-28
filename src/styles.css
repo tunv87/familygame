@@ -223,7 +223,9 @@ input {
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(17, 24, 39, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
   display: grid;
   place-items: center;
   padding: 16px;
@@ -382,6 +384,10 @@ input {
   background: var(--surface);
   box-shadow: var(--shadow);
   cursor: pointer;
+}
+
+.keypad .key-icon {
+  vertical-align: middle;
 }
 
 .code-slots {
@@ -1994,6 +2000,24 @@ input {
 
 .card .off-note {
   font-weight: 800;
+}
+
+/* ---------- Nối từ: words added this game next to the games won ---------- */
+.player-note {
+  margin-left: auto;
+  font-size: 0.7em;
+  font-weight: 800;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.player .score.with-note {
+  margin-left: 8px;
+}
+
+.player .score.with-note::before {
+  content: '🏆 ';
+  font-size: 0.8em;
 }
 
 /* ---------- spectators ---------- */
