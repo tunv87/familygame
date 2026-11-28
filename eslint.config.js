@@ -25,7 +25,7 @@ export default tseslint.config(
     },
   },
   {
-    files: ['scripts/**/*.mjs'],
+    files: ['scripts/**/*.mjs', 'qa/**/*.mjs'],
     languageOptions: {
       globals: {
         URL: 'readonly',
@@ -33,6 +33,12 @@ export default tseslint.config(
         console: 'readonly',
         setTimeout: 'readonly',
         navigator: 'readonly',
+        fetch: 'readonly',
+        // inside page.evaluate() callbacks (they run in the browser)
+        window: 'readonly',
+        document: 'readonly',
+        localStorage: 'readonly',
+        getComputedStyle: 'readonly',
       },
     },
   },

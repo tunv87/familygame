@@ -17,3 +17,7 @@ vendor/bundle
 *.jks
 *.keystore
 qa/runs/tmp
+
+# post-deploy QA output
+qa/latest-results.json
+qa/npm-audit.json
