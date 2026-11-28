@@ -13,14 +13,13 @@ import {
   useBackHandler,
 } from '../../ui/components';
 import { chooseMove } from './ai';
-import { CaNguaBoard, Dice2, HORSE_COLORS } from './CaNguaBoard';
+import { CaNguaBoard, Dice2, HORSE_COLORS, useDieChoice } from './CaNguaBoard';
 import { CN_HELP, CN_STORY } from './help';
 import {
   applyMove,
   applyRoll,
   colorOf,
   initialState,
-  legalMoves,
   rollsAgain,
   type CaNguaState,
   type Dice,
@@ -95,16 +94,16 @@ export function CaNguaLocal() {
       setRolling(false);
       busy.current = false;
       if (!next) return;
-      const vars = { name: nameOf(s.turn), a: dice[0], b: dice[1], n: dice[0] + dice[1] };
+      const vars = { name: nameOf(s.turn), a: dice[0], b: dice[1] };
       setMessage(next.lastRoll?.passed ? t('cnNoMove', vars) : t('cnRolled', vars));
       if (rollsAgain(dice)) sfx.lucky();
       setState(next);
     }, ROLL_MS);
   };
 
-  const move = (horse: number) => {
+  const move = (horse: number, die?: 0 | 1) => {
     const s = state;
-    const next = applyMove(s, horse);
+    const next = applyMove(s, horse, die);
     if (!next) return;
     sfx.hooves(next.last ? Math.max(1, next.last.to - Math.max(0, next.last.from)) : 1);
     if (next.last?.kick !== undefined) {
@@ -112,7 +111,7 @@ export function CaNguaLocal() {
       setMessage(
         t('cnKick', { name: nameOf(colorOf(horse)), other: nameOf(colorOf(next.last.kick)) }),
       );
-    } else if (s.roll && rollsAgain(s.roll) && next.winner === null)
+    } else if (s.roll && rollsAgain(s.roll) && next.roll === null && next.winner === null)
       setMessage(t('cnAgain', { a: s.roll[0], b: s.roll[1] }));
     else setMessage('');
     if (!local && next.turn === ME && next.winner === null && s.turn !== ME) sfx.opponent();
@@ -126,8 +125,8 @@ export function CaNguaLocal() {
       () => {
         if (state.roll === null) roll();
         else {
-          const h = chooseMove(state, state.roll);
-          if (h !== null) move(h);
+          const m = chooseMove(state, state.roll, Math.random, state.used);
+          if (m) move(m.horse, m.die);
         }
       },
       state.roll === null ? BOT_ROLL_MS : BOT_MOVE_MS,
@@ -149,12 +148,17 @@ export function CaNguaLocal() {
     started && state.winner === null ? setConfirmExit(true) : navigate('/cangua');
   useBackHandler(exit);
 
-  const playable =
-    myTurn && state.roll !== null && !rolling
-      ? legalMoves(state, state.roll).map((m) => m.horse)
-      : [];
-  const shownDice = state.lastRoll?.dice ?? null;
-  const rollText = (d: Dice) => `${d[0]} + ${d[1]} = ${d[0] + d[1]}`;
+  const choice = useDieChoice(state, myTurn && !rolling);
+  const shownDice = state.roll ?? state.lastRoll?.dice ?? null;
+  // what the player is asked: both dice still to use, or only one left
+  const pickText = (d: Dice, name?: string) => {
+    const left = state.used ? d[state.used & 1 ? 1 : 0] : null;
+    if (left !== null)
+      return name ? t('cnTurnPickRest', { name, n: left }) : t('cnPickRest', { n: left });
+    return name
+      ? t('cnTurnPick', { name, a: d[0], b: d[1] })
+      : t('cnPickHorse', { a: d[0], b: d[1] });
+  };
 
   const status =
     state.winner !== null
@@ -164,11 +168,11 @@ export function CaNguaLocal() {
         : myTurn && local
           ? state.roll === null
             ? t('cnTurnRoll', { name: nameOf(state.turn) })
-            : t('cnTurnPick', { name: nameOf(state.turn), n: rollText(state.roll) })
+            : pickText(state.roll, nameOf(state.turn))
           : myTurn
             ? state.roll === null
               ? t('cnYourRoll')
-              : t('cnPickHorse', { n: rollText(state.roll) })
+              : pickText(state.roll)
             : t('turnOf', { name: nameOf(state.turn) });
 
   return (
@@ -197,9 +201,24 @@ export function CaNguaLocal() {
       <div className="numbers-toast" data-testid="cn-message">
         {message}
       </div>
-      <CaNguaBoard state={state} playable={playable} onHorse={move} />
+      <CaNguaBoard
+        state={state}
+        playable={choice.playable}
+        onHorse={(h) => move(h, choice.selected ?? undefined)}
+      />
       <div className="cn-controls">
-        <Dice2 dice={rolling ? null : shownDice} rolling={rolling} />
+        <Dice2
+          dice={rolling ? null : shownDice}
+          rolling={rolling}
+          used={state.roll ? state.used : 0}
+          usable={choice.usable}
+          selected={choice.selected}
+          onPick={(d) => {
+            sfx.tap();
+            choice.pickDie(d);
+          }}
+          label={(n) => t('cnPickDie', { n })}
+        />
         <button
           className="btn grow"
           data-testid="cn-roll"

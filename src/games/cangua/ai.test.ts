@@ -8,10 +8,11 @@ import {
   legalMoves,
   type CaNguaState,
   type Dice,
+  type Move,
 } from './logic';
 
-/** Plays a whole game; `pick` chooses the horse for each colour. */
-function play(colors: (0 | 1 | 2 | 3)[], seed: number, pick: (s: CaNguaState, d: Dice) => number) {
+/** Plays a whole game; `pick` chooses the move (die and horse) for each colour. */
+function play(colors: (0 | 1 | 2 | 3)[], seed: number, pick: (s: CaNguaState, d: Dice) => Move) {
   const rng = createRng(seed);
   let s = initialState(colors);
   for (let i = 0; i < 20000 && s.winner === null; i++) {
@@ -19,8 +20,9 @@ function play(colors: (0 | 1 | 2 | 3)[], seed: number, pick: (s: CaNguaState, d:
     const r = applyRoll(s, d);
     if (!r) throw new Error('roll refused');
     s = r;
-    if (s.roll !== null) {
-      const m = applyMove(s, pick(s, s.roll));
+    while (s.roll !== null) {
+      const p = pick(s, s.roll);
+      const m = applyMove(s, p.horse, p.die);
       if (!m) throw new Error('move refused');
       s = m;
     }
@@ -34,12 +36,14 @@ describe('[LG-31] Cờ cá ngựa computer player', () => {
     let s = initialState([0, 1, 2, 3]);
     for (let i = 0; i < 3000 && s.winner === null; i++) {
       const d: Dice = [1 + Math.floor(rng() * 6), 1 + Math.floor(rng() * 6)];
-      const legal = legalMoves(s, d).map((m) => m.horse);
-      const h = chooseMove(s, d, rng);
-      if (legal.length === 0) expect(h).toBeNull();
-      else expect(legal).toContain(h);
+      if (legalMoves(s, d).length === 0) expect(chooseMove(s, d, rng)).toBeNull();
       s = applyRoll(s, d)!;
-      if (s.roll !== null) s = applyMove(s, h!)!;
+      while (s.roll !== null) {
+        const legal = legalMoves(s, s.roll, s.used);
+        const m = chooseMove(s, s.roll, rng, s.used)!;
+        expect(legal).toContainEqual(m);
+        s = applyMove(s, m.horse, m.die)!;
+      }
     }
   });
 
@@ -48,13 +52,13 @@ describe('[LG-31] Cờ cá ngựa computer player', () => {
     s.horses[0] = 10; // red on track cell 10
     s.horses[1] = 20; // another red horse that could move instead
     s.horses[8] = 39; // green (starts at cell 26) on track cell 13, three cells ahead of red
-    expect(legalMoves(s, [1, 2]).some((m) => m.kick === 8)).toBe(true);
-    expect(chooseMove(s, [1, 2], () => 0)).toBe(0);
+    expect(legalMoves(s, [3, 2]).some((m) => m.kick === 8)).toBe(true);
+    expect(chooseMove(s, [3, 2], () => 0)).toMatchObject({ horse: 0, die: 0, kick: 8 });
   });
 
   it('every game between computers ends with a winner', () => {
     for (let seed = 1; seed <= 20; seed++) {
-      const s = play([0, 1, 2, 3], seed, (st, d) => chooseMove(st, d)!);
+      const s = play([0, 1, 2, 3], seed, (st, d) => chooseMove(st, d, Math.random, st.used)!);
       expect(s.winner).not.toBeNull();
     }
   });
@@ -65,9 +69,9 @@ describe('[LG-31] Cờ cá ngựa computer player', () => {
     for (let seed = 1; seed <= games; seed++) {
       const rnd = createRng(seed * 31);
       const s = play([0, 2], seed, (st, d) => {
-        if (st.turn === 0) return chooseMove(st, d, rnd)!;
-        const legal = legalMoves(st, d);
-        return legal[Math.floor(rnd() * legal.length)].horse;
+        if (st.turn === 0) return chooseMove(st, d, rnd, st.used)!;
+        const legal = legalMoves(st, d, st.used);
+        return legal[Math.floor(rnd() * legal.length)];
       });
       if (s.winner === 0) wins++;
     }

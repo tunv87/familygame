@@ -186,3 +186,62 @@ test('[AU-11] Cờ cá ngựa: two dice rattle when rolled, hooves when a horse 
   expect(errors, '[AU-11] errors').toEqual([]);
   await ctx.close();
 });
+
+test('[UX-36] each die is a move of its own: pick a die, then a horse; one horse can use both', async ({
+  browser,
+}) => {
+  const { page, errors, ctx } = await openApp(browser, { name: 'An' });
+  // every roll comes out a 6 and a 3 (Math.random alternates 0.9, 0.4)
+  await page.addInitScript(() => {
+    let i = 0;
+    Math.random = () => (i++ % 2 === 0 ? 0.9 : 0.4);
+  });
+  await page.goto('/#/cangua/play?mode=local&players=2');
+  await page.getByTestId('cn-board').waitFor();
+  const pos = (h: number) => page.getByTestId(`horse-${h}`).getAttribute('data-pos');
+  await page.getByTestId('cn-roll').click();
+  await expect(page.getByTestId('cn-dice')).toHaveAttribute('data-value', /^(63|36)$/);
+  const dice = (await page.getByTestId('cn-dice').getAttribute('data-value'))!;
+  const six = dice[0] === '6' ? 0 : 1;
+  const three = 1 - six;
+  // only the 6 can bring a horse out: it is chosen, the 3 cannot be picked yet
+  await expect(page.locator(`button[data-testid="cn-die-${six}"]`)).toHaveAttribute(
+    'aria-pressed',
+    'true',
+  );
+  await expect(
+    page.locator(`button[data-testid="cn-die-${three}"]`),
+    '[UX-36] 3 usable',
+  ).toHaveCount(0);
+  await page.locator('.cn-horse.can').first().dispatchEvent('pointerdown');
+  expect(await pos(0)).toBe('0');
+  // the 6 is used (faded); the 3 is now chosen and the same player goes on
+  await expect(page.getByTestId(`cn-die-${six}`)).toHaveClass(/used/);
+  await expect(page.getByTestId(`cn-die-${three}`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('status')).toContainText(/Người 1 còn xí ngầu 3/);
+  await expect(page.getByTestId('cn-roll')).toBeDisabled();
+  await page.getByTestId('horse-0').dispatchEvent('pointerdown');
+  expect(await pos(0), '[UX-36] the same horse uses the second die').toBe('3');
+  // both dice used: the next player rolls
+  await expect(page.getByTestId('cn-roll')).toBeEnabled();
+  await expect(page.getByTestId('status')).toContainText(/Người 2/);
+  await evidence(page, 'cangua', 'D2', 'UX-36-two-dice');
+
+  // second player: 6 then 3 again. Pick the 6 for the new horse, keep it; then roll on.
+  await page.getByTestId('cn-roll').click();
+  await page.locator('.cn-horse.can').first().dispatchEvent('pointerdown');
+  await page.locator('.cn-horse.can').first().dispatchEvent('pointerdown');
+  // player 1 again: horse 0 on 3, one horse still out of reach. Use the 3 first on horse 0,
+  // then the 6 brings a second horse out: two horses moved in one turn.
+  await page.getByTestId('cn-roll').click();
+  await expect(page.getByTestId('cn-dice')).toHaveAttribute('data-value', /^(63|36)$/);
+  const again = (await page.getByTestId('cn-dice').getAttribute('data-value'))!;
+  await page.locator(`button[data-testid="cn-die-${again[0] === '3' ? 0 : 1}"]`).click();
+  await page.getByTestId('horse-0').dispatchEvent('pointerdown');
+  expect(await pos(0)).toBe('6');
+  await expect(page.getByTestId('horse-1')).toHaveClass(/can/);
+  await page.getByTestId('horse-1').dispatchEvent('pointerdown');
+  expect(await pos(1), '[UX-36] a second horse used the other die').toBe('0');
+  expect(errors, '[UX-36] errors').toEqual([]);
+  await ctx.close();
+});

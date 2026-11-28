@@ -1,6 +1,7 @@
+import { useState } from 'react';
 import { useT } from '../../i18n';
 import { HOME_CELLS, STABLE_AT, TRACK_CELLS, horseAt } from './geometry';
-import { ARM, COLORS, colorOf, type CaNguaState, type Color } from './logic';
+import { ARM, COLORS, colorOf, movesNow, type CaNguaState, type Color } from './logic';
 
 export const HORSE_COLORS: Record<Color, string> = {
   0: '#e63946',
@@ -186,12 +187,76 @@ export function DieFace({ value, rolling }: { value: number | null; rolling?: bo
   );
 }
 
-/** The two dice of a roll, side by side (blank before the first roll). */
-export function Dice2({ dice, rolling }: { dice: [number, number] | null; rolling?: boolean }) {
+/**
+ * The two dice of a roll, side by side (blank before the first roll). While the player moves,
+ * each die they can still use is a button: the chosen one is highlighted, used ones are faded.
+ */
+export function Dice2({
+  dice,
+  rolling,
+  used = 0,
+  usable = [],
+  selected = null,
+  onPick,
+  label,
+}: {
+  dice: [number, number] | null;
+  rolling?: boolean;
+  /** bit 0 = first die used, bit 1 = second */
+  used?: number;
+  /** dice (0, 1) that can move a horse now */
+  usable?: number[];
+  selected?: number | null;
+  onPick?: (die: 0 | 1) => void;
+  label?: (n: number) => string;
+}) {
   return (
     <div className="cn-dice" data-testid="cn-dice" data-value={dice ? dice.join('') : ''}>
-      <DieFace value={dice?.[0] ?? null} rolling={rolling} />
-      <DieFace value={dice?.[1] ?? null} rolling={rolling} />
+      {([0, 1] as const).map((i) => {
+        const value = dice?.[i] ?? null;
+        const isUsed = !!(used & (1 << i));
+        const can = !rolling && !isUsed && usable.includes(i) && !!onPick;
+        const cls = `cn-die-btn ${isUsed ? 'used' : ''} ${can ? 'can' : ''} ${
+          can && selected === i ? 'picked' : ''
+        }`;
+        return can ? (
+          <button
+            key={i}
+            type="button"
+            className={cls}
+            data-testid={`cn-die-${i}`}
+            aria-pressed={selected === i}
+            aria-label={value && label ? label(value) : undefined}
+            onClick={() => onPick(i)}
+          >
+            <DieFace value={value} />
+          </button>
+        ) : (
+          <span key={i} className={cls} data-testid={`cn-die-${i}`}>
+            <DieFace value={value} rolling={rolling} />
+          </span>
+        );
+      })}
     </div>
   );
+}
+
+/**
+ * Which die the player moves with: the one they tapped, or else the first die that can move.
+ * Returns the dice that can be picked and the horses that can move with the chosen die.
+ */
+export function useDieChoice(s: CaNguaState, active: boolean) {
+  const [pick, setPick] = useState<{ key: string; die: 0 | 1 } | null>(null);
+  // a tap only counts for the roll (and the dice left) it was made on
+  const key = `${s.rolls}:${s.turn}:${s.used}`;
+  const moves = active ? movesNow(s) : [];
+  const usable = [...new Set(moves.map((m) => m.die))];
+  const selected =
+    pick && pick.key === key && usable.includes(pick.die) ? pick.die : (usable[0] ?? null);
+  return {
+    usable,
+    selected,
+    playable: moves.filter((m) => m.die === selected).map((m) => m.horse),
+    pickDie: (die: 0 | 1) => setPick({ key, die }),
+  };
 }
