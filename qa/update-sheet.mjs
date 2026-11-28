@@ -13,9 +13,16 @@ import { google } from 'googleapis';
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const KEY = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
-if (!SPREADSHEET_ID || !KEY) {
-  console.error('SPREADSHEET_ID and GOOGLE_SERVICE_ACCOUNT_JSON are required');
+if (!SPREADSHEET_ID) {
+  console.error('SPREADSHEET_ID is required');
   process.exit(1);
+}
+if (!KEY) {
+  // not set up yet: keep the run green; the results stay attached to the run (latest-results.json)
+  const msg =
+    'GOOGLE_SERVICE_ACCOUNT_JSON is not set: the Google Sheet was not updated (see docs/post-deploy-qa.md)';
+  console.log(process.env.GITHUB_ACTIONS ? `::warning::${msg}` : msg);
+  process.exit(0);
 }
 
 let data;
