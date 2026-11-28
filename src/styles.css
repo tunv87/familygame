@@ -728,6 +728,16 @@ input {
   color: var(--o);
 }
 
+/* waiting room: a player who tapped Ready */
+.badge.ready-badge {
+  border-color: #2a9d5c;
+  font-size: 0.6em;
+}
+
+.player.ready {
+  border-color: #2a9d5c;
+}
+
 .topbar h1 {
   font-size: 1.15em;
   line-height: 1.2;

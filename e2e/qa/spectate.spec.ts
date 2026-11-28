@@ -1,6 +1,6 @@
 /** Spectators in online rooms (qa/test-cases.md: UX-31). */
 import { expect, test } from '@playwright/test';
-import { createRoomAs, evidence, joinAs, openApp } from './fixtures';
+import { createRoomAs, evidence, joinAs, openApp, readyUp } from './fixtures';
 
 test('[UX-31] a third person watches a Ca rô game: sees moves, cannot play, can leave', async ({
   browser,
@@ -13,6 +13,7 @@ test('[UX-31] a third person watches a Ca rô game: sees moves, cannot play, can
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status')).toContainText('Đến lượt bạn', { timeout: 15_000 });
   await joinAs(c.page, code, 'Chi');
   await expect(c.page.getByTestId('spectating'), '[UX-31] not told they are watching').toBeVisible({
@@ -67,6 +68,8 @@ test('[UX-31] the room closes: spectators are told the game is over', async ({ b
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
+  await a.page.getByTestId('status').waitFor({ timeout: 15_000 });
   await joinAs(c.page, code, 'Chi');
   await c.page.getByTestId('spectating').waitFor({ timeout: 15_000 });
   for (const p of [a.page, b.page]) {
@@ -91,6 +94,7 @@ test('[UX-31] Cờ cá ngựa: someone who arrives after the start watches', asy
   await a.page.getByTestId('mode-online').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(b.page);
   await a.page.getByTestId('start-game').click({ timeout: 15_000 });
   await a.page.getByTestId('cn-board').waitFor({ timeout: 15_000 });
   await joinAs(c.page, code, 'Chi');

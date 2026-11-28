@@ -1,6 +1,6 @@
 /** Ô ăn quan, hub groups and the help "story" tab through the real UI (qa/test-cases.md). */
 import { expect, test } from '@playwright/test';
-import { PHONES, createRoomAs, evidence, joinAs, openApp, pickField } from './fixtures';
+import { PHONES, createRoomAs, evidence, joinAs, openApp, pickField, readyUp } from './fixtures';
 
 const played = (page: import('@playwright/test').Page) =>
   page.evaluate(() => [...((window as unknown as { __fgSounds?: string[] }).__fgSounds ?? [])]);
@@ -80,6 +80,7 @@ test('[UX-22] online Ô ăn quan: each player sees their own fields at the botto
   await a.page.getByTestId('mode-online').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status'), '[UX-22] host does not move first').toContainText(
     'Đến lượt bạn',
     { timeout: 15_000 },

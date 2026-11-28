@@ -6,7 +6,7 @@
  * Screenshots go to test-results/screens/<theme>-<screen>.png for a visual pass.
  */
 import { expect, test, type Browser, type Page } from '@playwright/test';
-import { SKIP_WELCOME, createRoom } from './helpers';
+import { SKIP_WELCOME, createRoom, readyUp } from './helpers';
 import { devices } from '@playwright/test';
 
 const THEMES = ['classic', 'cute'] as const;
@@ -162,6 +162,9 @@ for (const theme of THEMES) {
       await checkScreen(a, theme, 'room-waiting');
 
       await b.goto(`/#/join/${code}`);
+      await expect(a.getByTestId('lobby-opp-ready')).toHaveCount(0, { timeout: 15_000 });
+      await checkScreen(b, theme, 'room-ready');
+      await readyUp(a, b);
       await expect(a.getByTestId('countdown')).toBeHidden({ timeout: 15_000 });
       await expect(b.getByTestId('countdown')).toBeHidden({ timeout: 15_000 });
       for (let n = 1; n <= 8; n++) await (n % 2 ? a : b).getByTestId(`num-${n}`).click();
@@ -179,6 +182,7 @@ for (const theme of THEMES) {
       await c.getByTestId('size-3').click();
       const code2 = await createRoom(c, 'Đức Anh');
       await d.goto(`/#/join/${code2}`);
+      await readyUp(c, d);
       await expect(c.getByTestId('status')).toContainText('Đến lượt bạn', { timeout: 15_000 });
       await checkScreen(c, theme, 'caro-online');
       for (const [p, i] of [
@@ -207,6 +211,7 @@ test('numbers: easy and medium boards also use one size', async ({ browser }) =>
     await a.getByTestId(`level-${level}`).click();
     const code = await createRoom(a, 'A');
     await b.goto(`/#/join/${code}`);
+    await readyUp(a, b);
     await expect(a.getByTestId('countdown')).toBeHidden({ timeout: 15_000 });
     await a.getByTestId('num-1').click();
     await b.getByTestId('num-2').click();

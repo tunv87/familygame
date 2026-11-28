@@ -12,6 +12,7 @@ import {
   joinAs,
   openApp,
   pickField,
+  readyUp,
 } from './fixtures';
 
 const MOBILE = QA_PROJECT.startsWith('mobile');
@@ -155,6 +156,7 @@ test(`[BR-07] online room between two players (${TAG})`, async ({ browser }) => 
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status'), '[BR-07] game did not start').toContainText(
     'Đến lượt bạn',
     { timeout: 20_000 },

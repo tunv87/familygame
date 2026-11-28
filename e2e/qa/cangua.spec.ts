@@ -1,6 +1,6 @@
 /** Cờ cá ngựa online for three players through the real UI (qa/test-cases.md). */
 import { expect, test, type Page } from '@playwright/test';
-import { createRoomAs, evidence, joinAs, openApp } from './fixtures';
+import { createRoomAs, evidence, joinAs, openApp, readyUp } from './fixtures';
 
 const positions = (p: Page) =>
   p
@@ -25,6 +25,11 @@ test('[UX-28] three players: the host starts, everyone rolls and moves, boards a
   await joinAs(c.page, code, 'Chi');
   await expect(a.page.getByTestId('start-game')).toContainText('3', { timeout: 15_000 });
   await expect(b.page.getByTestId('start-game'), '[UX-28] only the host starts').toHaveCount(0);
+  // the host can start only once everyone else tapped Ready
+  await expect(a.page.getByTestId('start-game'), '[UX-37] start before ready').toBeDisabled();
+  await readyUp(b.page);
+  await expect(a.page.getByTestId('start-game')).toBeDisabled();
+  await readyUp(c.page);
   await evidence(a.page, 'cangua', 'D2', 'UX-28-lobby');
   await a.page.getByTestId('start-game').click();
   for (const p of [a, b, c]) await p.page.getByTestId('cn-board').waitFor({ timeout: 15_000 });

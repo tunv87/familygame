@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 /** Nối từ (word chain) through the real UI (qa/test-cases.md: UX-24..27, UI-11, CR-15). */
 import { expect, test, type Page } from '@playwright/test';
-import { PHONES, createRoomAs, evidence, joinAs, openApp } from './fixtures';
+import { PHONES, createRoomAs, evidence, joinAs, openApp, readyUp } from './fixtures';
 
 /** every word the game knows (to tell when a spelling without tone marks is a real word too) */
 const WORDS = new Set(
@@ -118,6 +118,7 @@ test('[UX-26] online Nối từ: words reach both players; giving up ends the ro
   await a.page.getByTestId('mode-online').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status'), '[UX-26] host does not answer first').toContainText(
     'Đến lượt bạn',
     { timeout: 20_000 },

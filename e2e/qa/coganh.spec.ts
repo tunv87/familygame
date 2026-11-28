@@ -1,6 +1,6 @@
 /** Cờ gánh through the real UI (qa/test-cases.md: UI-09, UX-16..18, AU-08, CR-13). */
 import { expect, test } from '@playwright/test';
-import { PHONES, createRoomAs, evidence, joinAs, openApp } from './fixtures';
+import { PHONES, createRoomAs, evidence, joinAs, openApp, readyUp } from './fixtures';
 
 const played = (page: import('@playwright/test').Page) =>
   page.evaluate(() => [...((window as unknown as { __fgSounds?: string[] }).__fgSounds ?? [])]);
@@ -114,6 +114,7 @@ test('[UX-19] online Cờ gánh: moves, Mở and the result reach both players; 
   await a.page.getByTestId('mode-online').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status'), '[UX-19] host is not Black/first').toContainText(
     'Đến lượt bạn',
     { timeout: 15_000 },

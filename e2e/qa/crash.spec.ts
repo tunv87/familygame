@@ -1,6 +1,14 @@
 /** CR – crash resistance (qa/test-cases.md: CR-01 … CR-11). */
 import { expect, test } from '@playwright/test';
-import { createRoomAs, evidence, joinAs, openApp, settle, waitCountdown } from './fixtures';
+import {
+  createRoomAs,
+  evidence,
+  joinAs,
+  openApp,
+  settle,
+  waitCountdown,
+  readyUp,
+} from './fixtures';
 
 const ROUTES = [
   '/',
@@ -180,6 +188,7 @@ test('[CR-07] losing the connection mid-game and getting it back', async ({ brow
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status')).toContainText('Đến lượt bạn', { timeout: 15_000 });
   await a.page.getByTestId('cell-0').click();
   await expect(b.page.getByTestId('status')).toContainText('Đến lượt bạn');
@@ -210,6 +219,7 @@ test('[CR-08] reloading mid online game keeps the game', async ({ browser }) => 
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await expect(a.page.getByTestId('status')).toContainText('Đến lượt bạn', { timeout: 15_000 });
   await a.page.getByTestId('cell-0').click();
   await b.page.getByTestId('cell-4').click();
@@ -277,6 +287,7 @@ test('[CR-11] friend leaves mid-game', async ({ browser }) => {
   await a.page.getByTestId('level-easy').click();
   const code = await createRoomAs(a.page, 'An');
   await joinAs(b.page, code, 'Bình');
+  await readyUp(a.page, b.page);
   await waitCountdown(a.page);
   await a.page.getByTestId('num-1').click();
   await b.page.getByTestId('exit').click();
@@ -300,6 +311,7 @@ test('[CR-12] joining by link with a saved name has no rejected writes', async (
   await a.page.getByTestId('size-3').click();
   const code = await createRoomAs(a.page, 'An');
   await b.page.goto(`/#/join/${code}`);
+  await readyUp(a.page, b.page);
   await expect(b.page.getByTestId('caro-board'), '[CR-12] guest not in the game').toBeVisible({
     timeout: 15_000,
   });
