@@ -38,6 +38,10 @@ export function SettingsScreen() {
         </span>
         ✏️
       </button>
+      <button className="setting-row" onClick={() => navigate('/family')} data-testid="open-family">
+        <span>👨‍👩‍👧 {t('family')}</span>
+        <span>🏆 ›</span>
+      </button>
       <div className="setting-row">
         <span>🎨 {t('theme')}</span>
         <div className="segmented">

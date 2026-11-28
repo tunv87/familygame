@@ -93,6 +93,7 @@ export const getSettings = settingsStore.get;
 export const setSettings = settingsStore.set;
 export const getProfile = profileStore.get;
 export const setProfile = profileStore.set;
+export const subscribeProfile = profileStore.subscribe;
 
 export function useSettings(): Settings {
   return useSyncExternalStore(settingsStore.subscribe, settingsStore.get);

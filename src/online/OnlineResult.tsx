@@ -34,6 +34,7 @@ export function OnlineResult({
       title={title}
       win={winner === 'draw' || spectate ? undefined : iWon}
       sound={spectate && winner !== 'draw' ? 'win' : undefined}
+      record={!spectate && winner !== 'draw' && iWon ? room.game : undefined}
       actions={
         <>
           {!oppGone && !spectate && (

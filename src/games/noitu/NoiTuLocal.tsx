@@ -3,7 +3,9 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
 import { useT } from '../../i18n';
+import { dailySeed, finishDaily } from '../../lib/daily';
 import { createLogger } from '../../lib/logger';
+import { createRng } from '../../lib/rng';
 import { sfx } from '../../lib/sound';
 import {
   Avatar,
@@ -48,20 +50,25 @@ function Game({ loaded }: { loaded: Loaded }) {
   const profile = useProfile();
   const [params] = useSearchParams();
   const mode = params.get('mode') === 'local' ? 'local' : 'solo';
+  // today's challenge: everyone gets the same opening word today, against the medium computer
+  const daily = params.get('mode') === 'daily';
   const levelParam = params.get('level') as NoiTuLevel;
-  const level: NoiTuLevel = LEVELS.includes(levelParam) ? levelParam : 'easy';
+  const level: NoiTuLevel = daily ? 'medium' : LEVELS.includes(levelParam) ? levelParam : 'easy';
+  const opening = () =>
+    daily
+      ? startWord(dict, words, createRng(dailySeed('noitu')), false)
+      : startWord(dict, words, Math.random, kids);
   const seconds = SECONDS[mode === 'local' ? 'local' : level];
   // children's opening words on the easy level and on one device (often a child with a grown-up)
   const kids = mode === 'local' || level === 'easy';
 
   const [round, setRound] = useState(0);
   useCountPlay('noitu', round);
-  const [state, setState] = useState<NoiTuState>(() =>
-    initialState(startWord(dict, words, Math.random, kids), 1),
-  );
+  const [state, setState] = useState<NoiTuState>(() => initialState(opening(), 1));
   const [deadline, setDeadline] = useState(() => Date.now() + seconds * 1000);
   const [hints, setHints] = useState<[number, number]>([HINTS, HINTS]);
   const [score, setScore] = useState<[number, number]>([0, 0]);
+  const [streak, setStreak] = useState(0);
   const [confirmExit, setConfirmExit] = useState(false);
   // who said each word: the opener is 0, then sides alternate starting with the first answerer
   const [firstSide, setFirstSide] = useState<1 | 2>(1);
@@ -107,15 +114,17 @@ function Game({ loaded }: { loaded: Loaded }) {
     if (!state.winner) return;
     log.info('game over', { winner: state.winner, words: state.chain.length, mode, level });
     setScore(([a, b]) => (state.winner === 1 ? [a + 1, b] : [a, b + 1]));
+    if (daily)
+      setStreak(finishDaily('noitu', state.winner === 1 ? 1 : 0, (a, b) => a > b).record.streak);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.winner]);
 
   const newRound = () => {
     const r = round + 1;
-    const first = r % 2 === 0 ? 1 : 2;
+    const first = daily || r % 2 === 0 ? 1 : 2;
     setRound(r);
     setFirstSide(first);
-    setState(initialState(startWord(dict, words, Math.random, kids), first));
+    setState(initialState(opening(), first));
     setDeadline(Date.now() + seconds * 1000);
     setHints([HINTS, HINTS]);
   };
@@ -203,6 +212,7 @@ function Game({ loaded }: { loaded: Loaded }) {
         <ResultModal
           title={resultTitle}
           win={win}
+          record={mode === 'solo' && win ? 'noitu' : undefined}
           actions={
             <>
               <button className="btn" onClick={newRound} data-testid="play-again">
@@ -229,6 +239,11 @@ function Game({ loaded }: { loaded: Loaded }) {
           <div className="muted" data-testid="final-score">
             🏆 {score[0]} – {score[1]}
           </div>
+          {daily && streak > 0 && (
+            <div className="muted" data-testid="daily-streak">
+              🔥 {t('dailyStreak', { n: streak })}
+            </div>
+          )}
         </ResultModal>
       )}
     </main>

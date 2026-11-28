@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useProfile } from '../../app/settings';
 import { useT } from '../../i18n';
 import { createLogger } from '../../lib/logger';
+import { dailySeed, finishDaily, useDaily } from '../../lib/daily';
 import { randomSeed } from '../../lib/rng';
 import { sfx } from '../../lib/sound';
 import { ExitConfirm, ResultModal, useBackHandler } from '../../ui/components';
@@ -29,18 +30,28 @@ export function NumbersSolo() {
   const navigate = useNavigate();
   const profile = useProfile();
   const [params] = useSearchParams();
-  const level = asLevel(params.get('level'));
-  const practice = params.get('mode') === 'practice';
+  // today's challenge: the same medium board for everyone today, timed like practice
+  const daily = params.get('mode') === 'daily';
+  const level = daily ? 'medium' : asLevel(params.get('level'));
+  const practice = params.get('mode') === 'practice' || daily;
 
   const [round, setRound] = useState(0);
   useCountPlay('numbers', round);
-  const newState = () => initialState(level, randomSeed(), practice ? [ME] : [ME, BOT], Date.now());
+  const newState = () =>
+    initialState(
+      level,
+      daily ? dailySeed('numbers') : randomSeed(),
+      practice ? [ME] : [ME, BOT],
+      Date.now(),
+    );
   const [s, setS] = useState<NumbersState>(newState);
   const layout = useMemo(() => makeLayout(s.level, s.seed), [s.level, s.seed]);
   const count = useCountdown(round);
   const [startedAt, setStartedAt] = useState(0);
   const [now, setNow] = useState(0);
-  const [result, setResult] = useState<{ ms: number; record: boolean } | null>(null);
+  const [result, setResult] = useState<{ ms: number; record: boolean; streak?: number } | null>(
+    null,
+  );
   const [confirmExit, setConfirmExit] = useState(false);
 
   // Start the clock when the countdown ends.
@@ -72,10 +83,16 @@ export function NumbersSolo() {
   useEffect(() => {
     if (!practice || !s.done || result) return;
     const ms = Date.now() - startedAt;
+    if (daily) {
+      const { record, improved } = finishDaily('numbers', ms, (a, b) => a < b);
+      log.info('daily done', { ms, improved, streak: record.streak });
+      setResult({ ms, record: improved, streak: record.streak });
+      return;
+    }
     const record = submitTime(level, ms);
     log.info('practice done', { level, ms, record });
     setResult({ ms, record });
-  }, [practice, s.done, result, startedAt, level]);
+  }, [practice, daily, s.done, result, startedAt, level]);
 
   const find = (n: number) => setS((cur) => applyClaim(cur, ME, n) ?? cur);
 
@@ -90,7 +107,8 @@ export function NumbersSolo() {
 
   const winner = numbersWinner(s);
   const elapsed = practice && startedAt && count === 0 ? Math.max(0, now - startedAt) : 0;
-  const best = getRecord(level);
+  const todayBest = useDaily('numbers').best;
+  const best = daily ? todayBest : getRecord(level);
 
   return (
     <main className="screen tight game">
@@ -152,20 +170,23 @@ export function NumbersSolo() {
       {s.done && (practice ? result : winner) && (
         <ResultModal
           title={
-            practice
-              ? result!.record
-                ? t('numbersNewRecord')
-                : t('numbersFinished')
-              : winner === 'draw'
-                ? t('draw')
-                : winner === ME
-                  ? t('youWin')
-                  : t('youLose')
+            daily
+              ? t('dailyDone')
+              : practice
+                ? result!.record
+                  ? t('numbersNewRecord')
+                  : t('numbersFinished')
+                : winner === 'draw'
+                  ? t('draw')
+                  : winner === ME
+                    ? t('youWin')
+                    : t('youLose')
           }
           win={
             practice ? result!.record || undefined : winner === 'draw' ? undefined : winner === ME
           }
           sound={practice && result!.record ? 'record' : undefined}
+          record={!practice && winner === ME ? 'numbers' : undefined}
           actions={
             <>
               <button className="btn" onClick={restart} data-testid="play-again">
@@ -178,9 +199,18 @@ export function NumbersSolo() {
           }
         >
           {practice ? (
-            <div className="big-stat" data-testid="practice-time">
-              ⏱️ {t('numbersSeconds', { s: formatSeconds(result!.ms) })}
-            </div>
+            <>
+              <div className="big-stat" data-testid="practice-time">
+                ⏱️ {t('numbersSeconds', { s: formatSeconds(result!.ms) })}
+              </div>
+              {daily && (
+                <div className="muted" data-testid="daily-streak">
+                  🔥 {t('dailyStreak', { n: result!.streak ?? 1 })}
+                  {todayBest !== undefined &&
+                    ` · 🏆 ${t('dailyBestToday', { s: formatSeconds(todayBest) })}`}
+                </div>
+              )}
+            </>
           ) : (
             <div className="players">
               <MiniPlayer

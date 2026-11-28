@@ -134,7 +134,7 @@
     grid-template-columns: minmax(0, 1fr) minmax(300px, 380px);
     grid-template-areas:
       'intro join'
-      'count join';
+      'count family';
     align-items: center;
     gap: 8px 40px;
     padding: 24px 36px;
@@ -181,6 +181,15 @@
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.75);
     color: #4b5563;
+  }
+
+  .hub-hero .hub-family {
+    grid-area: family;
+    border: none;
+    min-height: 0;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 0 10px 24px -12px rgba(0, 0, 0, 0.35);
   }
 
   .hub-hero .hub-join {

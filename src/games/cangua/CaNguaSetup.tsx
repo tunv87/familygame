@@ -11,7 +11,7 @@ import { CN_HELP, CN_STORY } from './help';
 export function CaNguaSetup() {
   const t = useT();
   const navigate = useNavigate();
-  const [mode, setMode] = useState<'solo' | 'online' | null>(null);
+  const [mode, setMode] = useState<'solo' | 'local' | 'online' | null>(null);
   const back = () => (mode !== null ? setMode(null) : navigate('/'));
   useBackHandler(back);
 
@@ -43,6 +43,15 @@ export function CaNguaSetup() {
           />
           <ModeCard
             game="cangua"
+            mode="local"
+            emoji="👫"
+            title={t('modeLocal')}
+            hint={t('cnLocalHint')}
+            onClick={() => setMode('local')}
+            testId="mode-local"
+          />
+          <ModeCard
+            game="cangua"
             mode="online"
             emoji="🌏"
             title={t('modeOnline')}
@@ -50,6 +59,26 @@ export function CaNguaSetup() {
             onClick={() => setMode('online')}
             testId="mode-online"
           />
+        </div>
+      ) : mode === 'local' ? (
+        <div className="stack">
+          <h2 className="section-title">{t('cnHowManyPlayers')}</h2>
+          {(
+            [
+              [2, '🙂😎', t('cnPlayers2')],
+              [3, '🙂😎🤠', t('cnPlayers3')],
+              [4, '🙂😎🤠🥳', t('cnPlayers4')],
+            ] as const
+          ).map(([n, emoji, title]) => (
+            <Card
+              key={n}
+              emoji={emoji}
+              title={title}
+              testId={`players-${n}`}
+              className="bots"
+              onClick={() => navigate(`/cangua/play?mode=local&players=${n}`)}
+            />
+          ))}
         </div>
       ) : mode === 'solo' ? (
         <div className="stack">

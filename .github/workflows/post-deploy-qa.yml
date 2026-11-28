@@ -1,0 +1,69 @@
+name: Post-deploy QA
+
+# Checks the live site right after each GitHub Pages deploy (desktop 1280×800 and phone 360×800)
+# and writes the results to the project's Google Sheet (tabs Test_Cases, Version_Trigger,
+# Kiểm thử). Needs the repository secret GOOGLE_SERVICE_ACCOUNT_JSON (a service account key;
+# share the sheet with the service account's e-mail as Editor).
+on:
+  workflow_run:
+    workflows: ['Deploy to GitHub Pages']
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: post-deploy-qa
+  cancel-in-progress: false
+
+jobs:
+  qa:
+    # only after a successful deploy (or when started by hand)
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      QA_URL: https://tunv87.github.io/familygame/
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # the commit that was deployed
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install Playwright (Chromium) and googleapis
+        run: |
+          npm ci
+          # same Playwright version as the project's tests
+          npm install --no-save googleapis "playwright@$(node -p "require('@playwright/test/package.json').version")"
+          npx playwright install --with-deps chromium
+
+      - name: Dependency audit (read by TC-15)
+        run: npm audit --omit=dev --json > qa/npm-audit.json || true
+
+      - name: Wait for GitHub Pages to serve the new build
+        run: sleep 60
+
+      - name: Test the live site
+        run: node qa/post-deploy.mjs
+
+      - name: Update the Google Sheet
+        # also when some cases failed
+        if: always()
+        env:
+          SPREADSHEET_ID: 1eutkdPr7W6zX-IuyXDa9LwesCOMoXSb-a63A9uMdzaE
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+        run: node qa/update-sheet.mjs
+
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: post-deploy-qa
+          path: qa/latest-results.json
+          if-no-files-found: ignore

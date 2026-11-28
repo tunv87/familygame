@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AVATARS, getProfile, setProfile, useProfile, type Profile } from '../app/settings';
 import { useT, type MessageKey } from '../i18n';
+import { recordWin } from '../app/family';
+import type { GameId } from '../online/types';
 import { sfx } from '../lib/sound';
 import { useTheme } from '../app/theme';
 import { pushBackHandler } from '../lib/native';
@@ -258,6 +260,7 @@ export function ResultModal({
   sound,
   children,
   actions,
+  record,
 }: {
   title: string;
   /** true = confetti + win sound, false = lose sound, undefined = draw / finished */
@@ -266,8 +269,16 @@ export function ResultModal({
   sound?: 'win' | 'lose' | 'draw' | 'record';
   children?: ReactNode;
   actions: ReactNode;
+  /** the person playing on this device won this game (vs computer or online): count it */
+  record?: GameId;
 }) {
+  // count the win once, even if the effect runs twice (React strict mode in development)
+  const counted = useRef(false);
   useEffect(() => {
+    if (record && !counted.current) {
+      counted.current = true;
+      recordWin(record);
+    }
     sfx[sound ?? (win === true ? 'win' : win === false ? 'lose' : 'draw')]();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
