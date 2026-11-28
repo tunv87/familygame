@@ -9,7 +9,6 @@
  * on GitHub Actions the run's own page is used).
  */
 import { readFileSync } from 'node:fs';
-import { google } from 'googleapis';
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const KEY = process.env.GOOGLE_SERVICE_ACCOUNT_JSON;
@@ -37,6 +36,8 @@ try {
 }
 const { test_date, build_version, results = [] } = data;
 
+// loaded only now, so the warning above works without the package installed
+const { google } = await import('googleapis');
 const auth = new google.auth.GoogleAuth({
   credentials: JSON.parse(KEY),
   scopes: ['https://www.googleapis.com/auth/spreadsheets'],
