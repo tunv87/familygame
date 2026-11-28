@@ -82,6 +82,7 @@ Phiên bản: **v3.7** (bật/tắt game, người xem; xem `review-log.md`). M�
 | CR-15 | P1      | Link Nối từ sai tham số                                                          | Không crash, dùng mặc định                                                                                                  |
 | CR-16 | P1      | Phần chính của app không tải được (vừa có bản mới, mất mạng)                     | Tự tải lại 1 lần; vẫn lỗi thì hiện thông báo và nút "Tải lại" (không màn hình trắng); tải lại được thì app hiện bình thường |
 | CR-17 | P1      | Không tải được một game (mất mạng trước khi lưu, có bản mới thay thế)            | Thử lại một lần, rồi báo "Không mở được trò chơi" kèm nút Tải lại; không màn trắng; phần còn lại của app vẫn chạy           |
+| CR-18 | P1      | Chạm ngay khi bàn cờ vừa hiện (Ô ăn quan, Cờ gánh)                               | Ô/quân được chọn vẫn giữ nguyên; nút hướng (Ô ăn quan) bật; Đi lại không làm lựa chọn cũ hiện lại                           |
 
 ## LG – Logic
 
