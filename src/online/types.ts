@@ -49,6 +49,12 @@ export interface Room {
     | CaNguaOnlineState;
 }
 
+/** Everyone in the room (at least two) tapped Ready; `except` need not (the host who starts). */
+export function allReady(room: Pick<Room, 'players' | 'ready'>, except?: string) {
+  const uids = Object.keys(room.players ?? {});
+  return uids.length >= 2 && uids.every((u) => u === except || room.ready?.[u] === true);
+}
+
 export const MAX_PLAYERS = 2;
 /** players a room of this game can hold */
 export const maxPlayers = (game: GameId) => (game === 'cangua' ? 4 : MAX_PLAYERS);

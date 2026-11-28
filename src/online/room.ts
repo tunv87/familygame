@@ -22,6 +22,7 @@ import { initialState as initialNumbersState, type NumbersLevel } from '../games
 import { ensureAuth, getDb, serverNow } from './firebase';
 import { countPlay } from './plays';
 import { ROOM_TTL_MS, maxPlayers, type GameId, type Room, type RoomOptions } from './types';
+export { allReady } from './types';
 import type { Profile } from '../app/settings';
 
 const log = createLogger('room');
@@ -219,12 +220,6 @@ export async function startGame(room: Room) {
 /** In the waiting room: say (or take back) that we are ready to play. */
 export async function setReady(code: string, uid: string, ready: boolean) {
   await set(ref(getDb(), `rooms/${code}/ready/${uid}`), ready ? true : null);
-}
-
-/** Everyone in the room (at least two) tapped Ready; `except` need not (the host who starts). */
-export function allReady(room: Room, except?: string) {
-  const uids = Object.keys(room.players ?? {});
-  return uids.length >= 2 && uids.every((u) => u === except || room.ready?.[u]);
 }
 
 export async function requestRematch(code: string, uid: string) {
