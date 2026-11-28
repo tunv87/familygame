@@ -75,6 +75,8 @@ test("[UX-35] today's challenge: same Tìm số board on every device today, str
   const words: string[] = [];
   for (const q of [a.page, b.page]) {
     await q.goto('/#/noitu');
+    // wait for the Nối từ page itself (the previous page can still be on screen for a moment)
+    await q.locator('aside.poster[data-game="noitu"]').waitFor({ state: 'attached' });
     await q.getByTestId('mode-daily').click();
     await q.getByTestId('nt-word-0').waitFor({ timeout: 20_000 });
     words.push((await q.getByTestId('nt-word-0').textContent()) ?? '');
